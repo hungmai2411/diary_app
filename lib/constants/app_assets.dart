@@ -6,4 +6,7 @@ class AppAssets {
   static const String iconScared = 'assets/icons/scared.png';
   static const String iconSmile = 'assets/icons/smile.png';
   static const String iconSurprised = 'assets/icons/surprised.png';
+  static const String iconSleeping = 'assets/icons/sleeping.png';
+
+  static const String iconCoin = 'assets/icons/coin.png';
 }
