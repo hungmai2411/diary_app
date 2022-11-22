@@ -1,4 +1,6 @@
 import 'package:diary_app/constants/app_colors.dart';
+import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
+import 'package:diary_app/features/diary/screens/diary_screen.dart';
 import 'package:diary_app/widgets/tab_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -17,11 +19,19 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   List screens = [
-    Container(),
+    const DiaryScreen(),
     Container(),
     Container(),
     Container(),
   ];
+
+  navigateToAddDiaryScreen() {
+    Navigator.pushNamed(
+      context,
+      AddDiaryScreen.routeName,
+      arguments: DateTime.now(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,12 +105,13 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        onPressed: navigateToAddDiaryScreen,
         child: Container(
           width: 60,
           height: 60,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            gradient: AppColors.gradient,
+            color: AppColors.selectedColor,
           ),
           child: const Icon(
             Icons.add,
@@ -108,7 +119,6 @@ class _MyAppState extends State<MyApp> {
             size: 35,
           ),
         ),
-        onPressed: () {},
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
