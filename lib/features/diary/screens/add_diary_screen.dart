@@ -2,13 +2,18 @@ import 'dart:typed_data';
 import 'package:diary_app/constants/app_assets.dart';
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/models/mood.dart';
 import 'package:diary_app/features/diary/widgets/item_mood.dart';
 import 'package:diary_app/features/diary/widgets/item_upload_group.dart';
+import 'package:diary_app/features/diary/widgets/item_upload_voice.dart';
+import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/widgets/box.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:record/record.dart';
 
 class AddDiaryScreen extends StatefulWidget {
   final DateTime dateTime;
@@ -25,15 +30,26 @@ class AddDiaryScreen extends StatefulWidget {
 class _AddDiaryScreenState extends State<AddDiaryScreen> {
   Mood moodPicked = Mood(name: '', image: '');
   final TextEditingController noteController = TextEditingController();
+  // lưu trữ hình ảnh
   List<Uint8List> images = [];
 
   popScreen() {
     Navigator.pop(context);
   }
 
-  addNote() {
+  addNote(BuildContext context) {
     if (moodPicked.name.isEmpty) {
-    } else {}
+    } else {
+      final diaryProvider = context.read<DiaryProvider>();
+      Diary newDiary = Diary(
+        mood: moodPicked,
+        createdAt: widget.dateTime,
+        content: noteController.text,
+        images: images,
+      );
+      diaryProvider.addDiary(newDiary);
+      popScreen();
+    }
   }
 
   @override
@@ -73,7 +89,7 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
-              onTap: addNote,
+              onTap: () => addNote(context),
               child: const Icon(
                 FontAwesomeIcons.check,
                 color: AppColors.primaryColor,
@@ -185,49 +201,13 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
             ),
           ),
           // your voices
-          Box(
-            margin: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 10,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Your voice',
-                  style: AppStyles.medium.copyWith(fontSize: 18),
-                ),
-                const SizedBox(height: 50),
-                Center(
-                  child: Text(
-                    'Tap to record',
-                    style: AppStyles.medium.copyWith(fontSize: 18),
-                  ),
-                ),
-                Center(
-                  child: Container(
-                    margin: const EdgeInsets.only(
-                      top: 30,
-                      bottom: 20,
-                    ),
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: AppColors.primaryColor),
-                    ),
-                    child: const Center(
-                      child: Icon(
-                        FontAwesomeIcons.microphone,
-                        color: AppColors.primaryColor,
-                        size: 40,
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
+          // Box(
+          //   margin: const EdgeInsets.symmetric(
+          //     horizontal: 20,
+          //     vertical: 10,
+          //   ),
+          //   child: ItemUploadVoice(),
+          // ),
         ],
       ),
     );

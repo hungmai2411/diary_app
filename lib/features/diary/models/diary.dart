@@ -11,32 +11,33 @@ part 'diary.g.dart';
 @HiveType(typeId: 0)
 class Diary {
   @HiveField(0)
-  final String id;
-
-  @HiveField(1)
   final Mood mood;
 
-  @HiveField(2)
+  @HiveField(1)
   final String? content;
 
-  @HiveField(3)
+  @HiveField(2)
   final List<Uint8List>? images;
+
+  @HiveField(3)
+  final DateTime createdAt;
+
   Diary({
-    required this.id,
     required this.mood,
+    required this.createdAt,
     this.content,
     this.images,
   });
 
   Diary copyWith({
-    String? id,
     Mood? mood,
     String? content,
     List<Uint8List>? images,
+    DateTime? createdAt,
   }) {
     return Diary(
-      id: id ?? this.id,
       mood: mood ?? this.mood,
+      createdAt: createdAt ?? this.createdAt,
       content: content ?? this.content,
       images: images ?? this.images,
     );
