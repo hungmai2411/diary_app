@@ -17,10 +17,10 @@ class DiaryAdapter extends TypeAdapter<Diary> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Diary(
-      id: fields[0] as String,
-      mood: fields[1] as Mood,
-      content: fields[2] as String?,
-      images: (fields[3] as List?)?.cast<Uint8List>(),
+      mood: fields[0] as Mood,
+      createdAt: fields[3] as DateTime,
+      content: fields[1] as String?,
+      images: (fields[2] as List?)?.cast<Uint8List>(),
     );
   }
 
@@ -29,13 +29,13 @@ class DiaryAdapter extends TypeAdapter<Diary> {
     writer
       ..writeByte(4)
       ..writeByte(0)
-      ..write(obj.id)
-      ..writeByte(1)
       ..write(obj.mood)
-      ..writeByte(2)
+      ..writeByte(1)
       ..write(obj.content)
+      ..writeByte(2)
+      ..write(obj.images)
       ..writeByte(3)
-      ..write(obj.images);
+      ..write(obj.createdAt);
   }
 
   @override

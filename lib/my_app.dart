@@ -1,6 +1,9 @@
 import 'package:diary_app/constants/app_colors.dart';
+import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/diary_screen.dart';
+import 'package:diary_app/providers/diary_provider.dart';
+import 'package:diary_app/services/db_helpers.dart';
 import 'package:diary_app/widgets/tab_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -34,10 +37,24 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    getDiaries();
+  }
+
+  getDiaries() async {
+    var diaryProvider = Provider.of<DiaryProvider>(context, listen: false);
+    DbHelper dbHelper = DbHelper();
+    final box = await dbHelper.openBox("diaries");
+    List<Diary> diaries = dbHelper.getDiaries(box);
+    diaryProvider.setDiaries(diaries);
+  }
+
+  @override
   Widget build(BuildContext context) {
     var provider = Provider.of<BottomNavigationProvider>(context);
-
     return Scaffold(
+      extendBody: true,
       backgroundColor: AppColors.backgroundColor,
       body: screens[provider.currentIndex],
       bottomNavigationBar: BottomAppBar(
