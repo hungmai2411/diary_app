@@ -2,6 +2,7 @@ import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/diary_screen.dart';
+import 'package:diary_app/features/setting/screens/setting_screen.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/services/db_helpers.dart';
 import 'package:diary_app/widgets/tab_widget.dart';
@@ -25,7 +26,7 @@ class _MyAppState extends State<MyApp> {
     const DiaryScreen(),
     Container(),
     Container(),
-    Container(),
+    const SettingScreen(),
   ];
 
   navigateToAddDiaryScreen() {
