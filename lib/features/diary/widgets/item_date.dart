@@ -6,9 +6,11 @@ import 'package:flutter/src/widgets/placeholder.dart';
 class ItemDate extends StatelessWidget {
   final String date;
   final Color color;
+  final String? img;
   const ItemDate({
     super.key,
     required this.date,
+    this.img,
     this.color = Colors.black,
   });
 
@@ -22,15 +24,22 @@ class ItemDate extends StatelessWidget {
             date,
             style: TextStyle(color: color),
           ),
-          const SizedBox(height: 5),
-          Container(
-            width: 45,
-            height: 45,
-            decoration: BoxDecoration(
-              color: AppColors.unNote,
-              shape: BoxShape.circle,
-            ),
-          ),
+          const SizedBox(height: 2),
+          img != null
+              ? Image.asset(
+                  img!,
+                  fit: BoxFit.fitHeight,
+                  width: 45,
+                  height: 37,
+                )
+              : Container(
+                  width: 45,
+                  height: 37,
+                  decoration: BoxDecoration(
+                    color: AppColors.unNote,
+                    shape: BoxShape.circle,
+                  ),
+                ),
         ],
       ),
     );

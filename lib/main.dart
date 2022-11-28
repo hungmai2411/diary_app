@@ -5,6 +5,7 @@ import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/l10n/l10n.dart';
 import 'package:diary_app/my_app.dart';
 import 'package:diary_app/providers/bottom_navigation_provider.dart';
+import 'package:diary_app/providers/date_provider.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/route.dart';
@@ -36,6 +37,9 @@ void main() async {
         ),
         ChangeNotifierProvider<SettingProvider>(
           create: (_) => settingProvider,
+        ),
+        ChangeNotifierProvider<DateProvider>(
+          create: (_) => DateProvider(),
         ),
       ],
       child: Consumer<SettingProvider>(builder: (
