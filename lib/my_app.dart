@@ -2,8 +2,10 @@ import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/diary_screen.dart';
+import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/features/setting/screens/setting_screen.dart';
 import 'package:diary_app/providers/diary_provider.dart';
+import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/services/db_helpers.dart';
 import 'package:diary_app/widgets/tab_widget.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +24,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  DbHelper dbHelper = DbHelper();
+
   List screens = [
     const DiaryScreen(),
     Container(),
@@ -45,7 +49,6 @@ class _MyAppState extends State<MyApp> {
 
   getDiaries() async {
     var diaryProvider = Provider.of<DiaryProvider>(context, listen: false);
-    DbHelper dbHelper = DbHelper();
     final box = await dbHelper.openBox("diaries");
     List<Diary> diaries = dbHelper.getDiaries(box);
     diaryProvider.setDiaries(diaries);
