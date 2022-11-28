@@ -1,11 +1,15 @@
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/features/setting/models/setting.dart';
+import 'package:diary_app/features/setting/screens/language_screen.dart';
+import 'package:diary_app/features/setting/screens/passcode_screen.dart';
+import 'package:diary_app/features/setting/screens/start_of_the_week_screen.dart';
+import 'package:diary_app/features/setting/widgets/custom_app_bar.dart';
+import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/widgets/box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -16,58 +20,111 @@ class SettingScreen extends StatefulWidget {
 
 class _SettingScreenState extends State<SettingScreen> {
   bool hasPasscode = false;
-  bool hasReminderTime = false;
+  final ScrollController settingController = ScrollController();
+
+  TimeOfDay reminderTime = const TimeOfDay(
+    hour: 20,
+    minute: 00,
+  );
+
+  chooseReminderTime(BuildContext context) async {
+    final settingProvider = context.read<SettingProvider>();
+
+    final TimeOfDay? value = await showTimePicker(
+      context: context,
+      initialTime: reminderTime,
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
+        );
+      },
+    );
+
+    if (value != null) {
+      Setting setting = settingProvider.setting;
+      setting = setting.copyWith(
+        reminderHour: value.hour,
+        reminderMinute: value.minute,
+      );
+      settingProvider.setSetting(setting);
+    }
+  }
+
+  navigateToStartOfTheWeekScreen() {
+    Navigator.pushNamed(
+      context,
+      StartOfTheWeekScreen.routeName,
+    );
+  }
+
+  navigateToLanguageScreen() {
+    Navigator.pushNamed(
+      context,
+      LanguageScreen.routeName,
+    );
+  }
+
+  navigateToPasscodeScreen() {
+    Navigator.pushNamed(
+      context,
+      PasscodeScreen.routeName,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final settingProvider = Provider.of<SettingProvider>(context);
+    Setting setting = settingProvider.setting;
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          'Setting',
-          style: AppStyles.semibold.copyWith(fontSize: 18),
-        ),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(56),
+        child: CustomAppBar(scrollController: settingController),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: ListView(
+          controller: settingController,
           children: [
             // general text
             Text('General', style: AppStyles.medium),
             const SizedBox(height: 10),
             // passcode
-            Box(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15,
-                vertical: 20,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.lock_outline,
-                    color: AppColors.textSecondColor,
-                  ),
-                  const SizedBox(width: 8),
-                  Text('Passcode', style: AppStyles.medium),
-                  const Spacer(),
-                  CupertinoSwitch(
-                    // This bool value toggles the switch.
-                    value: hasPasscode,
-                    thumbColor: hasPasscode
-                        ? AppColors.selectedColor
-                        : AppColors.thumUnSelectedColor,
-                    trackColor: AppColors.trackUnSelectedColor,
-                    activeColor: AppColors.trackSelectedColor,
-                    onChanged: (bool? value) {
-                      // This is called when the user toggles the switch.
-                      setState(() {
-                        hasPasscode = value!;
-                      });
-                    },
-                  ),
-                ],
+            GestureDetector(
+              onTap: navigateToPasscodeScreen,
+              child: Box(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 20,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.lock_outline,
+                      color: AppColors.textSecondColor,
+                    ),
+                    const SizedBox(width: 8),
+                    Text('Passcode', style: AppStyles.medium),
+                    const Spacer(),
+                    CupertinoSwitch(
+                      // This bool value toggles the switch.
+                      value: hasPasscode,
+                      thumbColor: hasPasscode
+                          ? AppColors.selectedColor
+                          : AppColors.thumUnSelectedColor,
+                      trackColor: AppColors.trackUnSelectedColor,
+                      activeColor: AppColors.trackSelectedColor,
+                      onChanged: (bool? value) {
+                        // This is called when the user toggles the switch.
+                        setState(() {
+                          hasPasscode = value!;
+                        });
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 15),
@@ -91,100 +148,109 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
             const SizedBox(height: 15),
             // remider time
-            Box(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15,
-                vertical: 20,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.notifications_none_sharp,
-                    color: AppColors.textSecondColor,
-                  ),
-                  const SizedBox(width: 8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Reminder time', style: AppStyles.medium),
-                      Text(
-                        '20:00 CH',
-                        style: AppStyles.regular.copyWith(
-                          color: AppColors.textSecondColor,
+            GestureDetector(
+              onTap: () => chooseReminderTime(context),
+              child: Box(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 20,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.notifications_none_sharp,
+                      color: AppColors.textSecondColor,
+                    ),
+                    const SizedBox(width: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Reminder time', style: AppStyles.medium),
+                        Text(
+                          '${setting.reminderHour}:${setting.reminderMinute}',
+                          style: AppStyles.regular.copyWith(
+                            color: AppColors.selectedColor,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  CupertinoSwitch(
-                    // This bool value toggles the switch.
-                    value: hasReminderTime,
-                    thumbColor: hasReminderTime
-                        ? AppColors.selectedColor
-                        : AppColors.thumUnSelectedColor,
-                    trackColor: AppColors.trackUnSelectedColor,
-                    activeColor: AppColors.trackSelectedColor,
-                    onChanged: (bool? value) {
-                      // This is called when the user toggles the switch.
-                      setState(() {
-                        hasReminderTime = value!;
-                      });
-                    },
-                  ),
-                ],
+                      ],
+                    ),
+                    const Spacer(),
+                    CupertinoSwitch(
+                      // This bool value toggles the switch.
+                      value: setting.hasReminderTime,
+                      thumbColor: setting.hasReminderTime
+                          ? AppColors.selectedColor
+                          : AppColors.thumUnSelectedColor,
+                      trackColor: AppColors.trackUnSelectedColor,
+                      activeColor: AppColors.trackSelectedColor,
+                      onChanged: (bool? value) {
+                        setting = setting.copyWith(hasReminderTime: value);
+                        settingProvider.setSetting(setting);
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 15),
             // start of the week
-            Box(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15,
-                vertical: 20,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.calendar_today_rounded,
-                    color: AppColors.textSecondColor,
-                  ),
-                  const SizedBox(width: 8),
-                  Text('Start of the week', style: AppStyles.medium),
-                  const Spacer(),
-                  Text(
-                    'Monday',
-                    style: AppStyles.medium.copyWith(
-                      color: AppColors.selectedColor,
+            GestureDetector(
+              onTap: navigateToStartOfTheWeekScreen,
+              child: Box(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 20,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.calendar_today_rounded,
+                      color: AppColors.textSecondColor,
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 8),
+                    Text('Start of the week', style: AppStyles.medium),
+                    const Spacer(),
+                    Text(
+                      setting.startingDayOfWeek,
+                      style: AppStyles.medium.copyWith(
+                        color: AppColors.selectedColor,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 15),
             // language
-            Box(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15,
-                vertical: 20,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.language_rounded,
-                    color: AppColors.textSecondColor,
-                  ),
-                  const SizedBox(width: 8),
-                  Text('Language', style: AppStyles.medium),
-                  const Spacer(),
-                  Text(
-                    'English',
-                    style: AppStyles.medium.copyWith(
-                      color: AppColors.selectedColor,
+            GestureDetector(
+              onTap: navigateToLanguageScreen,
+              child: Box(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 20,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.language_rounded,
+                      color: AppColors.textSecondColor,
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 8),
+                    Text('Language', style: AppStyles.medium),
+                    const Spacer(),
+                    Text(
+                      setting.language,
+                      style: AppStyles.medium.copyWith(
+                        color: AppColors.selectedColor,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 15),
@@ -208,6 +274,7 @@ class _SettingScreenState extends State<SettingScreen> {
                     'Paradise Beach',
                     style: AppStyles.medium.copyWith(
                       color: AppColors.selectedColor,
+                      fontSize: 14,
                     ),
                   ),
                 ],
@@ -246,11 +313,49 @@ class _SettingScreenState extends State<SettingScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Icon(
-                    Icons.file_open_outlined,
+                    Icons.lock_outline,
                     color: AppColors.textSecondColor,
                   ),
                   const SizedBox(width: 8),
-                  Text('Terms of the service', style: AppStyles.medium),
+                  Text('Terms & Conditions', style: AppStyles.medium),
+                ],
+              ),
+            ),
+            const SizedBox(height: 15),
+            // feedback
+            Box(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 20,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.question_mark_outlined,
+                    color: AppColors.textSecondColor,
+                  ),
+                  const SizedBox(width: 8),
+                  Text('Feedback', style: AppStyles.medium),
+                ],
+              ),
+            ),
+            const SizedBox(height: 15),
+            // about us
+            Box(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 15,
+                vertical: 20,
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.error_outline,
+                    color: AppColors.textSecondColor,
+                  ),
+                  const SizedBox(width: 8),
+                  Text('About us', style: AppStyles.medium),
                 ],
               ),
             ),

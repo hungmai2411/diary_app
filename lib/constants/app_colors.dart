@@ -8,7 +8,7 @@ class AppColors {
   static Color trackSelectedColor = const Color(0xFFA7DDFF);
   static Color trackUnSelectedColor = const Color(0xFFCFE1EB);
   static Color thumUnSelectedColor = const Color(0xFFA5C0D1);
-
+  static Color appbarColor = const Color(0xFFDBEDF9);
   static const Color textPrimaryColor = Color(0xFF1D1E2C);
   static const Color textSecondaryColor = Color(0xFF4E687A);
 

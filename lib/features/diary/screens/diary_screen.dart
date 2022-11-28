@@ -12,6 +12,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DiaryScreen extends StatefulWidget {
   const DiaryScreen({super.key});
@@ -187,6 +188,11 @@ class _DiaryScreenState extends State<DiaryScreen> {
               ),
             ),
           ),
+          SliverToBoxAdapter(
+            child: Text(
+              AppLocalizations.of(context)!.language,
+            ),
+          )
         ],
       ),
     );
