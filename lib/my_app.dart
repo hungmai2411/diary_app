@@ -4,6 +4,7 @@ import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/diary_screen.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/features/setting/screens/setting_screen.dart';
+import 'package:diary_app/providers/date_provider.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/services/db_helpers.dart';
@@ -33,11 +34,11 @@ class _MyAppState extends State<MyApp> {
     const SettingScreen(),
   ];
 
-  navigateToAddDiaryScreen() {
+  navigateToAddDiaryScreen(DateTime dateTime) {
     Navigator.pushNamed(
       context,
       AddDiaryScreen.routeName,
-      arguments: DateTime.now(),
+      arguments: dateTime,
     );
   }
 
@@ -56,11 +57,13 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    var provider = Provider.of<BottomNavigationProvider>(context);
+    var bottomProvider = Provider.of<BottomNavigationProvider>(context);
+    var dateProvider = Provider.of<DateProvider>(context);
+    print(dateProvider.selectedDay);
     return Scaffold(
       extendBody: true,
       backgroundColor: AppColors.backgroundColor,
-      body: screens[provider.currentIndex],
+      body: screens[bottomProvider.currentIndex],
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 10,
@@ -76,20 +79,20 @@ class _MyAppState extends State<MyApp> {
                   TabWidget(
                     iconData: FontAwesomeIcons.bookOpen,
                     onPressed: () {
-                      provider.currentIndex = 0;
+                      bottomProvider.currentIndex = 0;
                     },
                     name: 'Diary',
-                    color: provider.currentIndex == 0
+                    color: bottomProvider.currentIndex == 0
                         ? AppColors.primaryColor
                         : AppColors.textSecondColor,
                   ),
                   TabWidget(
                     onPressed: () {
-                      provider.currentIndex = 1;
+                      bottomProvider.currentIndex = 1;
                     },
                     iconData: FontAwesomeIcons.globe,
                     name: 'Challenge',
-                    color: provider.currentIndex == 1
+                    color: bottomProvider.currentIndex == 1
                         ? AppColors.primaryColor
                         : AppColors.textSecondColor,
                   ),
@@ -101,21 +104,21 @@ class _MyAppState extends State<MyApp> {
                 children: [
                   TabWidget(
                     onPressed: () {
-                      provider.currentIndex = 2;
+                      bottomProvider.currentIndex = 2;
                     },
                     iconData: FontAwesomeIcons.chartLine,
                     name: 'Board',
-                    color: provider.currentIndex == 2
+                    color: bottomProvider.currentIndex == 2
                         ? AppColors.primaryColor
                         : AppColors.textSecondColor,
                   ),
                   TabWidget(
                     onPressed: () {
-                      provider.currentIndex = 3;
+                      bottomProvider.currentIndex = 3;
                     },
                     iconData: FontAwesomeIcons.gear,
                     name: 'Setting',
-                    color: provider.currentIndex == 3
+                    color: bottomProvider.currentIndex == 3
                         ? AppColors.primaryColor
                         : AppColors.textSecondColor,
                   ),
@@ -126,7 +129,7 @@ class _MyAppState extends State<MyApp> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: navigateToAddDiaryScreen,
+        onPressed: () => navigateToAddDiaryScreen(dateProvider.selectedDay),
         child: Container(
           width: 60,
           height: 60,
