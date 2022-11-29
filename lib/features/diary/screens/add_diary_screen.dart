@@ -7,7 +7,10 @@ import 'package:diary_app/features/diary/models/mood.dart';
 import 'package:diary_app/features/diary/widgets/item_mood.dart';
 import 'package:diary_app/features/diary/widgets/item_upload_group.dart';
 import 'package:diary_app/features/diary/widgets/item_upload_voice.dart';
+import 'package:diary_app/features/diary/widgets/success_dialog.dart';
+import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/providers/diary_provider.dart';
+import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/widgets/box.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -37,9 +40,13 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
     Navigator.pop(context);
   }
 
-  addNote(BuildContext context) {
+  addNote(BuildContext context) async {
     if (moodPicked.name.isEmpty) {
     } else {
+      final SettingProvider settingProvider = context.read<SettingProvider>();
+      Setting setting = settingProvider.setting;
+      setting = setting.copyWith(point: setting.point + 100);
+      settingProvider.setSetting(setting);
       final diaryProvider = context.read<DiaryProvider>();
       Diary newDiary = Diary(
         mood: moodPicked,
@@ -48,6 +55,12 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
         images: images,
       );
       diaryProvider.addDiary(newDiary);
+      await showDialog(
+        context: context,
+        builder: (_) {
+          return const SuccessDialog();
+        },
+      );
       popScreen();
     }
   }
@@ -107,108 +120,111 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
         ],
         centerTitle: true,
       ),
-      body: ListView(
-        children: [
-          // how was your day ?
-          Box(
-            margin: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 10,
+      body: GestureDetector(
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+        child: ListView(
+          children: [
+            // how was your day ?
+            Box(
+              margin: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 10,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'How was your day?',
+                    style: AppStyles.medium.copyWith(fontSize: 18),
+                  ),
+                  const SizedBox(height: 10),
+                  Wrap(
+                    spacing: 10,
+                    children: moods
+                        .map(
+                          (e) => ItemMood(
+                            mood: e,
+                            isPicked: moodPicked.name == (e as Mood).name
+                                ? true
+                                : false,
+                            callback: (mood) {
+                              setState(() {
+                                moodPicked = mood;
+                              });
+                            },
+                          ),
+                        )
+                        .toList(),
+                  )
+                ],
+              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'How was your day?',
-                  style: AppStyles.medium.copyWith(fontSize: 18),
-                ),
-                const SizedBox(height: 10),
-                Wrap(
-                  spacing: 10,
-                  children: moods
-                      .map(
-                        (e) => ItemMood(
-                          mood: e,
-                          isPicked: moodPicked.name == (e as Mood).name
-                              ? true
-                              : false,
-                          callback: (mood) {
-                            setState(() {
-                              moodPicked = mood;
-                            });
-                          },
+            // write about to day
+            Box(
+              margin: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 10,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Write about today',
+                    style: AppStyles.medium.copyWith(fontSize: 18),
+                  ),
+                  const SizedBox(height: 5),
+                  const Divider(
+                    color: AppColors.textSecondaryColor,
+                  ),
+                  SizedBox(
+                    height: 150,
+                    child: TextField(
+                      scrollPadding: EdgeInsets.zero,
+                      controller: noteController,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.zero,
+                        hintText: 'Write something...',
+                        hintStyle: AppStyles.regular.copyWith(
+                          fontSize: 17,
+                          color: AppColors.textSecondColor,
                         ),
-                      )
-                      .toList(),
-                )
-              ],
-            ),
-          ),
-          // write about to day
-          Box(
-            margin: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 10,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Write about today',
-                  style: AppStyles.medium.copyWith(fontSize: 18),
-                ),
-                const SizedBox(height: 5),
-                const Divider(
-                  color: AppColors.textSecondaryColor,
-                ),
-                SizedBox(
-                  height: 150,
-                  child: TextField(
-                    scrollPadding: EdgeInsets.zero,
-                    controller: noteController,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.zero,
-                      hintText: 'Write something...',
-                      hintStyle: AppStyles.regular.copyWith(
-                        fontSize: 17,
-                        color: AppColors.textSecondColor,
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          // your photos
-          Box(
-            margin: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 10,
+            // your photos
+            Box(
+              margin: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 10,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Your photos',
+                    style: AppStyles.medium.copyWith(fontSize: 18),
+                  ),
+                  const SizedBox(height: 10),
+                  ItemUploadGroup(
+                    images: images,
+                  ),
+                ],
+              ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Your photos',
-                  style: AppStyles.medium.copyWith(fontSize: 18),
-                ),
-                const SizedBox(height: 10),
-                ItemUploadGroup(
-                  images: images,
-                ),
-              ],
-            ),
-          ),
-          // your voices
-          // Box(
-          //   margin: const EdgeInsets.symmetric(
-          //     horizontal: 20,
-          //     vertical: 10,
-          //   ),
-          //   child: ItemUploadVoice(),
-          // ),
-        ],
+            // your voices
+            // Box(
+            //   margin: const EdgeInsets.symmetric(
+            //     horizontal: 20,
+            //     vertical: 10,
+            //   ),
+            //   child: ItemUploadVoice(),
+            // ),
+          ],
+        ),
       ),
     );
   }

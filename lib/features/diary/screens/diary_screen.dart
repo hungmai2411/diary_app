@@ -6,6 +6,7 @@ import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/widgets/item_date.dart';
 import 'package:diary_app/features/diary/widgets/item_diary.dart';
+import 'package:diary_app/features/diary/widgets/success_dialog.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/providers/date_provider.dart';
 import 'package:diary_app/providers/diary_provider.dart';
@@ -26,29 +27,9 @@ class DiaryScreen extends StatefulWidget {
 }
 
 class _DiaryScreenState extends State<DiaryScreen> {
-  CalendarFormat _calendarFormat = CalendarFormat.month;
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
-      .toggledOff; // Can be toggled on/off by longpressing a date
-  DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
-  DateTime? _rangeStart;
-  DateTime? _rangeEnd;
-
   @override
   void initState() {
     super.initState();
-
-    _selectedDay = _focusedDay;
-  }
-
-  void _onRangeSelected(DateTime? start, DateTime? end, DateTime focusedDay) {
-    setState(() {
-      _selectedDay = null;
-      _focusedDay = focusedDay;
-      _rangeStart = start;
-      _rangeEnd = end;
-      _rangeSelectionMode = RangeSelectionMode.toggledOn;
-    });
   }
 
   navigateToAddDiaryScreen(DateTime dateTime) {
@@ -60,12 +41,11 @@ class _DiaryScreenState extends State<DiaryScreen> {
   }
 
   String? getIconOfDay(DateTime dateTime, List<Diary> diaries) {
+    print('run func get icon of day');
     for (var diary in diaries) {
       if (dateTime.day == diary.createdAt.day &&
           dateTime.month == diary.createdAt.month &&
           dateTime.year == diary.createdAt.year) {
-        print('111');
-
         return diary.mood.image;
       }
     }
@@ -73,18 +53,32 @@ class _DiaryScreenState extends State<DiaryScreen> {
     return null;
   }
 
+  void chooseDate() async {
+    final dateProvider = context.read<DateProvider>();
+
+    final result = await showDatePicker(
+      context: context,
+      initialDate: dateProvider.selectedDay,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now(),
+    );
+    if (result != null) {
+      dateProvider.setDay(result);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final SettingProvider settingProvider =
-        Provider.of<SettingProvider>(context);
-    final DateProvider dateProvider = Provider.of<DateProvider>(context);
-    final DiaryProvider diaryProvider = Provider.of<DiaryProvider>(context);
+    final SettingProvider settingProvider = context.read<SettingProvider>();
+    final DateProvider dateProvider = context.watch<DateProvider>();
+    final DiaryProvider diaryProvider = context.watch<DiaryProvider>();
     List<Diary> diaries = diaryProvider.diaries;
     Setting setting = settingProvider.setting;
     String locale = setting.language == 'English' ? 'en' : 'vi';
     final kToday = DateTime.now();
     final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
     final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
+    print(setting.point);
 
     return Scaffold(
       body: CustomScrollView(
@@ -103,21 +97,29 @@ class _DiaryScreenState extends State<DiaryScreen> {
                 const SizedBox(width: 6),
                 // coin
                 Text(
-                  '500',
+                  setting.point.toString(),
                   style: AppStyles.semibold.copyWith(fontSize: 16),
                 ),
                 const Spacer(),
                 // datetime
-                Text(
-                  DateFormat('MMM dd, yyyy', locale).format(_selectedDay!),
-                  style: AppStyles.medium.copyWith(fontSize: 18),
-                ),
-                const SizedBox(width: 6),
-                // choose time
-                const Icon(
-                  FontAwesomeIcons.angleDown,
-                  size: 18,
-                  color: AppColors.textPrimaryColor,
+                GestureDetector(
+                  onTap: chooseDate,
+                  child: Row(
+                    children: [
+                      Text(
+                        DateFormat('MMM dd, yyyy', locale)
+                            .format(dateProvider.selectedDay),
+                        style: AppStyles.medium.copyWith(fontSize: 18),
+                      ),
+                      const SizedBox(width: 6),
+                      // choose time
+                      const Icon(
+                        FontAwesomeIcons.angleDown,
+                        size: 18,
+                        color: AppColors.textPrimaryColor,
+                      ),
+                    ],
+                  ),
                 ),
                 const Spacer(),
                 InkWell(
@@ -141,12 +143,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
                   defaultBuilder: (context, datetime, events) {
                     return GestureDetector(
                       onTap: () {
-                        if (!isSameDay(datetime, _selectedDay)) {
+                        if (!isSameDay(datetime, dateProvider.selectedDay) &&
+                            datetime.compareTo(DateTime.now()) == -1) {
                           dateProvider.setDay(datetime);
-                          setState(() {
-                            _selectedDay = datetime;
-                            _focusedDay = datetime;
-                          });
                         }
                       },
                       child: ItemDate(
@@ -165,37 +164,26 @@ class _DiaryScreenState extends State<DiaryScreen> {
                   selectedBuilder: (context, datetime, events) {
                     return ItemDate(
                       date: datetime.day.toString(),
-                      color: AppColors.selectedColor,
+                      color: AppColors.primaryColor,
                       img: getIconOfDay(datetime, diaries),
+                      isSelected: true,
                     );
                   },
                 ),
                 headerVisible: false,
                 firstDay: kFirstDay,
-                rangeSelectionMode: _rangeSelectionMode,
                 lastDay: kLastDay,
-                rangeStartDay: _rangeStart,
-                rangeEndDay: _rangeEnd,
-                onRangeSelected: _onRangeSelected,
                 calendarFormat: CalendarFormat.month,
-                focusedDay: _focusedDay,
-                onDaySelected: (selectedDay, focusedDay) {
-                  if (!isSameDay(selectedDay, _selectedDay)) {
-                    setState(() {
-                      _selectedDay = selectedDay;
-                      _focusedDay = focusedDay;
-                      // update `_focusedDay` here as well
-                    });
-                  }
-                },
+                focusedDay: dateProvider.focusedDay,
                 onPageChanged: (focusedDay) {
-                  _focusedDay = focusedDay;
+                  dateProvider.setDay(focusedDay);
                 },
                 calendarStyle: const CalendarStyle(
                   outsideDaysVisible: false,
                 ),
                 locale: locale,
-                selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                selectedDayPredicate: (day) =>
+                    isSameDay(dateProvider.selectedDay, day),
               ),
             ),
           ),
@@ -217,11 +205,6 @@ class _DiaryScreenState extends State<DiaryScreen> {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Text(
-              AppLocalizations.of(context)!.language,
-            ),
-          )
         ],
       ),
     );

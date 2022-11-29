@@ -6,6 +6,7 @@ import 'package:diary_app/features/setting/screens/passcode_screen.dart';
 import 'package:diary_app/features/setting/screens/start_of_the_week_screen.dart';
 import 'package:diary_app/features/setting/widgets/custom_app_bar.dart';
 import 'package:diary_app/providers/setting_provider.dart';
+import 'package:diary_app/services/notification_services.dart';
 import 'package:diary_app/widgets/box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +49,20 @@ class _SettingScreenState extends State<SettingScreen> {
         reminderMinute: value.minute,
       );
       settingProvider.setSetting(setting);
+      DateTime now = DateTime.now();
+      await NotificationsServices.init(initScheduled: true);
+      await NotificationsServices.showScheduledNotification(
+        scheduledDate: DateTime(
+          now.year,
+          now.month,
+          now.day,
+        ),
+        minute: value.minute,
+        hour: value.hour,
+        payload: 'hihi',
+        title: 'Diary Application',
+        body: 'Don\'t forget to check in your mood today.\nHave a good night!',
+      );
     }
   }
 
