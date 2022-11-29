@@ -2,11 +2,9 @@ import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/diary_screen.dart';
-import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/features/setting/screens/setting_screen.dart';
 import 'package:diary_app/providers/date_provider.dart';
 import 'package:diary_app/providers/diary_provider.dart';
-import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/services/db_helpers.dart';
 import 'package:diary_app/widgets/tab_widget.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +104,7 @@ class _MyAppState extends State<MyApp> {
                     onPressed: () {
                       bottomProvider.currentIndex = 2;
                     },
-                    iconData: FontAwesomeIcons.chartLine,
+                    iconData: FontAwesomeIcons.chartSimple,
                     name: 'Board',
                     color: bottomProvider.currentIndex == 2
                         ? AppColors.primaryColor

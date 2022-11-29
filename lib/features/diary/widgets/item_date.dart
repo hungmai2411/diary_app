@@ -1,4 +1,5 @@
 import 'package:diary_app/constants/app_colors.dart';
+import 'package:diary_app/constants/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -7,11 +8,14 @@ class ItemDate extends StatelessWidget {
   final String date;
   final Color color;
   final String? img;
-  const ItemDate({
+  bool? isSelected;
+
+  ItemDate({
     super.key,
     required this.date,
     this.img,
     this.color = Colors.black,
+    this.isSelected = false,
   });
 
   @override
@@ -22,7 +26,15 @@ class ItemDate extends StatelessWidget {
         children: [
           Text(
             date,
-            style: TextStyle(color: color),
+            style: isSelected!
+                ? AppStyles.semibold.copyWith(
+                    color: color,
+                    fontSize: 14,
+                  )
+                : AppStyles.medium.copyWith(
+                    color: color,
+                    fontSize: 14,
+                  ),
           ),
           const SizedBox(height: 2),
           img != null

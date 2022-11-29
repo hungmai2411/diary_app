@@ -25,13 +25,14 @@ class SettingAdapter extends TypeAdapter<Setting> {
       startingDayOfWeek: fields[4] as String,
       hasPasscode: fields[6] as bool,
       hasReminderTime: fields[5] as bool,
+      point: fields[8] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, Setting obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.reminderHour)
       ..writeByte(1)
@@ -47,7 +48,9 @@ class SettingAdapter extends TypeAdapter<Setting> {
       ..writeByte(6)
       ..write(obj.hasPasscode)
       ..writeByte(7)
-      ..write(obj.reminderMinute);
+      ..write(obj.reminderMinute)
+      ..writeByte(8)
+      ..write(obj.point);
   }
 
   @override

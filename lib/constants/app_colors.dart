@@ -12,7 +12,7 @@ class AppColors {
   static const Color textPrimaryColor = Color(0xFF1D1E2C);
   static const Color textSecondaryColor = Color(0xFF4E687A);
 
-  static Color orange = const Color(0xFFFE9870);
+  static Color orange = const Color(0xFFFE9F10);
   static Color unNote = const Color(0xFFCFE1EB);
   static Gradient gradient = const LinearGradient(
     begin: Alignment(1.0, 0.0),

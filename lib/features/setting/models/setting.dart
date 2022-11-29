@@ -32,6 +32,9 @@ class Setting {
   @HiveField(7)
   final int reminderMinute;
 
+  @HiveField(8)
+  final int point;
+
   Setting({
     this.reminderHour = 20,
     this.reminderMinute = 0,
@@ -41,6 +44,7 @@ class Setting {
     this.startingDayOfWeek = 'Sunday',
     this.hasPasscode = false,
     this.hasReminderTime = false,
+    this.point = 0,
   });
 
   Setting copyWith({
@@ -52,6 +56,7 @@ class Setting {
     String? startingDayOfWeek,
     bool? hasPasscode,
     bool? hasReminderTime,
+    int? point,
   }) {
     return Setting(
       reminderHour: reminderHour ?? this.reminderHour,
@@ -62,6 +67,7 @@ class Setting {
       startingDayOfWeek: startingDayOfWeek ?? this.startingDayOfWeek,
       hasPasscode: hasPasscode ?? this.hasPasscode,
       hasReminderTime: hasReminderTime ?? this.hasReminderTime,
+      point: point ?? this.point,
     );
   }
 }
