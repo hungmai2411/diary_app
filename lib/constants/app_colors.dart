@@ -20,5 +20,11 @@ class AppColors {
     colors: [Color(0xff82d84e), Color(0xff0ead69)],
     stops: [0.0, 1.0],
   );
-  static Color textSecondColor = const Color(0xFF7D8699);
+  static Color textSecondColor = const Color(0xFFB2B2B2);
+
+  static Color mood5 = const Color(0xFFEEDB87);
+  static Color mood4 = const Color(0xFFB8D68A);
+  static Color mood3 = const Color(0xFF60AE72);
+  static Color mood2 = const Color(0xFF3B7751);
+  static Color mood1 = const Color(0xFF6B7672);
 }
