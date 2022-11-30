@@ -1,4 +1,5 @@
 import 'package:diary_app/constants/app_colors.dart';
+import 'package:diary_app/features/board/screens/board_screen.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/diary_screen.dart';
@@ -28,7 +29,7 @@ class _MyAppState extends State<MyApp> {
   List screens = [
     const DiaryScreen(),
     Container(),
-    Container(),
+    const BoardScreen(),
     const SettingScreen(),
   ];
 

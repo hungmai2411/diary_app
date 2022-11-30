@@ -9,6 +9,7 @@ class AppAssets {
   static const String iconSleeping = '$iconPath/sleeping.png';
   static const String iconEnglish = '$iconPath/united_kingdom.png';
   static const String iconVietnamese = '$iconPath/vietnam.png';
+  static const String iconMood = '$iconPath/mood.png';
 
   static const String iconCoin = '$iconPath/coin.png';
 

@@ -72,13 +72,11 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
   }
 
   final List moods = [
-    Mood(name: 'Angry', image: AppAssets.iconAngry),
-    Mood(name: 'Loving', image: AppAssets.iconLoving),
-    Mood(name: 'Sad', image: AppAssets.iconSad),
-    Mood(name: 'Scared', image: AppAssets.iconScared),
-    Mood(name: 'Smile', image: AppAssets.iconSmile),
-    Mood(name: 'Surprised', image: AppAssets.iconSurprised),
-    Mood(name: 'Sleeping', image: AppAssets.iconSleeping),
+    Mood(name: 'Mood1', image: AppAssets.iconAngry),
+    Mood(name: 'Mood2', image: AppAssets.iconLoving),
+    Mood(name: 'Mood3', image: AppAssets.iconSad),
+    Mood(name: 'Mood4', image: AppAssets.iconScared),
+    Mood(name: 'Mood5', image: AppAssets.iconSmile),
   ];
 
   @override
