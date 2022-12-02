@@ -9,6 +9,8 @@ class SuccessDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8.0))),
       title: Container(
         // width: 200,
         // height: 200,

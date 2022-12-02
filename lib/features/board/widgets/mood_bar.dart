@@ -40,7 +40,7 @@ class MoodBar extends StatelessWidget {
             ),
             child: Row(
               children: [
-                // Mood 5
+                // Mood 1
                 ItemMoodPercent(
                   flex: percents[0],
                   color: AppColors.mood1,
@@ -49,7 +49,7 @@ class MoodBar extends StatelessWidget {
                     bottomLeft: Radius.circular(20),
                   ),
                 ),
-                // Mood 4
+                // Mood 2
                 ItemMoodPercent(
                   flex: percents[1],
                   color: AppColors.mood2,
@@ -59,12 +59,12 @@ class MoodBar extends StatelessWidget {
                   flex: percents[2],
                   color: AppColors.mood3,
                 ),
-                // Mood 2
+                // Mood 4
                 ItemMoodPercent(
                   flex: percents[3],
                   color: AppColors.mood4,
                 ),
-                // Mood 1
+                // Mood 5
                 ItemMoodPercent(
                   flex: percents[4],
                   color: AppColors.mood5,
@@ -82,11 +82,11 @@ class MoodBar extends StatelessWidget {
             children: [
               ItemMoodPercentDetail(
                 color: AppColors.mood5,
-                percent: percents[0],
+                percent: percents[4],
               ),
               ItemMoodPercentDetail(
                 color: AppColors.mood4,
-                percent: percents[1],
+                percent: percents[3],
               ),
               ItemMoodPercentDetail(
                 color: AppColors.mood3,
@@ -94,11 +94,11 @@ class MoodBar extends StatelessWidget {
               ),
               ItemMoodPercentDetail(
                 color: AppColors.mood2,
-                percent: percents[3],
+                percent: percents[1],
               ),
               ItemMoodPercentDetail(
                 color: AppColors.mood1,
-                percent: percents[4],
+                percent: percents[0],
               ),
             ],
           ),
@@ -131,11 +131,11 @@ class MoodBar extends StatelessWidget {
       }
     }
 
-    int mood1Percent = ((mood1 / totalMood) * 100).round();
-    int mood2Percent = ((mood2 / totalMood) * 100).round();
-    int mood3Percent = ((mood3 / totalMood) * 100).round();
-    int mood4Percent = ((mood4 / totalMood) * 100).round();
-    int mood5Percent = ((mood5 / totalMood) * 100).round();
+    int mood1Percent = getPercentMood(mood1, totalMood);
+    int mood2Percent = getPercentMood(mood2, totalMood);
+    int mood3Percent = getPercentMood(mood3, totalMood);
+    int mood4Percent = getPercentMood(mood4, totalMood);
+    int mood5Percent = getPercentMood(mood5, totalMood);
 
     List<int> percents = [
       mood1Percent,
@@ -147,4 +147,7 @@ class MoodBar extends StatelessWidget {
 
     return percents;
   }
+
+  int getPercentMood(int mood, int moodTotal) =>
+      ((mood / moodTotal) * 100).round();
 }
