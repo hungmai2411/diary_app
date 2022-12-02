@@ -72,11 +72,11 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
   }
 
   final List moods = [
-    Mood(name: 'Mood1', image: AppAssets.iconAngry),
-    Mood(name: 'Mood2', image: AppAssets.iconLoving),
-    Mood(name: 'Mood3', image: AppAssets.iconSad),
-    Mood(name: 'Mood4', image: AppAssets.iconScared),
-    Mood(name: 'Mood5', image: AppAssets.iconSmile),
+    Mood(name: 'Mood1', image: AppAssets.iconMood1),
+    Mood(name: 'Mood2', image: AppAssets.iconMood2),
+    Mood(name: 'Mood3', image: AppAssets.iconMood3),
+    Mood(name: 'Mood4', image: AppAssets.iconMood4),
+    Mood(name: 'Mood5', image: AppAssets.iconMood5),
   ];
 
   @override
@@ -128,16 +128,21 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                 horizontal: 20,
                 vertical: 10,
               ),
+              padding: EdgeInsets.zero,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'How was your day?',
-                    style: AppStyles.medium.copyWith(fontSize: 18),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 15.0, right: 15, top: 10),
+                    child: Text(
+                      'How was your day?',
+                      style: AppStyles.medium.copyWith(fontSize: 18),
+                    ),
                   ),
-                  const SizedBox(height: 10),
-                  Wrap(
-                    spacing: 10,
+                  const SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: moods
                         .map(
                           (e) => ItemMood(

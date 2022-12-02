@@ -12,6 +12,7 @@ class MoodFlow extends StatelessWidget {
   final bool? isMonthly;
   final int? year;
   final int? numOfDays;
+  final List<Diary> diariesMonth;
 
   const MoodFlow({
     super.key,
@@ -19,22 +20,11 @@ class MoodFlow extends StatelessWidget {
     this.isMonthly = true,
     this.year,
     this.numOfDays,
+    required this.diariesMonth,
   });
 
   @override
   Widget build(BuildContext context) {
-    final DiaryProvider diaryProvider = context.watch<DiaryProvider>();
-    List<Diary> diaries = diaryProvider.diaries;
-    List<Diary> diariesMonth = [];
-
-    for (Diary diary in diaries) {
-      DateTime createdAt = diary.createdAt;
-
-      if (createdAt.month == month && createdAt.year == year) {
-        diariesMonth.add(diary);
-      }
-    }
-
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -113,12 +103,7 @@ class MoodFlow extends StatelessWidget {
                           );
                         },
                       ),
-                      spots: diariesMonth.map((diary) {
-                        double x = diary.createdAt.day / 5 - 0.2;
-                        double y = diary.mood.getIndex();
-
-                        return FlSpot(x, y);
-                      }).toList(),
+                      spots: createSpots(diariesMonth),
                       color: AppColors.selectedColor,
                       barWidth: 5,
                       isStrokeCapRound: true,
@@ -131,6 +116,29 @@ class MoodFlow extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<FlSpot> createSpots(List<Diary> diariesMonth) {
+    List<FlSpot> spots = [];
+    int dayTmp = 0;
+    int i = 0;
+
+    for (Diary diary in diariesMonth) {
+      int dayCreated = diary.createdAt.day;
+      double x = dayCreated / 5 - 0.2;
+      double y = diary.mood.getIndex();
+
+      if (dayTmp == dayCreated) {
+        --i;
+        spots.removeAt(i);
+      }
+
+      spots.insert(i, FlSpot(x, y));
+      dayTmp = dayCreated;
+      i++;
+    }
+
+    return spots;
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
@@ -193,19 +201,19 @@ class MoodFlow extends StatelessWidget {
 
     switch (value.toInt()) {
       case 1:
-        colorMood = AppColors.mood1;
+        colorMood = AppColors.mood5;
         break;
       case 2:
-        colorMood = AppColors.mood2;
+        colorMood = AppColors.mood4;
         break;
       case 3:
         colorMood = AppColors.mood3;
         break;
       case 4:
-        colorMood = AppColors.mood4;
+        colorMood = AppColors.mood2;
         break;
       case 5:
-        colorMood = AppColors.mood5;
+        colorMood = AppColors.mood1;
         break;
       default:
         return Container();

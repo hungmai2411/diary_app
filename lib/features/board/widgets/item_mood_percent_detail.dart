@@ -5,7 +5,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 
 class ItemMoodPercentDetail extends StatelessWidget {
   final Color color;
-  final double percent;
+  final int percent;
 
   const ItemMoodPercentDetail({
     super.key,

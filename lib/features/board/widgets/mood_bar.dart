@@ -2,13 +2,20 @@ import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/features/board/widgets/item_mood_percent.dart';
 import 'package:diary_app/features/board/widgets/item_mood_percent_detail.dart';
+import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:flutter/material.dart';
 
 class MoodBar extends StatelessWidget {
-  const MoodBar({super.key});
+  final List<Diary> diariesMonth;
+
+  const MoodBar({
+    super.key,
+    required this.diariesMonth,
+  });
 
   @override
   Widget build(BuildContext context) {
+    List<int> percents = getListPercent();
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
@@ -35,8 +42,8 @@ class MoodBar extends StatelessWidget {
               children: [
                 // Mood 5
                 ItemMoodPercent(
-                  flex: (22 / 10).round(),
-                  color: AppColors.mood5,
+                  flex: percents[0],
+                  color: AppColors.mood1,
                   radius: const BorderRadius.only(
                     topLeft: Radius.circular(20),
                     bottomLeft: Radius.circular(20),
@@ -44,23 +51,23 @@ class MoodBar extends StatelessWidget {
                 ),
                 // Mood 4
                 ItemMoodPercent(
-                  flex: (11 / 10).round(),
-                  color: AppColors.mood4,
+                  flex: percents[1],
+                  color: AppColors.mood2,
                 ),
                 // Mood 3
                 ItemMoodPercent(
-                  flex: (33 / 10).round(),
+                  flex: percents[2],
                   color: AppColors.mood3,
                 ),
                 // Mood 2
                 ItemMoodPercent(
-                  flex: (0 / 10).round(),
-                  color: AppColors.mood2,
+                  flex: percents[3],
+                  color: AppColors.mood4,
                 ),
                 // Mood 1
                 ItemMoodPercent(
-                  flex: (33 / 10).round(),
-                  color: AppColors.mood1,
+                  flex: percents[4],
+                  color: AppColors.mood5,
                   radius: const BorderRadius.only(
                     topRight: Radius.circular(20),
                     bottomRight: Radius.circular(20),
@@ -75,28 +82,69 @@ class MoodBar extends StatelessWidget {
             children: [
               ItemMoodPercentDetail(
                 color: AppColors.mood5,
-                percent: 22,
+                percent: percents[0],
               ),
               ItemMoodPercentDetail(
                 color: AppColors.mood4,
-                percent: 11,
+                percent: percents[1],
               ),
               ItemMoodPercentDetail(
                 color: AppColors.mood3,
-                percent: 33,
+                percent: percents[2],
               ),
               ItemMoodPercentDetail(
                 color: AppColors.mood2,
-                percent: 0,
+                percent: percents[3],
               ),
               ItemMoodPercentDetail(
                 color: AppColors.mood1,
-                percent: 33,
+                percent: percents[4],
               ),
             ],
           ),
         ],
       ),
     );
+  }
+
+  List<int> getListPercent() {
+    int mood1 = 0;
+    int mood2 = 0;
+    int mood3 = 0;
+    int mood4 = 0;
+    int mood5 = 0;
+    int totalMood = diariesMonth.length;
+
+    for (Diary diary in diariesMonth) {
+      double index = diary.mood.getIndex();
+
+      if (index == 1) {
+        mood5++;
+      } else if (index == 2) {
+        mood4++;
+      } else if (index == 3) {
+        mood3++;
+      } else if (index == 4) {
+        mood2++;
+      } else if (index == 5) {
+        mood1++;
+      }
+    }
+
+    int mood1Percent = ((mood1 / totalMood) * 100).round();
+    int mood2Percent = ((mood2 / totalMood) * 100).round();
+    int mood3Percent = ((mood3 / totalMood) * 100).round();
+    int mood4Percent = ((mood4 / totalMood) * 100).round();
+    int mood5Percent = ((mood5 / totalMood) * 100).round();
+
+    List<int> percents = [
+      mood1Percent,
+      mood2Percent,
+      mood3Percent,
+      mood4Percent,
+      mood5Percent
+    ];
+
+    return percents;
   }
 }

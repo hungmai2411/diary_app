@@ -17,15 +17,15 @@ class Mood {
   double getIndex() {
     switch (name) {
       case 'Mood1':
-        return 1;
+        return 5;
       case 'Mood2':
-        return 2;
+        return 4;
       case 'Mood3':
         return 3;
       case 'Mood4':
-        return 4;
+        return 2;
       default:
-        return 5;
+        return 1;
     }
   }
 }
