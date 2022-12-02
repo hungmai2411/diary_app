@@ -1,4 +1,7 @@
+import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
+import 'package:diary_app/features/diary/screens/detail_diary_screen.dart';
+import 'package:diary_app/features/diary/screens/edit_diary_screen.dart';
 import 'package:diary_app/features/setting/screens/language_screen.dart';
 import 'package:diary_app/features/setting/screens/passcode_screen.dart';
 import 'package:diary_app/features/setting/screens/start_of_the_week_screen.dart';
@@ -20,6 +23,22 @@ MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
         settings: settings,
         builder: (context) => AddDiaryScreen(
           dateTime: dateTime,
+        ),
+      );
+    case EditDiaryScreen.routeName:
+      final Diary diary = settings.arguments as Diary;
+      return MaterialPageRoute<dynamic>(
+        settings: settings,
+        builder: (context) => EditDiaryScreen(
+          diary: diary,
+        ),
+      );
+    case DetailDiaryScreen.routeName:
+      final Diary diary = settings.arguments as Diary;
+      return MaterialPageRoute<dynamic>(
+        settings: settings,
+        builder: (context) => DetailDiaryScreen(
+          diary: diary,
         ),
       );
   }

@@ -17,19 +17,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class AddDiaryScreen extends StatefulWidget {
-  final DateTime dateTime;
+class EditDiaryScreen extends StatefulWidget {
+  final Diary diary;
 
-  const AddDiaryScreen({
+  const EditDiaryScreen({
     super.key,
-    required this.dateTime,
+    required this.diary,
   });
-  static const String routeName = '/add_diary_screen';
+  static const String routeName = '/edit_diary_screen';
   @override
-  State<AddDiaryScreen> createState() => _AddDiaryScreenState();
+  State<EditDiaryScreen> createState() => _EditDiaryScreenState();
 }
 
-class _AddDiaryScreenState extends State<AddDiaryScreen> {
+class _EditDiaryScreenState extends State<EditDiaryScreen> {
   Mood moodPicked = Mood(name: '', image: '');
   final TextEditingController noteController = TextEditingController();
   // lưu trữ hình ảnh
@@ -50,8 +50,10 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
       final diaryProvider = context.read<DiaryProvider>();
       Diary newDiary = Diary(
         mood: moodPicked,
-        createdAt: widget.dateTime,
-        content: noteController.text.isEmpty ? null : noteController.text,
+        createdAt: widget.diary.createdAt,
+        content: noteController.text.isEmpty
+            ? 'Nothing is written for this day 🙁'
+            : noteController.text,
         images: images,
       );
       diaryProvider.addDiary(newDiary);
@@ -69,6 +71,13 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
   void dispose() {
     super.dispose();
     noteController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    noteController.text = widget.diary.content!;
+    moodPicked = widget.diary.mood;
   }
 
   final List moods = [
@@ -93,7 +102,7 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
           ),
         ),
         title: Text(
-          DateFormat('MMM d, yyyy').format(widget.dateTime),
+          DateFormat('MMM d, yyyy').format(widget.diary.createdAt),
           style: AppStyles.medium.copyWith(fontSize: 18),
         ),
         actions: [
@@ -180,9 +189,8 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                     color: AppColors.textSecondaryColor,
                   ),
                   SizedBox(
+                    height: 150,
                     child: TextField(
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
                       scrollPadding: EdgeInsets.zero,
                       controller: noteController,
                       decoration: InputDecoration(
