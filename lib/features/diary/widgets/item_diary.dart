@@ -47,40 +47,42 @@ class ItemDiary extends StatelessWidget {
               color: AppColors.textSecondaryColor,
             ),
             const SizedBox(width: 10),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  diary.content!,
-                  style: AppStyles.regular.copyWith(
-                    fontSize: 14,
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    diary.content ?? 'Nothing is written for this day 🙁',
+                    style: AppStyles.regular.copyWith(
+                      fontSize: 14,
+                    ),
                   ),
-                ),
-                if (diary.images != null)
-                  Wrap(
-                    children: diary.images!
-                        .map(
-                          (e) => Padding(
-                            padding: const EdgeInsets.only(
-                              top: 8.0,
-                              right: 8.0,
-                            ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.memory(
-                                e,
-                                fit: BoxFit.cover,
-                                width: 80,
-                                height: 80,
+                  if (diary.images != null)
+                    Wrap(
+                      children: diary.images!
+                          .map(
+                            (e) => Padding(
+                              padding: const EdgeInsets.only(
+                                top: 8.0,
+                                right: 8.0,
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.memory(
+                                  e,
+                                  fit: BoxFit.cover,
+                                  width: 80,
+                                  height: 80,
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                        .toList(),
-                  )
-              ],
+                          )
+                          .toList(),
+                    )
+                ],
+              ),
             ),
           ],
         ),

@@ -16,6 +16,7 @@ class ItemMoodPercent extends StatelessWidget {
     return Expanded(
       flex: flex,
       child: Container(
+        height: 30,
         decoration: BoxDecoration(
           color: color,
           borderRadius: radius,

@@ -42,17 +42,17 @@ class SuccessDialog extends StatelessWidget {
               onTap: () => Navigator.pop(context),
               child: Container(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 60,
-                  vertical: 10,
+                  vertical: 15,
                 ),
                 decoration: BoxDecoration(
                   color: AppColors.selectedColor,
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(10),
                 ),
+                alignment: Alignment.center,
                 child: Text(
                   'Claim',
                   style: AppStyles.regular.copyWith(
-                    fontSize: 15,
+                    fontSize: 16,
                     color: Colors.white,
                   ),
                 ),

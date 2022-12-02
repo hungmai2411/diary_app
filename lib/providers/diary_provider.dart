@@ -16,9 +16,17 @@ class DiaryProvider extends ChangeNotifier {
   void addDiary(Diary diary) async {
     final box = await dbHelper.openBox("diaries");
 
-    dbHelper.addDiary(box, diary);
+    await dbHelper.addDiary(box, diary);
 
     _diaries.add(diary);
+    notifyListeners();
+  }
+
+  void deleteDiary(Diary diary) async {
+    final box = await dbHelper.openBox("diaries");
+    await dbHelper.deleteDiary(box, diary.key!);
+
+    _diaries.remove(diary);
     notifyListeners();
   }
 }

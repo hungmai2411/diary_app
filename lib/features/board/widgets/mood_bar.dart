@@ -32,22 +32,14 @@ class MoodBar extends StatelessWidget {
             style: AppStyles.medium,
           ),
           const SizedBox(height: 20),
-          Container(
-            height: 30,
-            decoration: BoxDecoration(
-              color: AppColors.orange,
-              borderRadius: BorderRadius.circular(20),
-            ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20),
             child: Row(
               children: [
                 // Mood 1
                 ItemMoodPercent(
                   flex: percents[0],
                   color: AppColors.mood1,
-                  radius: const BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    bottomLeft: Radius.circular(20),
-                  ),
                 ),
                 // Mood 2
                 ItemMoodPercent(
@@ -68,10 +60,6 @@ class MoodBar extends StatelessWidget {
                 ItemMoodPercent(
                   flex: percents[4],
                   color: AppColors.mood5,
-                  radius: const BorderRadius.only(
-                    topRight: Radius.circular(20),
-                    bottomRight: Radius.circular(20),
-                  ),
                 ),
               ],
             ),

@@ -6,6 +6,8 @@ import 'package:diary_app/constants/utils.dart';
 import 'package:diary_app/extensions/string_ext.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
+import 'package:diary_app/features/diary/screens/detail_diary_screen.dart';
+import 'package:diary_app/features/diary/screens/edit_diary_screen.dart';
 import 'package:diary_app/features/diary/widgets/item_date.dart';
 import 'package:diary_app/features/diary/widgets/item_diary.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
@@ -39,6 +41,14 @@ class _DiaryScreenState extends State<DiaryScreen> {
       context,
       AddDiaryScreen.routeName,
       arguments: dateTime,
+    );
+  }
+
+  navigateToDetailDiaryScreen(Diary diary) {
+    Navigator.pushNamed(
+      context,
+      DetailDiaryScreen.routeName,
+      arguments: diary,
     );
   }
 
@@ -208,7 +218,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
                   Diary diary = diaries[index];
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 15.0),
-                    child: ItemDiary(diary: diary),
+                    child: GestureDetector(
+                      onTap: () => navigateToDetailDiaryScreen(diary),
+                      child: ItemDiary(diary: diary),
+                    ),
                   );
                 },
                 childCount: diaries.length,
