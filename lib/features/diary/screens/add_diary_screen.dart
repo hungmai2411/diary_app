@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:diary_app/constants/app_assets.dart';
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/constants/utils.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/models/mood.dart';
 import 'package:diary_app/features/diary/widgets/item_mood.dart';
@@ -42,6 +43,7 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
 
   addNote(BuildContext context) async {
     if (moodPicked.name.isEmpty) {
+      showSnackBar(context, 'Please record your mood');
     } else {
       final SettingProvider settingProvider = context.read<SettingProvider>();
       Setting setting = settingProvider.setting;
@@ -51,7 +53,9 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
       Diary newDiary = Diary(
         mood: moodPicked,
         createdAt: widget.dateTime,
-        content: noteController.text,
+        content: noteController.text.isEmpty
+            ? 'Nothing is written for this day 🙁'
+            : noteController.text,
         images: images,
       );
       diaryProvider.addDiary(newDiary);

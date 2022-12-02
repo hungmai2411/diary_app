@@ -1,12 +1,13 @@
+import 'package:another_flushbar/flushbar.dart';
 import 'package:diary_app/constants/app_assets.dart';
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/constants/utils.dart';
 import 'package:diary_app/extensions/string_ext.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/widgets/item_date.dart';
 import 'package:diary_app/features/diary/widgets/item_diary.dart';
-import 'package:diary_app/features/diary/widgets/success_dialog.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/providers/date_provider.dart';
 import 'package:diary_app/providers/diary_provider.dart';
@@ -27,6 +28,7 @@ class DiaryScreen extends StatefulWidget {
 }
 
 class _DiaryScreenState extends State<DiaryScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   @override
   void initState() {
     super.initState();
@@ -81,6 +83,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
     print(setting.point);
 
     return Scaffold(
+      key: _scaffoldKey,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -140,12 +143,14 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     setting.startingDayOfWeek.getStartingDayOfWeek,
                 shouldFillViewport: true,
                 calendarBuilders: CalendarBuilders(
-                  defaultBuilder: (context, datetime, events) {
+                  defaultBuilder: (context1, datetime, events) {
                     return GestureDetector(
                       onTap: () {
                         if (!isSameDay(datetime, dateProvider.selectedDay) &&
                             datetime.compareTo(DateTime.now()) == -1) {
                           dateProvider.setDay(datetime);
+                        } else {
+                          showSnackBar(context, 'You cannot record the future');
                         }
                       },
                       child: ItemDate(
@@ -155,10 +160,15 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     );
                   },
                   todayBuilder: (context, datetime, events) {
-                    return ItemDate(
-                      date: datetime.day.toString(),
-                      color: AppColors.todayColor,
-                      img: getIconOfDay(datetime, diaries),
+                    return GestureDetector(
+                      onTap: () {
+                        dateProvider.setDay(datetime);
+                      },
+                      child: ItemDate(
+                        date: datetime.day.toString(),
+                        color: AppColors.todayColor,
+                        img: getIconOfDay(datetime, diaries),
+                      ),
                     );
                   },
                   selectedBuilder: (context, datetime, events) {
