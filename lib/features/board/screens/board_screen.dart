@@ -2,7 +2,9 @@ import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/features/board/widgets/mood_bar.dart';
 import 'package:diary_app/features/board/widgets/mood_flow.dart';
+import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
+import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/providers/setting_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -46,6 +48,20 @@ class _BoardScreenState extends State<BoardScreen>
     Setting setting = settingProvider.setting;
     String locale = setting.language == 'English' ? 'en' : 'vi';
     final size = MediaQuery.of(context).size;
+    final DiaryProvider diaryProvider = context.watch<DiaryProvider>();
+    List<Diary> diaries = diaryProvider.diaries;
+    List<Diary> diariesMonth = [];
+
+    diaries.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+
+    for (Diary diary in diaries) {
+      DateTime createdAt = diary.createdAt;
+
+      if (createdAt.month == selectedTime.month &&
+          createdAt.year == selectedTime.year) {
+        diariesMonth.add(diary);
+      }
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -132,9 +148,12 @@ class _BoardScreenState extends State<BoardScreen>
                             selectedTime.year,
                             selectedTime.month,
                           ),
+                          diariesMonth: diariesMonth,
                         ),
                         const SizedBox(height: 20),
-                        const MoodBar(),
+                        MoodBar(
+                          diariesMonth: diariesMonth,
+                        ),
                       ],
                     ),
                     Column(
@@ -143,9 +162,12 @@ class _BoardScreenState extends State<BoardScreen>
                           month: selectedTime.month,
                           isMonthly: false,
                           year: selectedTime.year,
+                          diariesMonth: diariesMonth,
                         ),
                         const SizedBox(height: 20),
-                        const MoodBar(),
+                        MoodBar(
+                          diariesMonth: diariesMonth,
+                        ),
                       ],
                     ),
                   ],

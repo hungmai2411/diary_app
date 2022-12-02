@@ -205,14 +205,6 @@ class _DiaryScreenState extends State<DiaryScreen> {
               ),
             ),
           ),
-          SliverToBoxAdapter(
-            child: Image.asset(
-              AppAssets.iconMood,
-              width: 45,
-              height: 37,
-              fit: BoxFit.fitHeight,
-            ),
-          )
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:diary_app/constants/app_assets.dart';
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/features/board/widgets/mood_flow.dart';
 import 'package:diary_app/features/diary/widgets/smile_painter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -41,14 +42,14 @@ class ItemDate extends StatelessWidget {
           const SizedBox(height: 2),
           img != null
               ? Image.asset(
-                  AppAssets.iconMood,
+                  img!,
                   fit: BoxFit.cover,
-                  width: 45,
-                  height: 37,
+                  width: 50,
+                  height: 50,
                 )
               : SizedBox(
                   width: 45,
-                  height: 37,
+                  height: 50,
                   child: Stack(
                     children: [
                       Container(
