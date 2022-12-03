@@ -1,5 +1,7 @@
 import 'package:diary_app/features/diary/models/diary.dart';
+import 'package:diary_app/features/diary/models/mood.dart';
 import 'package:diary_app/services/db_helpers.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class DiaryProvider extends ChangeNotifier {
@@ -16,9 +18,9 @@ class DiaryProvider extends ChangeNotifier {
   void addDiary(Diary diary) async {
     final box = await dbHelper.openBox("diaries");
 
-    await dbHelper.addDiary(box, diary);
+    Diary newDiary = await dbHelper.addDiary(box, diary);
 
-    _diaries.add(diary);
+    _diaries.add(newDiary);
     notifyListeners();
   }
 
@@ -27,6 +29,32 @@ class DiaryProvider extends ChangeNotifier {
     await dbHelper.deleteDiary(box, diary.key!);
 
     _diaries.remove(diary);
+    notifyListeners();
+  }
+
+  void editDiary(
+    Diary diary,
+    Mood mood,
+    String? content,
+    List<Uint8List>? images,
+  ) async {
+    for (var d in _diaries) {
+      if (diary.key == d.key) {
+        _diaries.remove(d);
+        break;
+      }
+    }
+
+    final box = await dbHelper.openBox("diaries");
+
+    diary = diary.copyWith(
+      mood: mood,
+      content: content,
+      images: images,
+    );
+    _diaries.add(diary);
+    await dbHelper.editDiary(box, diary.key!, diary);
+
     notifyListeners();
   }
 }

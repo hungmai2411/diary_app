@@ -183,6 +183,7 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                     child: TextField(
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
+                      autocorrect: false,
                       scrollPadding: EdgeInsets.zero,
                       controller: noteController,
                       decoration: InputDecoration(

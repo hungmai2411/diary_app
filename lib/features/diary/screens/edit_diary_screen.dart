@@ -5,10 +5,13 @@ import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/constants/utils.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/models/mood.dart';
+import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
+import 'package:diary_app/features/diary/screens/diary_screen.dart';
 import 'package:diary_app/features/diary/widgets/item_mood.dart';
 import 'package:diary_app/features/diary/widgets/item_upload_group.dart';
 import 'package:diary_app/features/diary/widgets/success_dialog.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
+import 'package:diary_app/my_app.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/widgets/box.dart';
@@ -43,27 +46,16 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
     if (moodPicked.name.isEmpty) {
       showSnackBar(context, 'Please record your mood');
     } else {
-      final SettingProvider settingProvider = context.read<SettingProvider>();
-      Setting setting = settingProvider.setting;
-      setting = setting.copyWith(point: setting.point + 100);
-      settingProvider.setSetting(setting);
       final diaryProvider = context.read<DiaryProvider>();
-      Diary newDiary = Diary(
-        mood: moodPicked,
-        createdAt: widget.diary.createdAt,
-        content: noteController.text.isEmpty
-            ? 'Nothing is written for this day 🙁'
-            : noteController.text,
-        images: images,
+
+      diaryProvider.editDiary(
+        widget.diary,
+        moodPicked,
+        noteController.text,
+        images,
       );
-      diaryProvider.addDiary(newDiary);
-      await showDialog(
-        context: context,
-        builder: (_) {
-          return const SuccessDialog();
-        },
-      );
-      popScreen();
+
+      Navigator.pushNamed(context, MyApp.routeName);
     }
   }
 
@@ -78,6 +70,9 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
     super.initState();
     noteController.text = widget.diary.content!;
     moodPicked = widget.diary.mood;
+    if (widget.diary.images != null) {
+      images = widget.diary.images!;
+    }
   }
 
   final List moods = [
@@ -116,14 +111,6 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
               ),
             ),
           ),
-          // Padding(
-          //   padding: EdgeInsets.only(right: 8.0),
-          //   child: Icon(
-          //     FontAwesomeIcons.trashCan,
-          //     size: 20,
-          //     color: AppColors.textPrimaryColor,
-          //   ),
-          // ),
         ],
         centerTitle: true,
       ),
@@ -191,6 +178,9 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
                   SizedBox(
                     height: 150,
                     child: TextField(
+                      maxLines: null,
+                      keyboardType: TextInputType.multiline,
+                      autocorrect: false,
                       scrollPadding: EdgeInsets.zero,
                       controller: noteController,
                       decoration: InputDecoration(
@@ -227,14 +217,6 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
                 ],
               ),
             ),
-            // your voices
-            // Box(
-            //   margin: const EdgeInsets.symmetric(
-            //     horizontal: 20,
-            //     vertical: 10,
-            //   ),
-            //   child: ItemUploadVoice(),
-            // ),
           ],
         ),
       ),

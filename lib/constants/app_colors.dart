@@ -27,4 +27,7 @@ class AppColors {
   static Color mood3 = const Color(0xFF60AE72);
   static Color mood4 = const Color(0xFF3B7751);
   static Color mood5 = const Color(0xFF6B7672);
+
+  static Color moodBarEmptyPrimary = const Color(0xFFEEEEEE);
+  static Color moodBarEmptySecondary = const Color(0xFFB6B6B5);
 }

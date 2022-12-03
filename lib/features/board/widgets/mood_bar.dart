@@ -1,5 +1,6 @@
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/features/board/widgets/empty_mood_bar.dart';
 import 'package:diary_app/features/board/widgets/item_mood_percent.dart';
 import 'package:diary_app/features/board/widgets/item_mood_percent_detail.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
@@ -15,6 +16,9 @@ class MoodBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (diariesMonth.isEmpty) {
+      return const EmptyMoodBar();
+    }
     List<int> percents = getListPercent();
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),

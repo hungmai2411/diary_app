@@ -24,7 +24,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DiaryScreen extends StatefulWidget {
   const DiaryScreen({super.key});
-
+  static const String routeName = '/diary_screen';
   @override
   State<DiaryScreen> createState() => _DiaryScreenState();
 }
@@ -98,6 +98,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
         slivers: [
           SliverAppBar(
             elevation: 0,
+            automaticallyImplyLeading: false,
             backgroundColor: Colors.transparent,
             title: Row(
               mainAxisAlignment: MainAxisAlignment.center,

@@ -55,6 +55,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       backgroundColor:
           !isAppbarCollapsing ? Colors.transparent : AppColors.appbarColor,
       elevation: 0,
+      automaticallyImplyLeading: false,
       title: Text(
         'Setting',
         style: AppStyles.semibold.copyWith(fontSize: 18),

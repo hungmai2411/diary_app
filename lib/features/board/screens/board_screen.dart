@@ -71,6 +71,7 @@ class _BoardScreenState extends State<BoardScreen>
           'Mood Board',
           style: AppStyles.semibold.copyWith(fontSize: 18),
         ),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         child: SizedBox(
