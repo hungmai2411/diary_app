@@ -1,6 +1,7 @@
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/detail_diary_screen.dart';
+import 'package:diary_app/features/diary/screens/diary_screen.dart';
 import 'package:diary_app/features/diary/screens/edit_diary_screen.dart';
 import 'package:diary_app/features/setting/screens/language_screen.dart';
 import 'package:diary_app/features/setting/screens/passcode_screen.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 
 final Map<String, WidgetBuilder> routes = {
   MyApp.routeName: (context) => const MyApp(),
+  DiaryScreen.routeName: (context) => const DiaryScreen(),
   StartOfTheWeekScreen.routeName: (context) => const StartOfTheWeekScreen(),
   LanguageScreen.routeName: (context) => const LanguageScreen(),
   PasscodeScreen.routeName: (context) => const PasscodeScreen(),
