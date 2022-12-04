@@ -41,28 +41,32 @@ class ItemDate extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           img != null
-              ? Image.asset(
-                  img!,
-                  fit: BoxFit.cover,
-                  width: 50,
-                  height: 50,
+              ? Expanded(
+                  child: Image.asset(
+                    img!,
+                    fit: BoxFit.cover,
+                    width: 50,
+                    height: 50,
+                  ),
                 )
-              : SizedBox(
-                  width: 45,
-                  height: 50,
-                  child: Stack(
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: AppColors.unNote,
+              : Expanded(
+                  child: SizedBox(
+                    width: 45,
+                    height: 50,
+                    child: Stack(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.unNote,
+                          ),
                         ),
-                      ),
-                      CustomPaint(
-                        painter: SmilePainter(),
-                        child: Container(),
-                      )
-                    ],
+                        CustomPaint(
+                          painter: SmilePainter(),
+                          child: Container(),
+                        )
+                      ],
+                    ),
                   ),
                 ),
         ],

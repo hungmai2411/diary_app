@@ -2,5 +2,52 @@
     "language": "Vietnamese",
     "@language": {
         "description":"Ngôn ngữ hiện tại"
-    }
+    },
+    "diaryTab": "Nhật kí",
+    "settingTab":"Cài đặt",
+    "timeLineTab":"Thời gian",
+    "boardTab":"Thống kê",
+    "general":"Cài đặt chung",
+    "passcode":"Mật mã",
+    "backUp":"Sao lưu và khôi phục",
+    "reminderTime":"Thời gian nhắc nhở",
+    "startOfTheWeek":"Ngày bắt đầu của tuần",
+    "monday":"Thứ hai",
+    "tuesday":"Thứ ba",
+    "wednesday":"Thứ tư",
+    "thursday":"Thứ năm",
+    "friday":"Thứ sáu",
+    "saturday":"Thứ bảy",
+    "sunday":"Chủ nhật",
+    "language":"Ngôn ngữ",
+    "changeTheme":"Thay đổi chủ đề",
+    "other":"Khác",
+    "privacyPolicy":"Chính sách riêng tư",
+    "termsOfConditions":"Điều khoản & Điều kiện",
+    "feedback":"Phản hồi",
+    "aboutUs":"Về chúng tôi",
+    "english":"Tiếng Anh",
+    "vietnamese":"Tiếng Việt",
+    "moodBoard":"Bảng tâm trạng",
+    "monthly":"Tháng",
+    "annual":"Năm",
+    "moodFlow":"Theo dõi tâm trạng",
+    "moodBar":"Thanh tâm trạng",
+    "noRecord":"Không dữ liệu",
+    "youCannotRecordThefuture":"Bạn không thể ghi cho tương lai",
+    "pleaseRecordYourMood":"Làm ơn chọn 1 tâm trang",
+    "howWasYourDay":"Ngày của bạn như thế nào?",
+    "writeAboutToday":"Viết về hôm nay",
+    "yourPhotos":"Ảnh của bạn",
+    "writeSomething":"Viết gì đó...",
+    "theDiaryHasBeenRecorded":"Nhật kí đã được lưu",
+    "coin":"100 xu",
+    "claim":"Nhận"
+
+
+
+
+
+
+
 }

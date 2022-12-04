@@ -16,6 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddDiaryScreen extends StatefulWidget {
   final DateTime dateTime;
@@ -41,7 +42,10 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
 
   addNote(BuildContext context) async {
     if (moodPicked.name.isEmpty) {
-      showSnackBar(context, 'Please record your mood');
+      showSnackBar(
+        context,
+        AppLocalizations.of(context)!.pleaseRecordYourMood,
+      );
     } else {
       final SettingProvider settingProvider = context.read<SettingProvider>();
       Setting setting = settingProvider.setting;
@@ -81,6 +85,11 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final SettingProvider settingProvider = context.read<SettingProvider>();
+
+    Setting setting = settingProvider.setting;
+    String locale = setting.language == 'English' ? 'en' : 'vi';
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -93,7 +102,7 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
           ),
         ),
         title: Text(
-          DateFormat('MMM d, yyyy').format(widget.dateTime),
+          DateFormat('MMM d, yyyy', locale).format(widget.dateTime),
           style: AppStyles.medium.copyWith(fontSize: 18),
         ),
         actions: [
@@ -107,14 +116,6 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
               ),
             ),
           ),
-          // Padding(
-          //   padding: EdgeInsets.only(right: 8.0),
-          //   child: Icon(
-          //     FontAwesomeIcons.trashCan,
-          //     size: 20,
-          //     color: AppColors.textPrimaryColor,
-          //   ),
-          // ),
         ],
         centerTitle: true,
       ),
@@ -136,7 +137,7 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                     padding:
                         const EdgeInsets.only(left: 15.0, right: 15, top: 10),
                     child: Text(
-                      'How was your day?',
+                      AppLocalizations.of(context)!.howWasYourDay,
                       style: AppStyles.medium.copyWith(fontSize: 18),
                     ),
                   ),
@@ -172,7 +173,7 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Write about today',
+                    AppLocalizations.of(context)!.writeAboutToday,
                     style: AppStyles.medium.copyWith(fontSize: 18),
                   ),
                   const SizedBox(height: 5),
@@ -189,7 +190,7 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.zero,
-                        hintText: 'Write something...',
+                        hintText: AppLocalizations.of(context)!.writeSomething,
                         hintStyle: AppStyles.regular.copyWith(
                           fontSize: 17,
                           color: AppColors.textSecondColor,
@@ -210,7 +211,7 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Your photos',
+                    AppLocalizations.of(context)!.yourPhotos,
                     style: AppStyles.medium.copyWith(fontSize: 18),
                   ),
                   const SizedBox(height: 10),

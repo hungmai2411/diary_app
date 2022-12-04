@@ -1,9 +1,12 @@
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
+import 'package:diary_app/features/setting/models/setting.dart';
+import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/widgets/box.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class ItemDiary extends StatelessWidget {
   final Diary diary;
@@ -15,6 +18,11 @@ class ItemDiary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SettingProvider settingProvider = context.read<SettingProvider>();
+
+    Setting setting = settingProvider.setting;
+    String locale = setting.language == 'English' ? 'en' : 'vi';
+
     return Box(
       child: IntrinsicHeight(
         child: Row(
@@ -29,7 +37,7 @@ class ItemDiary extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  DateFormat("MMM").format(diary.createdAt),
+                  DateFormat("MMM", locale).format(diary.createdAt),
                   style: AppStyles.regular.copyWith(
                     fontSize: 14,
                   ),

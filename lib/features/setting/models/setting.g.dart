@@ -19,10 +19,10 @@ class SettingAdapter extends TypeAdapter<Setting> {
     return Setting(
       reminderHour: fields[0] as int,
       reminderMinute: fields[7] as int,
-      language: fields[1] as String,
+      language: fields[1] as String?,
       theme: fields[2] as String,
       passcode: fields[3] as String?,
-      startingDayOfWeek: fields[4] as String,
+      startingDayOfWeek: fields[4] as String?,
       hasPasscode: fields[6] as bool,
       hasReminderTime: fields[5] as bool,
       point: fields[8] as int,

@@ -1,8 +1,7 @@
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomAppBar extends StatefulWidget {
   final ScrollController scrollController;
@@ -57,7 +56,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
       elevation: 0,
       automaticallyImplyLeading: false,
       title: Text(
-        'Setting',
+        AppLocalizations.of(context)!.settingTab,
         style: AppStyles.semibold.copyWith(fontSize: 18),
       ),
     );

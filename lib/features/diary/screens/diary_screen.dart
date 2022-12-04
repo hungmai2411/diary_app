@@ -1,4 +1,3 @@
-import 'package:another_flushbar/flushbar.dart';
 import 'package:diary_app/constants/app_assets.dart';
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
@@ -7,16 +6,15 @@ import 'package:diary_app/extensions/string_ext.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/detail_diary_screen.dart';
-import 'package:diary_app/features/diary/screens/edit_diary_screen.dart';
 import 'package:diary_app/features/diary/widgets/item_date.dart';
 import 'package:diary_app/features/diary/widgets/item_diary.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/providers/date_provider.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/providers/setting_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -30,7 +28,10 @@ class DiaryScreen extends StatefulWidget {
 }
 
 class _DiaryScreenState extends State<DiaryScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  GlobalKey? key1;
+  Uint8List? bytes1;
+
   @override
   void initState() {
     super.initState();
@@ -65,6 +66,21 @@ class _DiaryScreenState extends State<DiaryScreen> {
     return null;
   }
 
+  List<Diary> getDiaryOfDay(DateTime dateTime, List<Diary> diaries) {
+    List<Diary> diariesTmp = [];
+
+    print('run func get icon of day');
+    for (var diary in diaries) {
+      if (dateTime.day == diary.createdAt.day &&
+          dateTime.month == diary.createdAt.month &&
+          dateTime.year == diary.createdAt.year) {
+        diariesTmp.add(diary);
+      }
+    }
+
+    return diariesTmp;
+  }
+
   void chooseDate() async {
     final dateProvider = context.read<DateProvider>();
 
@@ -85,8 +101,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
     final DateProvider dateProvider = context.watch<DateProvider>();
     final DiaryProvider diaryProvider = context.watch<DiaryProvider>();
     List<Diary> diaries = diaryProvider.diaries;
+    List<Diary> diariesOfDay = getDiaryOfDay(dateProvider.selectedDay, diaries);
     Setting setting = settingProvider.setting;
     String locale = setting.language == 'English' ? 'en' : 'vi';
+
     final kToday = DateTime.now();
     final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
     final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
@@ -136,11 +154,27 @@ class _DiaryScreenState extends State<DiaryScreen> {
                   ),
                 ),
                 const Spacer(),
-                InkWell(
-                  onTap: () {},
+                GestureDetector(
+                  onTap: () async {
+                    final bytes1 = await capture(key1);
+
+                    setState(() {
+                      this.bytes1 = bytes1;
+                    });
+                    // showCupertinoModalBottomSheet(
+                    //   isDismissible: true,
+                    //   backgroundColor: AppColors.backgroundColor,
+                    //   context: context,
+                    //   builder: (context) => ShareScreen(
+                    //     bytes1: bytes1,
+                    //     bytes2: null,
+                    //     bytes3: null,
+                    //   ),
+                    // );
+                  },
                   child: const Icon(
-                    Icons.search,
-                    color: Colors.black,
+                    Icons.ios_share,
+                    color: AppColors.textPrimaryColor,
                   ),
                 ),
               ],
@@ -151,7 +185,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
               height: MediaQuery.of(context).size.width,
               child: TableCalendar(
                 startingDayOfWeek:
-                    setting.startingDayOfWeek.getStartingDayOfWeek,
+                    setting.startingDayOfWeek!.getStartingDayOfWeek,
                 shouldFillViewport: true,
                 calendarBuilders: CalendarBuilders(
                   defaultBuilder: (context1, datetime, events) {
@@ -161,7 +195,11 @@ class _DiaryScreenState extends State<DiaryScreen> {
                             datetime.compareTo(DateTime.now()) == -1) {
                           dateProvider.setDay(datetime);
                         } else {
-                          showSnackBar(context, 'You cannot record the future');
+                          showSnackBar(
+                            context,
+                            AppLocalizations.of(context)!
+                                .youCannotRecordThefuture,
+                          );
                         }
                       },
                       child: ItemDate(
@@ -215,8 +253,17 @@ class _DiaryScreenState extends State<DiaryScreen> {
             ),
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  Diary diary = diaries[index];
+                (
+                  BuildContext context,
+                  int index,
+                ) {
+                  if (index == diariesOfDay.length) {
+                    return Container(
+                      height: 50,
+                    );
+                  }
+                  Diary diary = diariesOfDay[index];
+
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 15.0),
                     child: GestureDetector(
@@ -225,7 +272,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     ),
                   );
                 },
-                childCount: diaries.length,
+                childCount: diariesOfDay.length + 1,
               ),
             ),
           ),

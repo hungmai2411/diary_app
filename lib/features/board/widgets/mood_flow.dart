@@ -1,18 +1,17 @@
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/features/board/widgets/empty_mood_flow.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
-import 'package:diary_app/providers/diary_provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:quiver/time.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MoodFlow extends StatelessWidget {
   final int? month;
   final bool? isMonthly;
   final int? year;
   final int? numOfDays;
-  final List<Diary> diariesMonth;
+  final List<Diary> diaries;
 
   const MoodFlow({
     super.key,
@@ -20,7 +19,7 @@ class MoodFlow extends StatelessWidget {
     this.isMonthly = true,
     this.year,
     this.numOfDays,
-    required this.diariesMonth,
+    required this.diaries,
   });
 
   @override
@@ -34,91 +33,127 @@ class MoodFlow extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Padding(
-        padding: const EdgeInsets.only(right: 10.0),
-        child: Column(
-          children: [
-            Text('Mood Flow', style: AppStyles.medium),
-            const SizedBox(height: 5),
-            Expanded(
-              child: LineChart(
-                LineChartData(
-                  gridData: FlGridData(
-                    show: true,
-                    drawVerticalLine: true,
-                    drawHorizontalLine: false,
-                    verticalInterval: 1,
-                    getDrawingVerticalLine: (value) {
-                      return FlLine(
-                        color: AppColors.unNote,
-                        strokeWidth: 1,
-                      );
-                    },
+      child: diaries.isEmpty
+          ? EmptyMoodFlow(
+              isMonthly: isMonthly!,
+              year: year!,
+              month: month!,
+            )
+          : Padding(
+              padding: const EdgeInsets.only(right: 10.0),
+              child: Column(
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.moodFlow,
+                    style: AppStyles.medium,
                   ),
-                  titlesData: FlTitlesData(
-                    show: true,
-                    rightTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                    topTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: false),
-                    ),
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 30,
-                        interval: 1,
-                        getTitlesWidget: bottomTitleWidgets,
+                  const SizedBox(height: 5),
+                  Expanded(
+                    child: LineChart(
+                      LineChartData(
+                        gridData: FlGridData(
+                          show: true,
+                          drawVerticalLine: true,
+                          drawHorizontalLine: false,
+                          verticalInterval: 1,
+                          getDrawingVerticalLine: (value) {
+                            return FlLine(
+                              color: AppColors.unNote,
+                              strokeWidth: 1,
+                            );
+                          },
+                        ),
+                        titlesData: FlTitlesData(
+                          show: true,
+                          rightTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          topTitles: AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 30,
+                              interval: 1,
+                              getTitlesWidget: bottomTitleWidgets,
+                            ),
+                          ),
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              interval: 1,
+                              getTitlesWidget: leftTitleWidgets,
+                              reservedSize: 42,
+                            ),
+                          ),
+                        ),
+                        borderData: FlBorderData(
+                          show: true,
+                          border: Border(
+                            left: BorderSide(width: 1, color: AppColors.unNote),
+                            bottom:
+                                BorderSide(width: 1, color: AppColors.unNote),
+                          ),
+                        ),
+                        minX: 0,
+                        maxX: isMonthly! ? (numOfDays == 31 ? 7 : 6) : 12,
+                        minY: 0,
+                        maxY: 6,
+                        lineBarsData: [
+                          LineChartBarData(
+                            dotData: FlDotData(
+                              show: true,
+                              getDotPainter: (p0, p1, p2, p3) {
+                                return FlDotCirclePainter(
+                                  color: Colors.white,
+                                  radius: 2,
+                                  strokeWidth: 2,
+                                  strokeColor: AppColors.selectedColor,
+                                );
+                              },
+                            ),
+                            spots: isMonthly!
+                                ? createSpotsForMonthly(diaries)
+                                : createSpotsForAnnualy(diaries),
+                            color: AppColors.selectedColor,
+                            barWidth: 5,
+                            isStrokeCapRound: true,
+                          ),
+                        ],
                       ),
                     ),
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        interval: 1,
-                        getTitlesWidget: leftTitleWidgets,
-                        reservedSize: 42,
-                      ),
-                    ),
                   ),
-                  borderData: FlBorderData(
-                    show: true,
-                    border: Border(
-                      left: BorderSide(width: 1, color: AppColors.unNote),
-                      bottom: BorderSide(width: 1, color: AppColors.unNote),
-                    ),
-                  ),
-                  minX: 0,
-                  maxX: isMonthly! ? (numOfDays == 31 ? 7 : 6) : 12,
-                  minY: 0,
-                  maxY: 6,
-                  lineBarsData: [
-                    LineChartBarData(
-                      dotData: FlDotData(
-                        show: true,
-                        getDotPainter: (p0, p1, p2, p3) {
-                          return FlDotCirclePainter(
-                            color: Colors.white,
-                            strokeWidth: 2,
-                            strokeColor: AppColors.selectedColor,
-                          );
-                        },
-                      ),
-                      spots: createSpots(diariesMonth),
-                      color: AppColors.selectedColor,
-                      barWidth: 5,
-                      isStrokeCapRound: true,
-                    ),
-                  ],
-                ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
     );
   }
 
-  List<FlSpot> createSpots(List<Diary> diariesMonth) {
+  List<FlSpot> createSpotsForAnnualy(List<Diary> diariesAnnual) {
+    List<FlSpot> spots = [];
+    int dayTmp = 0;
+    int i = 0;
+
+    for (Diary diary in diariesAnnual) {
+      int dayCreated = diary.createdAt.day;
+      double x = dayCreated / 5 - 0.2;
+      double y = diary.mood.getIndex();
+
+      if (dayTmp == dayCreated) {
+        --i;
+        spots.removeAt(i);
+      }
+
+      spots.insert(i, FlSpot(x, y));
+      dayTmp = dayCreated;
+      i++;
+    }
+
+    return spots;
+  }
+
+  List<FlSpot> createSpotsForMonthly(List<Diary> diariesMonth) {
     List<FlSpot> spots = [];
     int dayTmp = 0;
     int i = 0;

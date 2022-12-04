@@ -12,7 +12,7 @@ class Setting {
   final int reminderHour;
 
   @HiveField(1)
-  final String language;
+  final String? language;
 
   @HiveField(2)
   final String theme;
@@ -21,7 +21,7 @@ class Setting {
   final String? passcode;
 
   @HiveField(4)
-  final String startingDayOfWeek;
+  final String? startingDayOfWeek;
 
   @HiveField(5)
   final bool hasReminderTime;
@@ -38,10 +38,10 @@ class Setting {
   Setting({
     this.reminderHour = 20,
     this.reminderMinute = 0,
-    this.language = 'English',
+    this.language,
     this.theme = 'Paradise Beach',
     this.passcode,
-    this.startingDayOfWeek = 'Sunday',
+    this.startingDayOfWeek,
     this.hasPasscode = false,
     this.hasReminderTime = false,
     this.point = 0,

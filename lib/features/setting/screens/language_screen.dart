@@ -7,6 +7,7 @@ import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/widgets/box.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key});
@@ -47,7 +48,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          'Start day of the week',
+          AppLocalizations.of(context)!.language,
           style: AppStyles.regular.copyWith(fontSize: 16),
         ),
       ),

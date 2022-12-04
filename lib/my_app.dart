@@ -4,6 +4,7 @@ import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/diary_screen.dart';
 import 'package:diary_app/features/setting/screens/setting_screen.dart';
+import 'package:diary_app/features/time_line/screens/time_line_screen.dart';
 import 'package:diary_app/providers/date_provider.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/services/db_helpers.dart';
@@ -11,6 +12,7 @@ import 'package:diary_app/widgets/tab_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'providers/bottom_navigation_provider.dart';
 
@@ -28,7 +30,7 @@ class _MyAppState extends State<MyApp> {
 
   List screens = [
     const DiaryScreen(),
-    Container(),
+    const TimeLineScreen(),
     const BoardScreen(),
     const SettingScreen(),
   ];
@@ -58,6 +60,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     var bottomProvider = Provider.of<BottomNavigationProvider>(context);
     var dateProvider = Provider.of<DateProvider>(context);
+
     print(dateProvider.selectedDay);
     return Scaffold(
       extendBody: true,
@@ -80,7 +83,7 @@ class _MyAppState extends State<MyApp> {
                     onPressed: () {
                       bottomProvider.currentIndex = 0;
                     },
-                    name: 'Diary',
+                    name: AppLocalizations.of(context)!.diaryTab,
                     color: bottomProvider.currentIndex == 0
                         ? AppColors.primaryColor
                         : AppColors.textSecondColor,
@@ -89,8 +92,8 @@ class _MyAppState extends State<MyApp> {
                     onPressed: () {
                       bottomProvider.currentIndex = 1;
                     },
-                    iconData: FontAwesomeIcons.globe,
-                    name: 'Challenge',
+                    iconData: FontAwesomeIcons.list,
+                    name: AppLocalizations.of(context)!.timeLineTab,
                     color: bottomProvider.currentIndex == 1
                         ? AppColors.primaryColor
                         : AppColors.textSecondColor,
@@ -106,7 +109,7 @@ class _MyAppState extends State<MyApp> {
                       bottomProvider.currentIndex = 2;
                     },
                     iconData: FontAwesomeIcons.chartSimple,
-                    name: 'Board',
+                    name: AppLocalizations.of(context)!.boardTab,
                     color: bottomProvider.currentIndex == 2
                         ? AppColors.primaryColor
                         : AppColors.textSecondColor,
@@ -116,7 +119,7 @@ class _MyAppState extends State<MyApp> {
                       bottomProvider.currentIndex = 3;
                     },
                     iconData: FontAwesomeIcons.gear,
-                    name: 'Setting',
+                    name: AppLocalizations.of(context)!.settingTab,
                     color: bottomProvider.currentIndex == 3
                         ? AppColors.primaryColor
                         : AppColors.textSecondColor,

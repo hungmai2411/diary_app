@@ -11,6 +11,7 @@ import 'package:diary_app/widgets/box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -91,6 +92,7 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     final settingProvider = Provider.of<SettingProvider>(context);
     Setting setting = settingProvider.setting;
+    print(setting.startingDayOfWeek);
 
     return Scaffold(
       appBar: PreferredSize(
@@ -103,7 +105,8 @@ class _SettingScreenState extends State<SettingScreen> {
           controller: settingController,
           children: [
             // general text
-            Text('General', style: AppStyles.medium),
+            Text(AppLocalizations.of(context)!.general,
+                style: AppStyles.medium),
             const SizedBox(height: 10),
             // passcode
             GestureDetector(
@@ -121,7 +124,8 @@ class _SettingScreenState extends State<SettingScreen> {
                       color: AppColors.textSecondColor,
                     ),
                     const SizedBox(width: 8),
-                    Text('Passcode', style: AppStyles.medium),
+                    Text(AppLocalizations.of(context)!.passcode,
+                        style: AppStyles.medium),
                     const Spacer(),
                     CupertinoSwitch(
                       // This bool value toggles the switch.
@@ -157,7 +161,8 @@ class _SettingScreenState extends State<SettingScreen> {
                     color: AppColors.textSecondColor,
                   ),
                   const SizedBox(width: 8),
-                  Text('Backup and restore', style: AppStyles.medium),
+                  Text(AppLocalizations.of(context)!.backUp,
+                      style: AppStyles.medium),
                 ],
               ),
             ),
@@ -181,7 +186,8 @@ class _SettingScreenState extends State<SettingScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Reminder time', style: AppStyles.medium),
+                        Text(AppLocalizations.of(context)!.reminderTime,
+                            style: AppStyles.medium),
                         Text(
                           '${setting.reminderHour}:${setting.reminderMinute}',
                           style: AppStyles.regular.copyWith(
@@ -225,10 +231,11 @@ class _SettingScreenState extends State<SettingScreen> {
                       color: AppColors.textSecondColor,
                     ),
                     const SizedBox(width: 8),
-                    Text('Start of the week', style: AppStyles.medium),
+                    Text(AppLocalizations.of(context)!.startOfTheWeek,
+                        style: AppStyles.medium),
                     const Spacer(),
                     Text(
-                      setting.startingDayOfWeek,
+                      setting.startingDayOfWeek!,
                       style: AppStyles.medium.copyWith(
                         color: AppColors.selectedColor,
                         fontSize: 14,
@@ -255,10 +262,11 @@ class _SettingScreenState extends State<SettingScreen> {
                       color: AppColors.textSecondColor,
                     ),
                     const SizedBox(width: 8),
-                    Text('Language', style: AppStyles.medium),
+                    Text(AppLocalizations.of(context)!.language,
+                        style: AppStyles.medium),
                     const Spacer(),
                     Text(
-                      setting.language,
+                      setting.language!,
                       style: AppStyles.medium.copyWith(
                         color: AppColors.selectedColor,
                         fontSize: 14,
@@ -283,7 +291,8 @@ class _SettingScreenState extends State<SettingScreen> {
                     color: AppColors.textSecondColor,
                   ),
                   const SizedBox(width: 8),
-                  Text('Change theme', style: AppStyles.medium),
+                  Text(AppLocalizations.of(context)!.changeTheme,
+                      style: AppStyles.medium),
                   const Spacer(),
                   Text(
                     'Paradise Beach',
@@ -297,7 +306,7 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
             const SizedBox(height: 15),
             // general text
-            Text('About us', style: AppStyles.medium),
+            Text(AppLocalizations.of(context)!.other, style: AppStyles.medium),
             const SizedBox(height: 10),
             // privacy policy
             Box(
@@ -313,7 +322,8 @@ class _SettingScreenState extends State<SettingScreen> {
                     color: AppColors.textSecondColor,
                   ),
                   const SizedBox(width: 8),
-                  Text('Privacy Policy', style: AppStyles.medium),
+                  Text(AppLocalizations.of(context)!.privacyPolicy,
+                      style: AppStyles.medium),
                 ],
               ),
             ),
@@ -332,7 +342,8 @@ class _SettingScreenState extends State<SettingScreen> {
                     color: AppColors.textSecondColor,
                   ),
                   const SizedBox(width: 8),
-                  Text('Terms & Conditions', style: AppStyles.medium),
+                  Text(AppLocalizations.of(context)!.termsOfConditions,
+                      style: AppStyles.medium),
                 ],
               ),
             ),
@@ -351,7 +362,8 @@ class _SettingScreenState extends State<SettingScreen> {
                     color: AppColors.textSecondColor,
                   ),
                   const SizedBox(width: 8),
-                  Text('Feedback', style: AppStyles.medium),
+                  Text(AppLocalizations.of(context)!.feedback,
+                      style: AppStyles.medium),
                 ],
               ),
             ),
@@ -370,7 +382,8 @@ class _SettingScreenState extends State<SettingScreen> {
                     color: AppColors.textSecondColor,
                   ),
                   const SizedBox(width: 8),
-                  Text('About us', style: AppStyles.medium),
+                  Text(AppLocalizations.of(context)!.aboutUs,
+                      style: AppStyles.medium),
                 ],
               ),
             ),
@@ -379,4 +392,10 @@ class _SettingScreenState extends State<SettingScreen> {
       ),
     );
   }
+
+  // String change(String day, String language){
+  //   if(language == 'English'){
+
+  //   }
+  // }
 }
