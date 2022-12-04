@@ -5,6 +5,7 @@ import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/widgets/box.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StartOfTheWeekScreen extends StatefulWidget {
   const StartOfTheWeekScreen({super.key});
@@ -15,15 +16,30 @@ class StartOfTheWeekScreen extends StatefulWidget {
 }
 
 class _StartOfTheWeekScreenState extends State<StartOfTheWeekScreen> {
-  final List days = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',
-  ];
+  List days = [];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setDays();
+  }
+
+  void setDays() {
+    days = [
+      AppLocalizations.of(context)!.monday,
+      AppLocalizations.of(context)!.tuesday,
+      AppLocalizations.of(context)!.wednesday,
+      AppLocalizations.of(context)!.thursday,
+      AppLocalizations.of(context)!.friday,
+      AppLocalizations.of(context)!.saturday,
+      AppLocalizations.of(context)!.sunday,
+    ];
+  }
 
   chooseStartDayOfTheWeek(String day) {
     final settingProvider = context.read<SettingProvider>();
@@ -50,7 +66,7 @@ class _StartOfTheWeekScreenState extends State<StartOfTheWeekScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          'Start day of the week',
+          AppLocalizations.of(context)!.startOfTheWeek,
           style: AppStyles.regular.copyWith(fontSize: 16),
         ),
       ),

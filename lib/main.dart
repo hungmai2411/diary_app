@@ -13,6 +13,7 @@ import 'package:diary_app/services/db_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -24,7 +25,7 @@ void main() async {
   Hive.registerAdapter(MoodAdapter());
   Hive.registerAdapter(SettingAdapter());
   SettingProvider settingProvider = SettingProvider();
-  getSetting(settingProvider);
+  await getSetting(settingProvider);
 
   runApp(
     MultiProvider(
@@ -63,7 +64,8 @@ void main() async {
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate
+            GlobalWidgetsLocalizations.delegate,
+            MonthYearPickerLocalizations.delegate,
           ],
           routes: routes,
           debugShowCheckedModeBanner: false,
@@ -79,5 +81,14 @@ getSetting(SettingProvider settingProvider) async {
   final DbHelper dbHelper = DbHelper();
   final box = await dbHelper.openBox("settings");
   Setting setting = dbHelper.getSetting(box);
+
+  if (setting.language == null) {
+    setting = setting.copyWith(
+      language: 'English',
+    );
+  }
+  if (setting.startingDayOfWeek == null) {
+    setting = setting.copyWith(startingDayOfWeek: 'Sunday');
+  }
   settingProvider.setSetting(setting);
 }

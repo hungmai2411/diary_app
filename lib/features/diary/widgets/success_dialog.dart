@@ -2,6 +2,7 @@ import 'package:diary_app/constants/app_assets.dart';
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SuccessDialog extends StatelessWidget {
   const SuccessDialog({super.key});
@@ -22,7 +23,7 @@ class SuccessDialog extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              'The diary has been recorded',
+              AppLocalizations.of(context)!.theDiaryHasBeenRecorded,
               style: AppStyles.medium.copyWith(),
             ),
             const SizedBox(height: 15),
@@ -31,7 +32,7 @@ class SuccessDialog extends StatelessWidget {
               fit: BoxFit.cover,
             ),
             Text(
-              '100 coin',
+              AppLocalizations.of(context)!.coin,
               style: AppStyles.bold.copyWith(
                 color: AppColors.orange,
                 fontSize: 22,
@@ -50,7 +51,7 @@ class SuccessDialog extends StatelessWidget {
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  'Claim',
+                  AppLocalizations.of(context)!.claim,
                   style: AppStyles.regular.copyWith(
                     fontSize: 16,
                     color: Colors.white,

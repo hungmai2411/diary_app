@@ -4,11 +4,11 @@ import 'package:diary_app/features/board/widgets/mood_bar.dart';
 import 'package:diary_app/features/board/widgets/mood_flow.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
+import 'package:diary_app/providers/date_provider.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/providers/setting_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +34,7 @@ class _BoardScreenState extends State<BoardScreen>
       length: 2,
       vsync: this,
     );
+    selectedTime = context.read<DateProvider>().selectedDay;
   }
 
   @override
@@ -51,6 +52,7 @@ class _BoardScreenState extends State<BoardScreen>
     final DiaryProvider diaryProvider = context.watch<DiaryProvider>();
     List<Diary> diaries = diaryProvider.diaries;
     List<Diary> diariesMonth = [];
+    List<Diary> diariesYear = [];
 
     diaries.sort((a, b) => a.createdAt.compareTo(b.createdAt));
 
@@ -61,6 +63,10 @@ class _BoardScreenState extends State<BoardScreen>
           createdAt.year == selectedTime.year) {
         diariesMonth.add(diary);
       }
+
+      if (createdAt.year == selectedTime.year) {
+        diariesYear.add(diary);
+      }
     }
 
     return Scaffold(
@@ -68,7 +74,7 @@ class _BoardScreenState extends State<BoardScreen>
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          'Mood Board',
+          AppLocalizations.of(context)!.moodBoard,
           style: AppStyles.semibold.copyWith(fontSize: 18),
         ),
         automaticallyImplyLeading: false,
@@ -120,17 +126,10 @@ class _BoardScreenState extends State<BoardScreen>
                       labelStyle: AppStyles.medium,
                       indicatorColor: AppColors.selectedColor,
                       labelColor: AppColors.selectedColor,
-                      tabs: const [
-                        Tab(text: 'Monthly'),
-                        Tab(text: 'Annual'),
+                      tabs: [
+                        Tab(text: AppLocalizations.of(context)!.monthly),
+                        Tab(text: AppLocalizations.of(context)!.annual),
                       ],
-                      onTap: (value) {
-                        setState(
-                          () {
-                            tabIndex = value;
-                          },
-                        );
-                      },
                     ),
                   ],
                 ),
@@ -140,6 +139,7 @@ class _BoardScreenState extends State<BoardScreen>
                 child: TabBarView(
                   controller: tabController,
                   children: [
+                    // monthly
                     Column(
                       children: [
                         MoodFlow(
@@ -149,7 +149,7 @@ class _BoardScreenState extends State<BoardScreen>
                             selectedTime.year,
                             selectedTime.month,
                           ),
-                          diariesMonth: diariesMonth,
+                          diaries: diariesMonth,
                         ),
                         const SizedBox(height: 20),
                         MoodBar(
@@ -157,17 +157,18 @@ class _BoardScreenState extends State<BoardScreen>
                         ),
                       ],
                     ),
+                    // annually
                     Column(
                       children: [
                         MoodFlow(
                           month: selectedTime.month,
                           isMonthly: false,
                           year: selectedTime.year,
-                          diariesMonth: diariesMonth,
+                          diaries: diariesYear,
                         ),
                         const SizedBox(height: 20),
                         MoodBar(
-                          diariesMonth: diariesMonth,
+                          diariesMonth: diariesYear,
                         ),
                       ],
                     ),

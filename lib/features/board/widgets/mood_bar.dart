@@ -5,6 +5,7 @@ import 'package:diary_app/features/board/widgets/item_mood_percent.dart';
 import 'package:diary_app/features/board/widgets/item_mood_percent_detail.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MoodBar extends StatelessWidget {
   final List<Diary> diariesMonth;
@@ -32,7 +33,7 @@ class MoodBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            'Mood Bar',
+            AppLocalizations.of(context)!.moodBar,
             style: AppStyles.medium,
           ),
           const SizedBox(height: 20),

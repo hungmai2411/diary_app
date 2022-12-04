@@ -68,7 +68,9 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
   @override
   void initState() {
     super.initState();
-    noteController.text = widget.diary.content!;
+    if (widget.diary.content != null) {
+      noteController.text = widget.diary.content!;
+    }
     moodPicked = widget.diary.mood;
     if (widget.diary.images != null) {
       images = widget.diary.images!;
