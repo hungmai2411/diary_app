@@ -68,26 +68,29 @@ class ItemDiary extends StatelessWidget {
                     ),
                   ),
                   if (diary.images != null)
-                    Wrap(
-                      children: diary.images!
-                          .map(
-                            (e) => Padding(
-                              padding: const EdgeInsets.only(
-                                top: 8.0,
-                                right: 8.0,
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.memory(
-                                  e,
-                                  fit: BoxFit.cover,
-                                  width: 80,
-                                  height: 80,
+                    Hero(
+                      tag: diary.key!,
+                      child: Wrap(
+                        children: diary.images!
+                            .map(
+                              (e) => Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 8.0,
+                                  right: 8.0,
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.memory(
+                                    e,
+                                    fit: BoxFit.cover,
+                                    width: 80,
+                                    height: 80,
+                                  ),
                                 ),
                               ),
-                            ),
-                          )
-                          .toList(),
+                            )
+                            .toList(),
+                      ),
                     )
                 ],
               ),

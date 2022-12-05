@@ -29,20 +29,6 @@ class _TimeLineScreenState extends State<TimeLineScreen> {
   @override
   void initState() {
     super.initState();
-
-    final DiaryProvider diaryProvider = context.read<DiaryProvider>();
-    List<Diary> diaries = diaryProvider.diaries;
-
-    diaries.sort((a, b) => a.createdAt.compareTo(b.createdAt));
-
-    for (Diary diary in diaries) {
-      DateTime createdAt = diary.createdAt;
-
-      if (createdAt.month == selectedDay.month &&
-          createdAt.year == selectedDay.year) {
-        diariesMonth.add(diary);
-      }
-    }
   }
 
   chooseMonth() async {
@@ -58,13 +44,36 @@ class _TimeLineScreenState extends State<TimeLineScreen> {
     );
   }
 
+  getDiariesPerMonth(DateTime selectedDay) {
+    diariesMonth = [];
+    final DiaryProvider diaryProvider = context.read<DiaryProvider>();
+    List<Diary> diaries = diaryProvider.diaries;
+
+    diaries.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+
+    for (Diary diary in diaries) {
+      DateTime createdAt = diary.createdAt;
+
+      if (createdAt.month == selectedDay.month &&
+          createdAt.year == selectedDay.year) {
+        diariesMonth.add(diary);
+      }
+    }
+
+    if (isSort) {
+      diariesMonth.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    } else {
+      diariesMonth.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final SettingProvider settingProvider = context.read<SettingProvider>();
-    final DateProvider dateProvider = context.watch<DateProvider>();
-
     Setting setting = settingProvider.setting;
     String locale = setting.language == 'English' ? 'en' : 'vi';
+
+    getDiariesPerMonth(selectedDay);
 
     return Scaffold(
       appBar: AppBar(
@@ -97,13 +106,6 @@ class _TimeLineScreenState extends State<TimeLineScreen> {
             GestureDetector(
               onTap: () {
                 setState(() {
-                  if (isSort) {
-                    diariesMonth
-                        .sort((a, b) => b.createdAt.compareTo(a.createdAt));
-                  } else {
-                    diariesMonth
-                        .sort((a, b) => a.createdAt.compareTo(b.createdAt));
-                  }
                   isSort = !isSort;
                 });
               },

@@ -181,7 +181,10 @@ class DetailDiaryScreen extends StatelessWidget {
                     style: AppStyles.medium.copyWith(fontSize: 18),
                   ),
                   const SizedBox(height: 10),
-                  ImageGroup(images: diary.images!),
+                  Hero(
+                    tag: diary.key!,
+                    child: ImageGroup(images: diary.images!),
+                  ),
                 ],
               ),
             ),
