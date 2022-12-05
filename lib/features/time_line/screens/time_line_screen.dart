@@ -2,14 +2,12 @@ import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/widgets/item_diary.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
-import 'package:diary_app/providers/date_provider.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/providers/setting_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:month_year_picker/month_year_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../../constants/app_colors.dart';
@@ -81,7 +79,7 @@ class _TimeLineScreenState extends State<TimeLineScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Spacer(
-              flex: 2,
+              flex: 3,
             ),
             GestureDetector(
               onTap: chooseMonth,
@@ -102,7 +100,7 @@ class _TimeLineScreenState extends State<TimeLineScreen> {
                 ],
               ),
             ),
-            const Spacer(),
+            const Spacer(flex: 2),
             GestureDetector(
               onTap: () {
                 setState(() {

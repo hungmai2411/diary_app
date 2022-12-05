@@ -1,5 +1,6 @@
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/extensions/string_ext.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/features/setting/screens/language_screen.dart';
 import 'package:diary_app/features/setting/screens/passcode_screen.dart';
@@ -231,11 +232,18 @@ class _SettingScreenState extends State<SettingScreen> {
                       color: AppColors.textSecondColor,
                     ),
                     const SizedBox(width: 8),
-                    Text(AppLocalizations.of(context)!.startOfTheWeek,
-                        style: AppStyles.medium),
+                    Text(
+                      AppLocalizations.of(context)!.startOfTheWeek,
+                      style: AppStyles.medium,
+                    ),
                     const Spacer(),
                     Text(
-                      setting.startingDayOfWeek!,
+                      (setting.language == 'Tiếng Việt' &&
+                              !setting.startingDayOfWeek!.checkIsVietNam)
+                          ? setting.startingDayOfWeek!.convertVietNam
+                          : setting.startingDayOfWeek!.checkIsVietNam
+                              ? setting.startingDayOfWeek!.convertEnglish
+                              : setting.startingDayOfWeek!,
                       style: AppStyles.medium.copyWith(
                         color: AppColors.selectedColor,
                         fontSize: 14,
@@ -262,8 +270,10 @@ class _SettingScreenState extends State<SettingScreen> {
                       color: AppColors.textSecondColor,
                     ),
                     const SizedBox(width: 8),
-                    Text(AppLocalizations.of(context)!.language,
-                        style: AppStyles.medium),
+                    Text(
+                      AppLocalizations.of(context)!.language,
+                      style: AppStyles.medium,
+                    ),
                     const Spacer(),
                     Text(
                       setting.language!,
@@ -362,8 +372,10 @@ class _SettingScreenState extends State<SettingScreen> {
                     color: AppColors.textSecondColor,
                   ),
                   const SizedBox(width: 8),
-                  Text(AppLocalizations.of(context)!.feedback,
-                      style: AppStyles.medium),
+                  Text(
+                    AppLocalizations.of(context)!.feedback,
+                    style: AppStyles.medium,
+                  ),
                 ],
               ),
             ),

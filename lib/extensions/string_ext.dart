@@ -1,6 +1,72 @@
 import 'package:table_calendar/table_calendar.dart';
 
 extension StringExtension on String {
+  bool get checkIsVietNam {
+    List<String> days = [
+      'Thứ hai',
+      'Thứ ba',
+      'Thứ tư',
+      'Thứ năm',
+      'Thứ sáu',
+      'Thứ bảy',
+      'Chủ nhật',
+    ];
+    if (days.contains(this)) {
+      return true;
+    }
+    return false;
+  }
+
+  String get convertVietNam {
+    switch (this) {
+      case 'Monday':
+        return 'Thứ hai';
+
+      case 'Tuesday':
+        return 'Thứ ba';
+
+      case 'Wednesday':
+        return 'Thứ tư';
+
+      case 'Thursday':
+        return 'Thứ năm';
+
+      case 'Friday':
+        return 'Thứ sáu';
+
+      case 'Saturday':
+        return 'Thứ bảy';
+
+      default:
+        return 'Chủ nhật';
+    }
+  }
+
+  String get convertEnglish {
+    switch (this) {
+      case 'Thứ hai':
+        return 'Monday';
+
+      case 'Thứ ba':
+        return 'Tuesday';
+
+      case 'Thứ tư':
+        return 'Wednesday';
+
+      case 'Thứ năm':
+        return 'Thursday';
+
+      case 'Thứ sáu':
+        return 'Friday';
+
+      case 'Thứ bảy':
+        return 'Saturday';
+
+      default:
+        return 'Sunday';
+    }
+  }
+
   StartingDayOfWeek get getStartingDayOfWeek {
     switch (this) {
       case 'Monday':

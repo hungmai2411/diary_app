@@ -1,5 +1,6 @@
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/extensions/string_ext.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/widgets/box.dart';
@@ -42,6 +43,9 @@ class _StartOfTheWeekScreenState extends State<StartOfTheWeekScreen> {
   }
 
   chooseStartDayOfTheWeek(String day) {
+    if (day.checkIsVietNam) {
+      day = day.convertEnglish;
+    }
     final settingProvider = context.read<SettingProvider>();
     Setting setting = settingProvider.setting;
     setting = setting.copyWith(startingDayOfWeek: day);
@@ -52,6 +56,8 @@ class _StartOfTheWeekScreenState extends State<StartOfTheWeekScreen> {
   @override
   Widget build(BuildContext context) {
     final settingProvider = context.read<SettingProvider>();
+    Setting setting = settingProvider.setting;
+
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -95,7 +101,13 @@ class _StartOfTheWeekScreenState extends State<StartOfTheWeekScreen> {
                     ),
                   ),
                   const Spacer(),
-                  settingProvider.setting.startingDayOfWeek == day
+                  (setting.language == 'Tiếng Việt' &&
+                                  !setting.startingDayOfWeek!.checkIsVietNam
+                              ? setting.startingDayOfWeek!.convertVietNam
+                              : setting.startingDayOfWeek!.checkIsVietNam
+                                  ? setting.startingDayOfWeek!.convertEnglish
+                                  : setting.startingDayOfWeek!) ==
+                          day
                       ? Icon(
                           Icons.check,
                           color: AppColors.selectedColor,
