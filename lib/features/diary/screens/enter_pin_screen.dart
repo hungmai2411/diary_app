@@ -1,19 +1,20 @@
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
-import 'package:diary_app/features/setting/screens/passcode_confirm_screen.dart';
+import 'package:diary_app/my_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class PasscodeScreen extends StatefulWidget {
-  const PasscodeScreen({super.key});
-  static const String routeName = '/passcode_screen';
+class EnterPinScreen extends StatefulWidget {
+  const EnterPinScreen({super.key, required this.passcode});
+  final String passcode;
 
+  static const String routeName = '/enter_pin_screen';
   @override
-  State<PasscodeScreen> createState() => _PasscodeScreenState();
+  State<EnterPinScreen> createState() => _EnterPinScreenState();
 }
 
-class _PasscodeScreenState extends State<PasscodeScreen> {
+class _EnterPinScreenState extends State<EnterPinScreen> {
   late List<String> input;
   int indexTmp = 0;
   List<String> passcode = ['', '', '', ''];
@@ -31,7 +32,7 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
       '7',
       '8',
       '9',
-      AppLocalizations.of(context)!.exit,
+      '',
       '0',
       AppLocalizations.of(context)!.delete,
     ];
@@ -53,7 +54,7 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
             children: [
               SizedBox(height: size.height * .1),
               Text(
-                AppLocalizations.of(context)!.enterNewPin,
+                AppLocalizations.of(context)!.enterPin,
                 style: AppStyles.semibold,
               ),
               const SizedBox(height: 20),
@@ -90,20 +91,22 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                             }
                           },
                           child: _buildInput(s, AppColors.primaryColor));
-                    } else if (indexTmp == 4) {
-                      SchedulerBinding.instance.addPostFrameCallback((_) {
-                        Navigator.pushNamed(
-                          context,
-                          PasscodeConfirmScreen.routeName,
-                          arguments: passcode.toString(),
-                        );
-                      });
                     }
                     return GestureDetector(
                       onTap: () {
                         setState(() {
                           passcode[indexTmp++] = s;
                         });
+                        if (indexTmp == 4) {
+                          if (passcode.toString() == widget.passcode) {
+                            SchedulerBinding.instance.addPostFrameCallback((_) {
+                              Navigator.pushNamed(
+                                context,
+                                MyApp.routeName,
+                              );
+                            });
+                          }
+                        }
                       },
                       child: _buildInput(s, null),
                     );

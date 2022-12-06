@@ -1,6 +1,7 @@
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/models/mood.dart';
+import 'package:diary_app/features/diary/screens/enter_pin_screen.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/l10n/l10n.dart';
 import 'package:diary_app/my_app.dart';
@@ -48,6 +49,8 @@ void main() async {
         model,
         child,
       ) {
+        Setting setting = settingProvider.setting;
+
         return MaterialApp(
           theme: ThemeData(
             scaffoldBackgroundColor: AppColors.backgroundColor,
@@ -70,7 +73,11 @@ void main() async {
           routes: routes,
           debugShowCheckedModeBanner: false,
           onGenerateRoute: generateRoutes,
-          home: const MyApp(),
+          home: setting.hasPasscode
+              ? EnterPinScreen(
+                  passcode: setting.passcode!,
+                )
+              : const MyApp(),
         );
       }),
     ),

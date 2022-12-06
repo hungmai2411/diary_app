@@ -4,8 +4,8 @@ import 'package:diary_app/constants/app_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class SuccessDialog extends StatelessWidget {
-  const SuccessDialog({super.key});
+class PinSuccessDialog extends StatelessWidget {
+  const PinSuccessDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,22 +21,10 @@ class SuccessDialog extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              AppLocalizations.of(context)!.theDiaryHasBeenRecorded,
+              AppLocalizations.of(context)!.pinSet,
               style: AppStyles.medium.copyWith(),
             ),
             const SizedBox(height: 15),
-            Image.asset(
-              AppAssets.imgGold,
-              fit: BoxFit.cover,
-            ),
-            Text(
-              AppLocalizations.of(context)!.coin,
-              style: AppStyles.bold.copyWith(
-                color: AppColors.orange,
-                fontSize: 22,
-              ),
-            ),
-            const SizedBox(height: 20),
             GestureDetector(
               onTap: () => Navigator.pop(context),
               child: Container(
@@ -49,7 +37,7 @@ class SuccessDialog extends StatelessWidget {
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  AppLocalizations.of(context)!.claim,
+                  AppLocalizations.of(context)!.ok,
                   style: AppStyles.regular.copyWith(
                     fontSize: 16,
                     color: Colors.white,

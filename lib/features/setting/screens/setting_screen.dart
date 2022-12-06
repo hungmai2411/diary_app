@@ -16,7 +16,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
-
+  static const String routeName = '/setting_screen';
   @override
   State<SettingScreen> createState() => _SettingScreenState();
 }
@@ -93,8 +93,7 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     final settingProvider = Provider.of<SettingProvider>(context);
     Setting setting = settingProvider.setting;
-    print(setting.startingDayOfWeek);
-
+    hasPasscode = setting.hasPasscode;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(56),

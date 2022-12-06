@@ -5,6 +5,7 @@ import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/constants/utils.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/models/mood.dart';
+import 'package:diary_app/features/diary/screens/document_screen.dart';
 import 'package:diary_app/features/diary/widgets/item_mood.dart';
 import 'package:diary_app/features/diary/widgets/item_upload_group.dart';
 import 'package:diary_app/features/diary/widgets/success_dialog.dart';
@@ -172,15 +173,38 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    AppLocalizations.of(context)!.writeAboutToday,
-                    style: AppStyles.medium.copyWith(fontSize: 18),
+                  Row(
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.writeAboutToday,
+                        style: AppStyles.medium.copyWith(fontSize: 18),
+                      ),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () async {
+                          final result =
+                              await Navigator.of(context).pushNamed<String>(
+                            DocumentScreen.routeName,
+                          );
+
+                          setState(() {
+                            noteController.text = result!;
+                          });
+                        },
+                        child: const FaIcon(
+                          FontAwesomeIcons.upRightAndDownLeftFromCenter,
+                          color: AppColors.textPrimaryColor,
+                          size: 17,
+                        ),
+                      )
+                    ],
                   ),
                   const SizedBox(height: 5),
                   const Divider(
                     color: AppColors.textSecondaryColor,
                   ),
                   SizedBox(
+                    height: 150,
                     child: TextField(
                       keyboardType: TextInputType.multiline,
                       maxLines: null,

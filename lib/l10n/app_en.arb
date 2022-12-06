@@ -42,5 +42,13 @@
     "writeSomething":"Write something...",
     "theDiaryHasBeenRecorded":"The diary has been recorded",
     "coin":"100 coin",
-    "claim":"Claim"
+    "claim":"Claim",
+    "enterNewPin":"Enter your new PIN",
+    "exit":"Exit",
+    "delete":"Delete",
+    "confirmYourPasscode":"Confirm your PIN",
+    "pinNotMatch":"PIN does not match",
+    "pinSet":"PIN has been set",
+    "ok":"OK",
+    "enterPin":"Enter PIN"
 }

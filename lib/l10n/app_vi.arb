@@ -42,7 +42,19 @@
     "writeSomething":"Viết gì đó...",
     "theDiaryHasBeenRecorded":"Nhật kí đã được lưu",
     "coin":"100 xu",
-    "claim":"Nhận"
+    "claim":"Nhận",
+    "enterNewPin":"Nhập mã pin mới của bạn",
+    "exit":"Thoát",
+    "delete":"Xoá",
+    "confirmYourPasscode":"Xác nhận mã PIN của bạn",
+    "pinNotMatch":"Không khớp, Vui lòng thử lại",
+    "pinSet":"PIN has đã được thiết lập",
+    "ok":"Xác nhận",
+    "enterPin":"Nhập mã PIN"
+
+
+
+
 
 
 

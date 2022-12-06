@@ -6,6 +6,7 @@ import 'package:diary_app/extensions/string_ext.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/detail_diary_screen.dart';
+import 'package:diary_app/features/diary/screens/document_screen.dart';
 import 'package:diary_app/features/diary/widgets/item_date.dart';
 import 'package:diary_app/features/diary/widgets/item_diary.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
@@ -156,21 +157,21 @@ class _DiaryScreenState extends State<DiaryScreen> {
                 const Spacer(),
                 GestureDetector(
                   onTap: () async {
-                    final bytes1 = await capture(key1);
+                    // final bytes1 = await capture(key1);
 
-                    setState(() {
-                      this.bytes1 = bytes1;
-                    });
-                    // showCupertinoModalBottomSheet(
-                    //   isDismissible: true,
-                    //   backgroundColor: AppColors.backgroundColor,
-                    //   context: context,
-                    //   builder: (context) => ShareScreen(
-                    //     bytes1: bytes1,
-                    //     bytes2: null,
-                    //     bytes3: null,
-                    //   ),
-                    // );
+                    // setState(() {
+                    //   this.bytes1 = bytes1;
+                    // });
+                    // // showCupertinoModalBottomSheet(
+                    // //   isDismissible: true,
+                    // //   backgroundColor: AppColors.backgroundColor,
+                    // //   context: context,
+                    // //   builder: (context) => ShareScreen(
+                    // //     bytes1: bytes1,
+                    // //     bytes2: null,
+                    // //     bytes3: null,
+                    // //   ),
+                    // // );
                   },
                   child: const Icon(
                     Icons.ios_share,
