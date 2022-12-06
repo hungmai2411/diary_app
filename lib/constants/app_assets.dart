@@ -13,4 +13,5 @@ class AppAssets {
 
   static const String imagePath = 'assets/images';
   static const String imgGold = '$imagePath/gold.png';
+  static const String imgNoDiary = '$imagePath/ic_empty_order.png';
 }

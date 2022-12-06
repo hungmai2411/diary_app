@@ -6,7 +6,6 @@ import 'package:diary_app/extensions/string_ext.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/detail_diary_screen.dart';
-import 'package:diary_app/features/diary/screens/document_screen.dart';
 import 'package:diary_app/features/diary/screens/share_screen.dart';
 import 'package:diary_app/features/diary/widgets/item_date.dart';
 import 'package:diary_app/features/diary/widgets/item_diary.dart';

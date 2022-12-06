@@ -1,6 +1,7 @@
 import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/widgets/item_diary.dart';
+import 'package:diary_app/features/diary/widgets/item_no_diary.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/providers/setting_provider.dart';
@@ -29,10 +30,12 @@ class _TimeLineScreenState extends State<TimeLineScreen> {
     super.initState();
   }
 
-  chooseMonth() async {
+  chooseMonth(String locale) async {
     DatePicker.showDatePicker(
       context,
       dateFormat: 'MMMM-yyyy',
+      locale:
+          locale != 'en' ? DateTimePickerLocale.vi : DateTimePickerLocale.en_us,
       minDateTime: DateTime(2022),
       onConfirm: (dateTime, selectedIndex) {
         setState(() {
@@ -83,7 +86,7 @@ class _TimeLineScreenState extends State<TimeLineScreen> {
               flex: 3,
             ),
             GestureDetector(
-              onTap: chooseMonth,
+              onTap: () => chooseMonth(locale),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -118,20 +121,18 @@ class _TimeLineScreenState extends State<TimeLineScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: ListView.builder(
-        itemBuilder: (context, index) {
-          Diary diary = diariesMonth[index];
-          return Padding(
-            padding: const EdgeInsets.only(
-              left: 20.0,
-              right: 20,
-              bottom: 10,
+      body: diariesMonth.isEmpty
+          ? const SizedBox(
+              width: double.infinity,
+              child: ItemNoDiary(),
+            )
+          : ListView.builder(
+              itemBuilder: (context, index) {
+                Diary diary = diariesMonth[index];
+                return ItemDiary(diary: diary);
+              },
+              itemCount: diariesMonth.length,
             ),
-            child: ItemDiary(diary: diary),
-          );
-        },
-        itemCount: diariesMonth.length,
-      ),
     );
   }
 }

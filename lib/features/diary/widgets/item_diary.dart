@@ -24,6 +24,11 @@ class ItemDiary extends StatelessWidget {
     String locale = setting.language == 'English' ? 'en' : 'vi';
 
     return Box(
+      margin: const EdgeInsets.only(
+        left: 20.0,
+        right: 20,
+        bottom: 10,
+      ),
       child: IntrinsicHeight(
         child: Row(
           children: [
