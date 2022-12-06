@@ -75,6 +75,7 @@ class _TimeLineScreenState extends State<TimeLineScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

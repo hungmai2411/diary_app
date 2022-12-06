@@ -1,240 +1,125 @@
-// import 'dart:io';
-// import 'dart:typed_data';
+import 'dart:io';
+import 'dart:typed_data';
 
-// import 'package:flutter/cupertino.dart';
-// import 'package:flutter/material.dart';
-// import 'package:path_provider/path_provider.dart';
+import 'package:diary_app/constants/app_colors.dart';
+import 'package:diary_app/constants/app_styles.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 
-// class ShareScreen extends StatefulWidget {
-//   // Các tham số truyền vào để lấy dữ liệu từ widget và chuyển sang hình ảnh.
-//   final Uint8List bytes1;
-//   final Uint8List bytes2;
-//   final Uint8List bytes3;
+class ShareScreen extends StatefulWidget {
+  // Các tham số truyền vào để lấy dữ liệu từ widget và chuyển sang hình ảnh.
+  final Uint8List bytes1;
+  final Uint8List bytes2;
+  const ShareScreen({
+    Key? key,
+    required this.bytes1,
+    required this.bytes2,
+  }) : super(key: key);
 
-//   ShareScreen(
-//       {Key? key,
-//       required this.bytes1,
-//       required this.bytes2,
-//       required this.bytes3})
-//       : super(key: key);
-//   @override
-//   ShareScreenState createState() => ShareScreenState();
-// }
+  static const String routeName = '/share_screen';
+  @override
+  ShareScreenState createState() => ShareScreenState();
+}
 
-// class ShareScreenState extends State<ShareScreen> {
-//   // Các tham số truyền vào để lấy dữ liệu từ widget và chuyển sang hình ảnh.
-//   Uint8List? reportData1;
-//   Uint8List? reportData2;
-//   Uint8List? reportData3;
+class ShareScreenState extends State<ShareScreen> {
+  // Các tham số truyền vào để lấy dữ liệu từ widget và chuyển sang hình ảnh.
+  Uint8List? reportData1;
+  Uint8List? reportData2;
 
-//   // Thứ tự của hình ảnh đang chọn để xuất.
-//   int currentIndex = 0;
+  ScreenshotController screenshotController = ScreenshotController();
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     reportData1 = widget.bytes1;
-//     reportData2 = widget.bytes2;
-//     reportData3 = widget.bytes3;
-//   }
+  @override
+  void initState() {
+    super.initState();
+    reportData1 = widget.bytes1;
+    reportData2 = widget.bytes2;
+  }
 
-//   @override
-//   void didUpdateWidget(covariant ShareScreen oldWidget) {
-//     super.didUpdateWidget(oldWidget);
-//     reportData1 = widget.bytes1;
-//     reportData2 = widget.bytes2;
-//     reportData3 = widget.bytes3;
-//   }
+  @override
+  void didUpdateWidget(covariant ShareScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    reportData1 = widget.bytes1;
+    reportData2 = widget.bytes2;
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
+  shareImage() async {
+    final imageFile = await screenshotController.capture();
+    final directory = await getApplicationDocumentsDirectory();
+    final image = File('${directory.path}/diary.png');
+    await image.writeAsBytes(imageFile!);
+    await Share.shareXFiles(
+      [
+        XFile(image.path),
+      ],
+      subject: 'Diary',
+    );
+  }
 
-//     return Scaffold(
-//       appBar: AppBar(
-//         centerTitle: true,
-//         elevation: 0,
-//         backgroundColor: Style.appBarColor,
-//         title: Text('Share',
-//             style: TextStyle(
-//               color: Style.foregroundColor,
-//               fontFamily: Style.fontFamily,
-//               fontSize: 17.0,
-//               fontWeight: FontWeight.w600,
-//             )),
-//         leading: CloseButton(
-//           color: Style.foregroundColor,
-//         ),
-//       ),
-//       body: Container(
-//           color: Style.backgroundColor1,
-//           padding: EdgeInsets.symmetric(vertical: 20.0),
-//           child: ListView(
-//             children: [
-//               Container(
-//                 child: CarouselSlider(
-//                   options: CarouselOptions(
-//                     scrollPhysics: BouncingScrollPhysics(),
-//                     autoPlay: false,
-//                     aspectRatio: 1.2,
-//                     enlargeCenterPage: true,
-//                     enableInfiniteScroll: false,
-//                     onPageChanged: (index, reason) {
-//                       setState(() {
-//                         currentIndex = index;
-//                       });
-//                     },
-//                   ),
-//                   items: [
-//                     if (reportData1 != null) getImageFromUnit8List(reportData1),
-//                     if (reportData2 != null) getImageFromUnit8List(reportData2),
-//                     if (reportData3 != null) getImageFromUnit8List(reportData3),
-//                   ],
-//                 ),
-//               ),
-//               Container(
-//                 height: 40,
-//                 width: double.infinity,
-//                 margin: EdgeInsets.fromLTRB(40, 50, 40, 10),
-//                 child: TextButton(
-//                   style: ButtonStyle(
-//                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
-//                       (Set<MaterialState> states) {
-//                         if (states.contains(MaterialState.pressed))
-//                           return Colors.white;
-//                         return Colors
-//                             .blueAccent; // Use the component's default.
-//                       },
-//                     ),
-//                     foregroundColor: MaterialStateProperty.resolveWith<Color>(
-//                       (Set<MaterialState> states) {
-//                         if (states.contains(MaterialState.pressed))
-//                           return Colors.blueAccent;
-//                         return Colors.white; // Use the component's default.
-//                       },
-//                     ),
-//                   ),
-//                   onPressed: () async {
-//                     final tempDir = await getTemporaryDirectory();
-//                     final file =
-//                         await new File('${tempDir.path}/$reportName.jpg')
-//                             .create();
-//                     var data = (currentIndex == 0)
-//                         ? reportData1
-//                         : ((currentIndex == 1) ? reportData2 : reportData3);
-//                     file.writeAsBytesSync(data);
-//                     Share.shareFiles([file.path]);
-//                   },
-//                   child: Row(
-//                     mainAxisSize: MainAxisSize.min,
-//                     mainAxisAlignment: MainAxisAlignment.start,
-//                     children: [
-//                       Icon(Icons.share),
-//                       SizedBox(
-//                         width: 10,
-//                       ),
-//                       Text(
-//                         'SHARE',
-//                         style: TextStyle(
-//                             fontSize: 14,
-//                             fontFamily: Style.fontFamily,
-//                             fontWeight: FontWeight.w700,
-//                             letterSpacing: 0.5,
-//                             wordSpacing: 2.0),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//               Container(
-//                 height: 40,
-//                 width: double.infinity,
-//                 margin: EdgeInsets.fromLTRB(40, 5, 40, 10),
-//                 child: TextButton(
-//                   style: ButtonStyle(
-//                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
-//                       (Set<MaterialState> states) {
-//                         if (states.contains(MaterialState.pressed))
-//                           return Colors.white;
-//                         return Colors.green; // Use the component's default.
-//                       },
-//                     ),
-//                     foregroundColor: MaterialStateProperty.resolveWith<Color>(
-//                       (Set<MaterialState> states) {
-//                         if (states.contains(MaterialState.pressed))
-//                           return Colors.green;
-//                         return Colors.white; // Use the component's default.
-//                       },
-//                     ),
-//                   ),
-//                   onPressed: () async {
-//                     // Gọi hàm cấp phép truy cập storage và photo gallery để lưu ảnh.
-//                     if (await Permission.storage.request().isGranted &&
-//                         await Permission.photos.request().isGranted) {
-//                       // Lưu hình ảnh theo thứ tự đang được chọn.
-//                       dynamic result = await ImageGallerySaver.saveImage(
-//                           (currentIndex == 0)
-//                               ? reportData1
-//                               : ((currentIndex == 1)
-//                                   ? reportData2
-//                                   : reportData3),
-//                           quality: 100,
-//                           name: reportName);
-
-//                       if (result['isSuccess']) {
-//                         // Thông báo lưu thành công.
-//                         showDialog<void>(
-//                           context: context,
-//                           barrierDismissible: false,
-//                           barrierColor: Style.backgroundColor.withOpacity(0.54),
-//                           builder: (BuildContext context) {
-//                             return CustomAlert(
-//                                 iconPath: "assets/images/success.svg",
-//                                 title: "Successfully",
-//                                 content:
-//                                     "Image has been saved,\ncheck your gallery.");
-//                           },
-//                         );
-//                       } else {
-//                         // Thông báo lưu thất bại.
-//                         showDialog<void>(
-//                           context: context,
-//                           barrierDismissible: false, // user must tap button!
-//                           barrierColor: Style.backgroundColor.withOpacity(0.54),
-//                           builder: (BuildContext context) {
-//                             return CustomAlert(
-//                                 iconPath: "assets/images/error.svg",
-//                                 content:
-//                                     "Something was wrong,\nplease try again.");
-//                           },
-//                         );
-//                       }
-//                     }
-//                   },
-//                   child: Row(
-//                     mainAxisSize: MainAxisSize.min,
-//                     mainAxisAlignment: MainAxisAlignment.start,
-//                     children: [
-//                       Icon(Icons.save_alt),
-//                       SizedBox(width: 10),
-//                       Text(
-//                         'SAVE',
-//                         style: TextStyle(
-//                             fontSize: 14,
-//                             fontFamily: Style.fontFamily,
-//                             fontWeight: FontWeight.w700,
-//                             letterSpacing: 0.5,
-//                             wordSpacing: 2.0),
-//                       ),
-//                     ],
-//                   ),
-//                 ),
-//               )
-//             ],
-//           )),
-//     );
-//   }
-
-//   // Hàm chuyển từ dữ liệu của widget sang hình ảnh.
-//   Widget getImageFromUnit8List(Uint8List bytes) =>
-//       bytes != null ? Image.memory(bytes) : Container();
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.backgroundShareScreen,
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        leading: GestureDetector(
+          onTap: () => Navigator.of(context).pop(),
+          child: const Icon(
+            Icons.arrow_back_ios_rounded,
+            color: Colors.white,
+            size: 20,
+          ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: Text(
+          'Share',
+          style: AppStyles.semibold.copyWith(
+            color: Colors.white,
+            fontSize: 18,
+          ),
+        ),
+        actions: [
+          GestureDetector(
+            onTap: shareImage,
+            child: const Icon(
+              Icons.arrow_forward_rounded,
+              color: Colors.white,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 10),
+        ],
+        centerTitle: true,
+      ),
+      body: Screenshot(
+        controller: screenshotController,
+        child: Container(
+          color: Colors.white,
+          margin: const EdgeInsets.symmetric(
+            horizontal: 30,
+            vertical: 50,
+          ),
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.memory(
+                reportData1!,
+                fit: BoxFit.cover,
+                height: 20,
+              ),
+              const SizedBox(height: 15),
+              Image.memory(
+                reportData2!,
+                fit: BoxFit.cover,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -7,12 +7,14 @@ import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/detail_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/document_screen.dart';
+import 'package:diary_app/features/diary/screens/share_screen.dart';
 import 'package:diary_app/features/diary/widgets/item_date.dart';
 import 'package:diary_app/features/diary/widgets/item_diary.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/providers/date_provider.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/providers/setting_provider.dart';
+import 'package:diary_app/widgets/widget_to_image.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -32,6 +34,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   GlobalKey? key1;
   Uint8List? bytes1;
+
+  GlobalKey? key2;
+  Uint8List? bytes2;
 
   @override
   void initState() {
@@ -139,11 +144,14 @@ class _DiaryScreenState extends State<DiaryScreen> {
                   onTap: chooseDate,
                   child: Row(
                     children: [
-                      Text(
-                        DateFormat('MMM dd, yyyy', locale)
-                            .format(dateProvider.selectedDay),
-                        style: AppStyles.medium.copyWith(fontSize: 18),
-                      ),
+                      WidgetToImage(builder: (key) {
+                        key1 = key;
+                        return Text(
+                          DateFormat('MMM dd, yyyy', locale)
+                              .format(dateProvider.selectedDay),
+                          style: AppStyles.medium.copyWith(fontSize: 18),
+                        );
+                      }),
                       const SizedBox(width: 6),
                       // choose time
                       const Icon(
@@ -157,21 +165,18 @@ class _DiaryScreenState extends State<DiaryScreen> {
                 const Spacer(),
                 GestureDetector(
                   onTap: () async {
-                    // final bytes1 = await capture(key1);
-
-                    // setState(() {
-                    //   this.bytes1 = bytes1;
-                    // });
-                    // // showCupertinoModalBottomSheet(
-                    // //   isDismissible: true,
-                    // //   backgroundColor: AppColors.backgroundColor,
-                    // //   context: context,
-                    // //   builder: (context) => ShareScreen(
-                    // //     bytes1: bytes1,
-                    // //     bytes2: null,
-                    // //     bytes3: null,
-                    // //   ),
-                    // // );
+                    // Lấy dữ liệu của widget theo key.
+                    final bytes1 = await capture(key1);
+                    final bytes2 = await capture(key2);
+                    setState(() {
+                      this.bytes1 = bytes1;
+                      this.bytes2 = bytes2;
+                    });
+                    Navigator.pushNamed(
+                      context,
+                      ShareScreen.routeName,
+                      arguments: [this.bytes1, this.bytes2],
+                    );
                   },
                   child: const Icon(
                     Icons.ios_share,
@@ -184,66 +189,72 @@ class _DiaryScreenState extends State<DiaryScreen> {
           SliverToBoxAdapter(
             child: SizedBox(
               height: MediaQuery.of(context).size.width,
-              child: TableCalendar(
-                startingDayOfWeek:
-                    setting.startingDayOfWeek!.getStartingDayOfWeek,
-                shouldFillViewport: true,
-                calendarBuilders: CalendarBuilders(
-                  defaultBuilder: (context1, datetime, events) {
-                    return GestureDetector(
-                      onTap: () {
-                        if (!isSameDay(datetime, dateProvider.selectedDay) &&
-                            datetime.compareTo(DateTime.now()) == -1) {
-                          dateProvider.setDay(datetime);
-                        } else {
-                          showSnackBar(
-                            context,
-                            AppLocalizations.of(context)!
-                                .youCannotRecordThefuture,
-                          );
-                        }
+              child: WidgetToImage(
+                builder: (key) {
+                  key2 = key;
+                  return TableCalendar(
+                    startingDayOfWeek:
+                        setting.startingDayOfWeek!.getStartingDayOfWeek,
+                    shouldFillViewport: true,
+                    calendarBuilders: CalendarBuilders(
+                      defaultBuilder: (context1, datetime, events) {
+                        return GestureDetector(
+                          onTap: () {
+                            if (!isSameDay(
+                                    datetime, dateProvider.selectedDay) &&
+                                datetime.compareTo(DateTime.now()) == -1) {
+                              dateProvider.setDay(datetime);
+                            } else {
+                              showSnackBar(
+                                context,
+                                AppLocalizations.of(context)!
+                                    .youCannotRecordThefuture,
+                              );
+                            }
+                          },
+                          child: ItemDate(
+                            date: datetime.day.toString(),
+                            img: getIconOfDay(datetime, diaries),
+                          ),
+                        );
                       },
-                      child: ItemDate(
-                        date: datetime.day.toString(),
-                        img: getIconOfDay(datetime, diaries),
-                      ),
-                    );
-                  },
-                  todayBuilder: (context, datetime, events) {
-                    return GestureDetector(
-                      onTap: () {
-                        dateProvider.setDay(datetime);
+                      todayBuilder: (context, datetime, events) {
+                        return GestureDetector(
+                          onTap: () {
+                            dateProvider.setDay(datetime);
+                          },
+                          child: ItemDate(
+                            date: datetime.day.toString(),
+                            color: AppColors.todayColor,
+                            img: getIconOfDay(datetime, diaries),
+                          ),
+                        );
                       },
-                      child: ItemDate(
-                        date: datetime.day.toString(),
-                        color: AppColors.todayColor,
-                        img: getIconOfDay(datetime, diaries),
-                      ),
-                    );
-                  },
-                  selectedBuilder: (context, datetime, events) {
-                    return ItemDate(
-                      date: datetime.day.toString(),
-                      color: AppColors.primaryColor,
-                      img: getIconOfDay(datetime, diaries),
-                      isSelected: true,
-                    );
-                  },
-                ),
-                headerVisible: false,
-                firstDay: kFirstDay,
-                lastDay: kLastDay,
-                calendarFormat: CalendarFormat.month,
-                focusedDay: dateProvider.focusedDay,
-                onPageChanged: (focusedDay) {
-                  dateProvider.setDay(focusedDay);
+                      selectedBuilder: (context, datetime, events) {
+                        return ItemDate(
+                          date: datetime.day.toString(),
+                          color: AppColors.primaryColor,
+                          img: getIconOfDay(datetime, diaries),
+                          isSelected: true,
+                        );
+                      },
+                    ),
+                    headerVisible: false,
+                    firstDay: kFirstDay,
+                    lastDay: kLastDay,
+                    calendarFormat: CalendarFormat.month,
+                    focusedDay: dateProvider.focusedDay,
+                    onPageChanged: (focusedDay) {
+                      dateProvider.setDay(focusedDay);
+                    },
+                    calendarStyle: const CalendarStyle(
+                      outsideDaysVisible: false,
+                    ),
+                    locale: locale,
+                    selectedDayPredicate: (day) =>
+                        isSameDay(dateProvider.selectedDay, day),
+                  );
                 },
-                calendarStyle: const CalendarStyle(
-                  outsideDaysVisible: false,
-                ),
-                locale: locale,
-                selectedDayPredicate: (day) =>
-                    isSameDay(dateProvider.selectedDay, day),
               ),
             ),
           ),

@@ -50,5 +50,6 @@
     "pinNotMatch":"PIN does not match",
     "pinSet":"PIN has been set",
     "ok":"OK",
-    "enterPin":"Enter PIN"
+    "enterPin":"Enter PIN",
+    "share":"Share"
 }

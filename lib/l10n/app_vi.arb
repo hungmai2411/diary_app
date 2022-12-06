@@ -50,7 +50,9 @@
     "pinNotMatch":"Không khớp, Vui lòng thử lại",
     "pinSet":"PIN has đã được thiết lập",
     "ok":"Xác nhận",
-    "enterPin":"Nhập mã PIN"
+    "enterPin":"Nhập mã PIN",
+    "share":"Chia sẻ"
+
 
 
 

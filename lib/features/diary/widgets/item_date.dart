@@ -51,8 +51,8 @@ class ItemDate extends StatelessWidget {
                 )
               : Expanded(
                   child: SizedBox(
-                    width: 45,
-                    height: 50,
+                    height: 43,
+                    width: 43,
                     child: Stack(
                       children: [
                         Container(

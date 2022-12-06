@@ -4,6 +4,7 @@ import 'package:diary_app/features/diary/screens/detail_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/diary_screen.dart';
 import 'package:diary_app/features/diary/screens/document_screen.dart';
 import 'package:diary_app/features/diary/screens/edit_diary_screen.dart';
+import 'package:diary_app/features/diary/screens/share_screen.dart';
 import 'package:diary_app/features/setting/screens/language_screen.dart';
 import 'package:diary_app/features/setting/screens/passcode_confirm_screen.dart';
 import 'package:diary_app/features/setting/screens/passcode_screen.dart';
@@ -57,6 +58,16 @@ MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
       return MaterialPageRoute<dynamic>(
         settings: settings,
         builder: (context) => PasscodeConfirmScreen(passcode: passcode),
+      );
+    case ShareScreen.routeName:
+      final List images = settings.arguments as List;
+      print(images);
+      return MaterialPageRoute<dynamic>(
+        settings: settings,
+        builder: (context) => ShareScreen(
+          bytes1: images[0],
+          bytes2: images[1],
+        ),
       );
   }
 }

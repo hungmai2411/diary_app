@@ -30,4 +30,5 @@ class AppColors {
 
   static Color moodBarEmptyPrimary = const Color(0xFFEEEEEE);
   static Color moodBarEmptySecondary = const Color(0xFFB6B6B5);
+  static Color backgroundShareScreen = const Color(0xFF707070);
 }

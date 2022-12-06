@@ -42,6 +42,7 @@ dependencies:
   flutter_localization: ^0.1.9
   flutter_native_timezone: ^2.0.0
   flutter_quill: ^6.1.5
+  flutter_share: ^2.0.0
   flutter_svg: ^1.1.6
   font_awesome_flutter: ^10.2.1
   hive: ^2.2.3
@@ -50,11 +51,14 @@ dependencies:
   intl: ^0.17.0
   markdown: ^6.0.1
   month_year_picker: ^0.2.0+3
+  path_provider: ^2.0.11
   photo_manager: ^2.5.0
   provider: ^6.0.4
   quiver: ^3.1.0
   record: ^4.4.3
   rxdart: ^0.27.7
+  screenshot: ^1.2.3
+  share_plus: ^6.3.0
   syncfusion_flutter_charts: ^20.3.59
   table_calendar: ^3.0.8
 
