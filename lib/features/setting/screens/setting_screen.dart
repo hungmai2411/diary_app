@@ -4,6 +4,7 @@ import 'package:diary_app/extensions/string_ext.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/features/setting/screens/language_screen.dart';
 import 'package:diary_app/features/setting/screens/passcode_screen.dart';
+import 'package:diary_app/features/setting/screens/select_theme_screen.dart';
 import 'package:diary_app/features/setting/screens/start_of_the_week_screen.dart';
 import 'package:diary_app/features/setting/widgets/custom_app_bar.dart';
 import 'package:diary_app/providers/setting_provider.dart';
@@ -30,17 +31,26 @@ class _SettingScreenState extends State<SettingScreen> {
     minute: 00,
   );
 
-  chooseReminderTime(BuildContext context) async {
+  chooseReminderTime(BuildContext context, String locale) async {
     final settingProvider = context.read<SettingProvider>();
 
     final TimeOfDay? value = await showTimePicker(
       context: context,
       initialTime: reminderTime,
       builder: (BuildContext context, Widget? child) {
-        return MediaQuery(
-          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-          child: child!,
-        );
+        // return MediaQuery(
+        //   data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+        //   child: child!,
+        // );
+        if (MediaQuery.of(context).alwaysUse24HourFormat) {
+          return child!;
+        } else {
+          return Localizations.override(
+            context: context,
+            locale: Locale(locale),
+            child: child,
+          );
+        }
       },
     );
 
@@ -75,6 +85,13 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
+  navigateToSelectThemeScreen() {
+    Navigator.pushNamed(
+      context,
+      SelectThemeScreen.routeName,
+    );
+  }
+
   navigateToLanguageScreen() {
     Navigator.pushNamed(
       context,
@@ -93,6 +110,8 @@ class _SettingScreenState extends State<SettingScreen> {
   Widget build(BuildContext context) {
     final settingProvider = Provider.of<SettingProvider>(context);
     Setting setting = settingProvider.setting;
+    String locale = setting.language == 'English' ? 'en' : 'vi';
+    print(setting.bean);
     hasPasscode = setting.hasPasscode;
     return Scaffold(
       appBar: PreferredSize(
@@ -169,7 +188,7 @@ class _SettingScreenState extends State<SettingScreen> {
             const SizedBox(height: 15),
             // remider time
             GestureDetector(
-              onTap: () => chooseReminderTime(context),
+              onTap: () => chooseReminderTime(context, locale),
               child: Box(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 15,
@@ -287,30 +306,35 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
             const SizedBox(height: 15),
             // theme
-            Box(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15,
-                vertical: 20,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.image_outlined,
-                    color: AppColors.textSecondColor,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(AppLocalizations.of(context)!.changeTheme,
-                      style: AppStyles.medium),
-                  const Spacer(),
-                  Text(
-                    'Paradise Beach',
-                    style: AppStyles.medium.copyWith(
-                      color: AppColors.selectedColor,
-                      fontSize: 14,
+            GestureDetector(
+              onTap: navigateToSelectThemeScreen,
+              child: Box(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 20,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.image_outlined,
+                      color: AppColors.textSecondColor,
                     ),
-                  ),
-                ],
+                    const SizedBox(width: 8),
+                    Text(
+                      AppLocalizations.of(context)!.changeTheme,
+                      style: AppStyles.medium,
+                    ),
+                    const Spacer(),
+                    Text(
+                      setting.bean.nameBean,
+                      style: AppStyles.medium.copyWith(
+                        color: AppColors.selectedColor,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 15),
@@ -403,10 +427,4 @@ class _SettingScreenState extends State<SettingScreen> {
       ),
     );
   }
-
-  // String change(String day, String language){
-  //   if(language == 'English'){
-
-  //   }
-  // }
 }

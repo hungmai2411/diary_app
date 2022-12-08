@@ -31,6 +31,7 @@ dependencies:
   animated_snack_bar: ^0.3.0
   another_flushbar: ^1.12.29
   awesome_snackbar_content: ^0.1.0
+  carousel_slider: ^4.1.1
   cupertino_icons: ^1.0.2
   delta_markdown: ^0.8.0
   dotted_border: ^2.0.0+3
@@ -50,6 +51,7 @@ dependencies:
   image_picker: ^0.8.6
   intl: ^0.17.0
   markdown: ^6.0.1
+  month_picker_dialog_2: ^0.5.8
   month_year_picker: ^0.2.0+3
   path_provider: ^2.0.11
   photo_manager: ^2.5.0

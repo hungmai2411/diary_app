@@ -51,5 +51,6 @@
     "pinSet":"PIN has been set",
     "ok":"OK",
     "enterPin":"Enter PIN",
-    "share":"Share"
+    "share":"Share",
+    "cancel":"Cancel"
 }

@@ -78,11 +78,11 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
   }
 
   final List moods = [
-    Mood(name: 'Mood1', image: AppAssets.iconMood1),
-    Mood(name: 'Mood2', image: AppAssets.iconMood2),
-    Mood(name: 'Mood3', image: AppAssets.iconMood3),
-    Mood(name: 'Mood4', image: AppAssets.iconMood4),
-    Mood(name: 'Mood5', image: AppAssets.iconMood5),
+    Mood(name: 'Mood1', image: AppAssets.iconBasicBean1),
+    Mood(name: 'Mood2', image: AppAssets.iconBasicBean2),
+    Mood(name: 'Mood3', image: AppAssets.iconBasicBean3),
+    Mood(name: 'Mood4', image: AppAssets.iconBasicBean4),
+    Mood(name: 'Mood5', image: AppAssets.iconBasicBean5),
   ];
 
   @override

@@ -20,12 +20,12 @@ class SettingAdapter extends TypeAdapter<Setting> {
       reminderHour: fields[0] as int,
       reminderMinute: fields[7] as int,
       language: fields[1] as String?,
-      theme: fields[2] as String,
       passcode: fields[3] as String?,
       startingDayOfWeek: fields[4] as String?,
       hasPasscode: fields[6] as bool,
       hasReminderTime: fields[5] as bool,
       point: fields[8] as int,
+      bean: fields[2] as Bean,
     );
   }
 
@@ -38,7 +38,7 @@ class SettingAdapter extends TypeAdapter<Setting> {
       ..writeByte(1)
       ..write(obj.language)
       ..writeByte(2)
-      ..write(obj.theme)
+      ..write(obj.bean)
       ..writeByte(3)
       ..write(obj.passcode)
       ..writeByte(4)

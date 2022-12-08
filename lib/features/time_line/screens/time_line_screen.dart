@@ -1,15 +1,18 @@
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/constants/bean.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
+import 'package:diary_app/features/diary/models/mood.dart';
 import 'package:diary_app/features/diary/widgets/item_diary.dart';
 import 'package:diary_app/features/diary/widgets/item_no_diary.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/providers/setting_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:month_picker_dialog_2/month_picker_dialog_2.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../constants/app_colors.dart';
 
@@ -31,25 +34,41 @@ class _TimeLineScreenState extends State<TimeLineScreen> {
   }
 
   chooseMonth(String locale) async {
-    DatePicker.showDatePicker(
-      context,
-      dateFormat: 'MMMM-yyyy',
-      locale:
-          locale != 'en' ? DateTimePickerLocale.vi : DateTimePickerLocale.en_us,
-      minDateTime: DateTime(2022),
-      onConfirm: (dateTime, selectedIndex) {
+    showMonthPicker(
+      context: context,
+      initialDate: selectedDay,
+      locale: locale != 'en' ? const Locale('vi') : null,
+      roundedCornersRadius: 8,
+      unselectedMonthTextColor: AppColors.textSecondaryColor,
+      headerColor: AppColors.selectedColor,
+      cancelText: Text(
+        AppLocalizations.of(context)!.cancel,
+        style: const TextStyle(
+          color: AppColors.textSecondaryColor,
+        ),
+      ),
+      confirmText: Text(
+        AppLocalizations.of(context)!.ok,
+        style: TextStyle(
+          color: AppColors.selectedColor,
+        ),
+      ),
+    ).then((date) {
+      if (date != null) {
         setState(() {
-          selectedDay = dateTime;
+          selectedDay = date;
         });
-      },
-    );
+      }
+    });
   }
 
   getDiariesPerMonth(DateTime selectedDay) {
     diariesMonth = [];
     final DiaryProvider diaryProvider = context.read<DiaryProvider>();
     List<Diary> diaries = diaryProvider.diaries;
-
+    final SettingProvider settingProvider = context.read<SettingProvider>();
+    Setting setting = settingProvider.setting;
+    Bean bean = setting.bean;
     diaries.sort((a, b) => a.createdAt.compareTo(b.createdAt));
 
     for (Diary diary in diaries) {
@@ -57,6 +76,10 @@ class _TimeLineScreenState extends State<TimeLineScreen> {
 
       if (createdAt.month == selectedDay.month &&
           createdAt.year == selectedDay.year) {
+        int indexOfMood = 5 - diary.mood.getIndex().round();
+        String imageMood = bean.beans[indexOfMood];
+        String moodName = diary.mood.name;
+        diary = diary.copyWith(mood: Mood(name: moodName, image: imageMood));
         diariesMonth.add(diary);
       }
     }

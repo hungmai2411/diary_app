@@ -1,9 +1,11 @@
 import 'package:diary_app/constants/app_assets.dart';
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/constants/bean.dart';
 import 'package:diary_app/constants/utils.dart';
 import 'package:diary_app/extensions/string_ext.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
+import 'package:diary_app/features/diary/models/mood.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/detail_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/share_screen.dart';
@@ -36,10 +38,16 @@ class _DiaryScreenState extends State<DiaryScreen> {
 
   GlobalKey? key2;
   Uint8List? bytes2;
+  late SettingProvider settingProvider;
+  late Setting setting;
+  late Bean bean;
 
   @override
   void initState() {
     super.initState();
+    settingProvider = context.read<SettingProvider>();
+    setting = settingProvider.setting;
+    bean = setting.bean;
   }
 
   navigateToAddDiaryScreen(DateTime dateTime) {
@@ -59,12 +67,15 @@ class _DiaryScreenState extends State<DiaryScreen> {
   }
 
   String? getIconOfDay(DateTime dateTime, List<Diary> diaries) {
-    print('run func get icon of day');
+    print('run func get icon of  per day');
+
     for (var diary in diaries) {
       if (dateTime.day == diary.createdAt.day &&
           dateTime.month == diary.createdAt.month &&
           dateTime.year == diary.createdAt.year) {
-        return diary.mood.image;
+        int indexOfMood = 5 - diary.mood.getIndex().round();
+        String imageMood = bean.beans[indexOfMood];
+        return imageMood;
       }
     }
 
@@ -74,11 +85,15 @@ class _DiaryScreenState extends State<DiaryScreen> {
   List<Diary> getDiaryOfDay(DateTime dateTime, List<Diary> diaries) {
     List<Diary> diariesTmp = [];
 
-    print('run func get icon of day');
+    print('run func get icon of  per day');
     for (var diary in diaries) {
       if (dateTime.day == diary.createdAt.day &&
           dateTime.month == diary.createdAt.month &&
           dateTime.year == diary.createdAt.year) {
+        int indexOfMood = 5 - diary.mood.getIndex().round();
+        String imageMood = bean.beans[indexOfMood];
+        String moodName = diary.mood.name;
+        diary = diary.copyWith(mood: Mood(name: moodName, image: imageMood));
         diariesTmp.add(diary);
       }
     }
@@ -98,6 +113,21 @@ class _DiaryScreenState extends State<DiaryScreen> {
     if (result != null) {
       dateProvider.setDay(result);
     }
+  }
+
+  void captureImage() async {
+// Lấy dữ liệu của widget theo key.
+    final bytes1 = await capture(key1);
+    final bytes2 = await capture(key2);
+    setState(() {
+      this.bytes1 = bytes1;
+      this.bytes2 = bytes2;
+    });
+    Navigator.pushNamed(
+      context,
+      ShareScreen.routeName,
+      arguments: [this.bytes1, this.bytes2],
+    );
   }
 
   @override
@@ -163,20 +193,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                 ),
                 const Spacer(),
                 GestureDetector(
-                  onTap: () async {
-                    // Lấy dữ liệu của widget theo key.
-                    final bytes1 = await capture(key1);
-                    final bytes2 = await capture(key2);
-                    setState(() {
-                      this.bytes1 = bytes1;
-                      this.bytes2 = bytes2;
-                    });
-                    Navigator.pushNamed(
-                      context,
-                      ShareScreen.routeName,
-                      arguments: [this.bytes1, this.bytes2],
-                    );
-                  },
+                  onTap: captureImage,
                   child: const Icon(
                     Icons.ios_share,
                     color: AppColors.textPrimaryColor,
@@ -259,7 +276,6 @@ class _DiaryScreenState extends State<DiaryScreen> {
           ),
           SliverPadding(
             padding: const EdgeInsets.symmetric(
-              horizontal: 10,
               vertical: 10,
             ),
             sliver: SliverList(

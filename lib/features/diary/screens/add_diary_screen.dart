@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:diary_app/constants/app_assets.dart';
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/constants/bean.dart';
 import 'package:diary_app/constants/utils.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/models/mood.dart';
@@ -76,13 +77,53 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
     noteController.dispose();
   }
 
-  final List moods = [
-    Mood(name: 'Mood1', image: AppAssets.iconMood1),
-    Mood(name: 'Mood2', image: AppAssets.iconMood2),
-    Mood(name: 'Mood3', image: AppAssets.iconMood3),
-    Mood(name: 'Mood4', image: AppAssets.iconMood4),
-    Mood(name: 'Mood5', image: AppAssets.iconMood5),
-  ];
+  late final List moods;
+
+  @override
+  void initState() {
+    super.initState();
+    getMoods();
+  }
+
+  getMoods() {
+    final SettingProvider settingProvider = context.read<SettingProvider>();
+    Setting setting = settingProvider.setting;
+    String nameBean = setting.bean.nameBean;
+
+    if (nameBean == 'Basic Bean') {
+      moods = [
+        Mood(name: 'Mood1', image: basicBean[0]),
+        Mood(name: 'Mood2', image: basicBean[1]),
+        Mood(name: 'Mood3', image: basicBean[2]),
+        Mood(name: 'Mood4', image: basicBean[3]),
+        Mood(name: 'Mood5', image: basicBean[4]),
+      ];
+    } else if (nameBean == 'Blushing Bean') {
+      moods = [
+        Mood(name: 'Mood1', image: blushingBean[0]),
+        Mood(name: 'Mood2', image: blushingBean[1]),
+        Mood(name: 'Mood3', image: blushingBean[2]),
+        Mood(name: 'Mood4', image: blushingBean[3]),
+        Mood(name: 'Mood5', image: blushingBean[4]),
+      ];
+    } else if (nameBean == 'Kitty Bean') {
+      moods = [
+        Mood(name: 'Mood1', image: kittyBean[0]),
+        Mood(name: 'Mood2', image: kittyBean[1]),
+        Mood(name: 'Mood3', image: kittyBean[2]),
+        Mood(name: 'Mood4', image: kittyBean[3]),
+        Mood(name: 'Mood5', image: kittyBean[4]),
+      ];
+    } else {
+      moods = [
+        Mood(name: 'Mood1', image: sproutBean[0]),
+        Mood(name: 'Mood2', image: sproutBean[1]),
+        Mood(name: 'Mood3', image: sproutBean[2]),
+        Mood(name: 'Mood4', image: sproutBean[3]),
+        Mood(name: 'Mood5', image: sproutBean[4]),
+      ];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

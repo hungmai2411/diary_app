@@ -20,7 +20,7 @@
     "saturday":"Thứ bảy",
     "sunday":"Chủ nhật",
     "language":"Ngôn ngữ",
-    "changeTheme":"Thay đổi chủ đề",
+    "changeTheme":"Thay đổi giao diện",
     "other":"Khác",
     "privacyPolicy":"Chính sách riêng tư",
     "termsOfConditions":"Điều khoản & Điều kiện",
@@ -51,7 +51,9 @@
     "pinSet":"PIN has đã được thiết lập",
     "ok":"Xác nhận",
     "enterPin":"Nhập mã PIN",
-    "share":"Chia sẻ"
+    "share":"Chia sẻ",
+    "cancel":"Huỷ"
+
 
 
 

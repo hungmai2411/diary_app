@@ -8,6 +8,7 @@ import 'package:diary_app/features/diary/screens/share_screen.dart';
 import 'package:diary_app/features/setting/screens/language_screen.dart';
 import 'package:diary_app/features/setting/screens/passcode_confirm_screen.dart';
 import 'package:diary_app/features/setting/screens/passcode_screen.dart';
+import 'package:diary_app/features/setting/screens/select_theme_screen.dart';
 import 'package:diary_app/features/setting/screens/setting_screen.dart';
 import 'package:diary_app/features/setting/screens/start_of_the_week_screen.dart';
 import 'package:diary_app/my_app.dart';
@@ -20,6 +21,7 @@ final Map<String, WidgetBuilder> routes = {
   LanguageScreen.routeName: (context) => const LanguageScreen(),
   PasscodeScreen.routeName: (context) => const PasscodeScreen(),
   SettingScreen.routeName: (context) => const SettingScreen(),
+  SelectThemeScreen.routeName: (context) => const SelectThemeScreen(),
 };
 
 MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
@@ -61,7 +63,6 @@ MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
       );
     case ShareScreen.routeName:
       final List images = settings.arguments as List;
-      print(images);
       return MaterialPageRoute<dynamic>(
         settings: settings,
         builder: (context) => ShareScreen(

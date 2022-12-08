@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
+import 'package:diary_app/constants/bean.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -15,7 +16,7 @@ class Setting {
   final String? language;
 
   @HiveField(2)
-  final String theme;
+  final Bean bean;
 
   @HiveField(3)
   final String? passcode;
@@ -39,12 +40,12 @@ class Setting {
     this.reminderHour = 20,
     this.reminderMinute = 0,
     this.language,
-    this.theme = 'Paradise Beach',
     this.passcode,
     this.startingDayOfWeek,
     this.hasPasscode = false,
     this.hasReminderTime = false,
     this.point = 0,
+    this.bean = const Bean(nameBean: 'Basic Bean'),
   });
 
   Setting copyWith({
@@ -57,17 +58,18 @@ class Setting {
     bool? hasPasscode,
     bool? hasReminderTime,
     int? point,
+    Bean? bean,
   }) {
     return Setting(
       reminderHour: reminderHour ?? this.reminderHour,
       reminderMinute: reminderMinute ?? this.reminderMinute,
       language: language ?? this.language,
-      theme: theme ?? this.theme,
       passcode: passcode ?? this.passcode,
       startingDayOfWeek: startingDayOfWeek ?? this.startingDayOfWeek,
       hasPasscode: hasPasscode ?? this.hasPasscode,
       hasReminderTime: hasReminderTime ?? this.hasReminderTime,
       point: point ?? this.point,
+      bean: bean ?? this.bean,
     );
   }
 }

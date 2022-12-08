@@ -1,4 +1,5 @@
 import 'package:diary_app/constants/app_colors.dart';
+import 'package:diary_app/constants/bean.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/models/mood.dart';
 import 'package:diary_app/features/diary/screens/enter_pin_screen.dart';
@@ -25,6 +26,8 @@ void main() async {
   Hive.registerAdapter(DiaryAdapter());
   Hive.registerAdapter(MoodAdapter());
   Hive.registerAdapter(SettingAdapter());
+  Hive.registerAdapter(BeanAdapter());
+
   SettingProvider settingProvider = SettingProvider();
   await getSetting(settingProvider);
 

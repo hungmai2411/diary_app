@@ -8,9 +8,11 @@ import 'package:diary_app/providers/date_provider.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/providers/setting_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:month_picker_dialog_2/month_picker_dialog_2.dart';
 import 'package:provider/provider.dart';
 import 'package:quiver/time.dart';
 
@@ -25,7 +27,7 @@ class _BoardScreenState extends State<BoardScreen>
     with SingleTickerProviderStateMixin {
   late TabController tabController;
   int tabIndex = 0;
-  DateTime selectedTime = DateTime.now();
+  DateTime selectedDay = DateTime.now();
 
   @override
   void initState() {
@@ -34,13 +36,42 @@ class _BoardScreenState extends State<BoardScreen>
       length: 2,
       vsync: this,
     );
-    selectedTime = context.read<DateProvider>().selectedDay;
+    selectedDay = context.read<DateProvider>().selectedDay;
   }
 
   @override
   void dispose() {
     super.dispose();
     tabController.dispose();
+  }
+
+  chooseMonth(String locale) async {
+    showMonthPicker(
+      context: context,
+      initialDate: selectedDay,
+      locale: locale != 'en' ? const Locale('vi') : null,
+      roundedCornersRadius: 8,
+      unselectedMonthTextColor: AppColors.textSecondaryColor,
+      headerColor: AppColors.selectedColor,
+      cancelText: Text(
+        AppLocalizations.of(context)!.cancel,
+        style: const TextStyle(
+          color: AppColors.textSecondaryColor,
+        ),
+      ),
+      confirmText: Text(
+        AppLocalizations.of(context)!.ok,
+        style: TextStyle(
+          color: AppColors.selectedColor,
+        ),
+      ),
+    ).then((date) {
+      if (date != null) {
+        setState(() {
+          selectedDay = date;
+        });
+      }
+    });
   }
 
   @override
@@ -59,12 +90,12 @@ class _BoardScreenState extends State<BoardScreen>
     for (Diary diary in diaries) {
       DateTime createdAt = diary.createdAt;
 
-      if (createdAt.month == selectedTime.month &&
-          createdAt.year == selectedTime.year) {
+      if (createdAt.month == selectedDay.month &&
+          createdAt.year == selectedDay.year) {
         diariesMonth.add(diary);
       }
 
-      if (createdAt.year == selectedTime.year) {
+      if (createdAt.year == selectedDay.year) {
         diariesYear.add(diary);
       }
     }
@@ -100,23 +131,26 @@ class _BoardScreenState extends State<BoardScreen>
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          DateFormat('MMM yyyy', locale).format(selectedTime),
-                          style: AppStyles.medium.copyWith(
-                            fontSize: 18,
+                    GestureDetector(
+                      onTap: () => chooseMonth(locale),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            DateFormat('MMM yyyy', locale).format(selectedDay),
+                            style: AppStyles.medium.copyWith(
+                              fontSize: 18,
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 6),
-                        // choose time
-                        const Icon(
-                          FontAwesomeIcons.angleDown,
-                          size: 18,
-                          color: AppColors.textPrimaryColor,
-                        ),
-                      ],
+                          const SizedBox(width: 6),
+                          // choose time
+                          const Icon(
+                            FontAwesomeIcons.angleDown,
+                            size: 18,
+                            color: AppColors.textPrimaryColor,
+                          ),
+                        ],
+                      ),
                     ),
                     const Divider(
                       color: AppColors.textSecondaryColor,
@@ -143,11 +177,11 @@ class _BoardScreenState extends State<BoardScreen>
                     Column(
                       children: [
                         MoodFlow(
-                          month: selectedTime.month,
-                          year: selectedTime.year,
+                          month: selectedDay.month,
+                          year: selectedDay.year,
                           numOfDays: daysInMonth(
-                            selectedTime.year,
-                            selectedTime.month,
+                            selectedDay.year,
+                            selectedDay.month,
                           ),
                           diaries: diariesMonth,
                         ),
@@ -161,9 +195,9 @@ class _BoardScreenState extends State<BoardScreen>
                     Column(
                       children: [
                         MoodFlow(
-                          month: selectedTime.month,
+                          month: selectedDay.month,
                           isMonthly: false,
-                          year: selectedTime.year,
+                          year: selectedDay.year,
                           diaries: diariesYear,
                         ),
                         const SizedBox(height: 20),
