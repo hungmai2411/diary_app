@@ -4,10 +4,9 @@ import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/constants/bean.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
+import 'package:diary_app/features/setting/widgets/item_carousel.dart';
 import 'package:diary_app/providers/setting_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
@@ -51,87 +50,49 @@ class _SelectThemeScreenState extends State<SelectThemeScreen> {
     }
   }
 
+  setTheme(String img) {
+    if (img == AppAssets.imgBasicBean) {
+      setting = setting.copyWith(
+        bean: const Bean(
+          nameBean: 'Basic Bean',
+          beans: basicBean,
+        ),
+      );
+    } else if (img == AppAssets.imgBlushBean) {
+      setting = setting.copyWith(
+        bean: const Bean(
+          nameBean: 'Blush Bean',
+          beans: blushingBean,
+        ),
+      );
+    } else if (img == AppAssets.imgKittyBean) {
+      setting = setting.copyWith(
+        bean: const Bean(
+          nameBean: 'Kitty Bean',
+          beans: kittyBean,
+        ),
+      );
+    } else {
+      setting = setting.copyWith(
+        bean: const Bean(
+          nameBean: 'Sprout Bean',
+          beans: sproutBean,
+        ),
+      );
+    }
+
+    settingProvider.setSetting(setting);
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgets = [
-      GestureDetector(
-        onTap: () {
-          setting = setting.copyWith(
-            bean: const Bean(
-              nameBean: 'Basic Bean',
-              beans: basicBean,
-            ),
-          );
-          settingProvider.setSetting(setting);
-          Navigator.of(context).pop();
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.teal,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: const Center(child: Text('Basic Bean')),
-        ),
-      ),
-      GestureDetector(
-        onTap: () {
-          setting = setting.copyWith(
-            bean: const Bean(
-              nameBean: 'Blushing Bean',
-              beans: blushingBean,
-            ),
-          );
-          settingProvider.setSetting(setting);
-          Navigator.of(context).pop();
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.orange,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: const Center(child: Text('Blushing Bean')),
-        ),
-      ),
-      GestureDetector(
-        onTap: () {
-          setting = setting.copyWith(
-            bean: const Bean(
-              nameBean: 'Kitty Bean',
-              beans: kittyBean,
-            ),
-          );
-          settingProvider.setSetting(setting);
-          Navigator.of(context).pop();
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.yellow,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: const Center(child: Text('Kitty Bean')),
-        ),
-      ),
-      GestureDetector(
-        onTap: () {
-          setting = setting.copyWith(
-            bean: const Bean(
-              nameBean: 'Sprout Bean',
-              beans: sproutBean,
-            ),
-          );
-          settingProvider.setSetting(setting);
-          Navigator.of(context).pop();
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.yellow,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: const Center(child: Text('Sprout Bean')),
-        ),
-      ),
+    List<String> images = [
+      AppAssets.imgBasicBean,
+      AppAssets.imgBlushBean,
+      AppAssets.imgKittyBean,
+      AppAssets.imgSproutBean,
     ];
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -151,15 +112,27 @@ class _SelectThemeScreenState extends State<SelectThemeScreen> {
           ),
         ),
       ),
-      body: CarouselSlider(
-        carouselController: controller,
-        options: CarouselOptions(
-          initialPage: getInitialPage(),
-          autoPlay: false,
-          aspectRatio: 0.85,
-          enlargeCenterPage: true,
+      body: SizedBox(
+        height: 600,
+        width: double.infinity,
+        child: CarouselSlider(
+          carouselController: controller,
+          options: CarouselOptions(
+            initialPage: getInitialPage(),
+            autoPlay: false,
+            viewportFraction: 0.623,
+            aspectRatio: 0.6,
+            enlargeCenterPage: true,
+          ),
+          items: images
+              .map(
+                (e) => GestureDetector(
+                  onTap: () => setTheme(e),
+                  child: ItemCarousel(image: e),
+                ),
+              )
+              .toList(),
         ),
-        items: widgets,
       ),
     );
   }

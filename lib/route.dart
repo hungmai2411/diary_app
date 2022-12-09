@@ -11,6 +11,7 @@ import 'package:diary_app/features/setting/screens/passcode_screen.dart';
 import 'package:diary_app/features/setting/screens/select_theme_screen.dart';
 import 'package:diary_app/features/setting/screens/setting_screen.dart';
 import 'package:diary_app/features/setting/screens/start_of_the_week_screen.dart';
+import 'package:diary_app/features/time_line/screens/time_line_screen.dart';
 import 'package:diary_app/my_app.dart';
 import 'package:flutter/material.dart';
 
@@ -68,6 +69,14 @@ MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
         builder: (context) => ShareScreen(
           bytes1: images[0],
           bytes2: images[1],
+        ),
+      );
+    case TimeLineScreen.routeName:
+      final List<Diary> diaries = settings.arguments as List<Diary>;
+      return MaterialPageRoute<dynamic>(
+        settings: settings,
+        builder: (context) => TimeLineScreen(
+          diariesMonth: diaries,
         ),
       );
   }

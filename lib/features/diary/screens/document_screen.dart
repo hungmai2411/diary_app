@@ -38,9 +38,8 @@ class _DocumentScreenState extends State<DocumentScreen> {
         onPressed: () {
           final convertedValue =
               jsonEncode(controller.document.toDelta().toJson());
-          final markdown = deltaToMarkdown(convertedValue);
-          final html = markdownToHtml(markdown);
-          Navigator.of(context).pop(html);
+
+          Navigator.of(context).pop(convertedValue);
         },
         child: const FaIcon(
           FontAwesomeIcons.downLeftAndUpRightToCenter,

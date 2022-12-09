@@ -32,6 +32,10 @@ class AppAssets {
   static const String imagePath = 'assets/images';
   static const String imgGold = '$imagePath/gold.png';
   static const String imgNoDiary = '$imagePath/ic_empty_order.png';
+  static const String imgBasicBean = '$imagePath/basic_bean.png';
+  static const String imgBlushBean = '$imagePath/blush_bean.png';
+  static const String imgKittyBean = '$imagePath/kitty_bean.png';
+  static const String imgSproutBean = '$imagePath/sprout_bean.png';
 }
 
 const List<String> basicBean = [

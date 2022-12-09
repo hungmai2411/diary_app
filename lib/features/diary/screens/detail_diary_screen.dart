@@ -1,21 +1,25 @@
-import 'package:diary_app/constants/app_assets.dart';
+import 'dart:convert';
+
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/constants/bean.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
-import 'package:diary_app/features/diary/models/mood.dart';
 import 'package:diary_app/features/diary/screens/edit_diary_screen.dart';
 import 'package:diary_app/features/diary/widgets/delete_dialog.dart';
 import 'package:diary_app/features/diary/widgets/image_group.dart';
-import 'package:diary_app/features/diary/widgets/item_mood.dart';
+import 'package:diary_app/features/setting/models/setting.dart';
+import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/widgets/box.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 class DetailDiaryScreen extends StatelessWidget {
   final Diary diary;
 
-  DetailDiaryScreen({
+  const DetailDiaryScreen({
     super.key,
     required this.diary,
   });
@@ -24,14 +28,6 @@ class DetailDiaryScreen extends StatelessWidget {
   popScreen(BuildContext context) {
     Navigator.pop(context);
   }
-
-  final List moods = [
-    Mood(name: 'Mood1', image: AppAssets.iconBasicBean1),
-    Mood(name: 'Mood2', image: AppAssets.iconBasicBean2),
-    Mood(name: 'Mood3', image: AppAssets.iconBasicBean3),
-    Mood(name: 'Mood4', image: AppAssets.iconBasicBean4),
-    Mood(name: 'Mood5', image: AppAssets.iconBasicBean5),
-  ];
 
   navigateToEditScreen(BuildContext context) {
     Navigator.pushNamed(
@@ -55,13 +51,24 @@ class DetailDiaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SettingProvider settingProvider = context.read<SettingProvider>();
+    Setting setting = settingProvider.setting;
+    Bean bean = setting.bean;
+    List<String> moodImages = bean.beans;
+    int indexMood = 5 - diary.mood.getIndex().round();
+    final FocusNode editorFocusNode = FocusNode();
+    var json = jsonDecode(diary.content!);
+    quill.QuillController noteController = quill.QuillController(
+      document: quill.Document.fromJson(json),
+      selection: const TextSelection.collapsed(offset: 0),
+    );
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: GestureDetector(
-          onTap: () => popScreen(context),
-          child: const Icon(
+        leading: IconButton(
+          onPressed: () => popScreen(context),
+          icon: const Icon(
             Icons.arrow_back_ios_rounded,
             color: AppColors.textPrimaryColor,
           ),
@@ -119,17 +126,18 @@ class DetailDiaryScreen extends StatelessWidget {
                 const SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: moods
-                      .map(
-                        (e) => ItemMood(
-                          mood: e,
-                          isPicked: diary.mood.name == (e as Mood).name
-                              ? true
-                              : false,
-                          callback: (mood) {},
-                        ),
-                      )
-                      .toList(),
+                  children: moodImages.map((e) {
+                    int index = moodImages.indexOf(e);
+                    return Opacity(
+                      opacity: index == indexMood ? 1 : 0.3,
+                      child: Image.asset(
+                        e,
+                        width: 70,
+                        height: 70,
+                        fit: BoxFit.fitHeight,
+                      ),
+                    );
+                  }).toList(),
                 ),
                 const SizedBox(height: 5),
               ],
@@ -153,14 +161,16 @@ class DetailDiaryScreen extends StatelessWidget {
                   const Divider(
                     color: AppColors.textSecondaryColor,
                   ),
-                  SizedBox(
-                    child: Text(
-                      diary.content!,
-                      style: AppStyles.regular.copyWith(
-                        fontSize: 17,
-                        color: AppColors.textPrimaryColor,
-                      ),
-                    ),
+                  quill.QuillEditor(
+                    scrollable: true,
+                    scrollController: ScrollController(),
+                    focusNode: editorFocusNode,
+                    padding: const EdgeInsets.all(0),
+                    autoFocus: false,
+                    readOnly: true,
+                    expands: false,
+                    showCursor: false,
+                    controller: noteController,
                   ),
                 ],
               ),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
@@ -5,6 +7,7 @@ import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/widgets/box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -19,9 +22,15 @@ class ItemDiary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final SettingProvider settingProvider = context.read<SettingProvider>();
-
+    final FocusNode editorFocusNode = FocusNode();
     Setting setting = settingProvider.setting;
     String locale = setting.language == 'English' ? 'en' : 'vi';
+
+    var json = jsonDecode(diary.content!);
+    quill.QuillController controller = quill.QuillController(
+      document: quill.Document.fromJson(json),
+      selection: const TextSelection.collapsed(offset: 0),
+    );
 
     return Box(
       margin: const EdgeInsets.only(
@@ -66,11 +75,23 @@ class ItemDiary extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    diary.content ?? 'Nothing is written for this day 🙁',
-                    style: AppStyles.regular.copyWith(
-                      fontSize: 14,
-                    ),
+                  //Html(data: "<p>Hello <b>Flutter</b><p>"),
+                  // Text(
+                  //   diary.content ?? 'Nothing is written for this day 🙁',
+                  //   style: AppStyles.regular.copyWith(
+                  //     fontSize: 14,
+                  //   ),
+                  // ),
+                  quill.QuillEditor(
+                    scrollable: true,
+                    scrollController: ScrollController(),
+                    focusNode: editorFocusNode,
+                    padding: const EdgeInsets.all(0),
+                    autoFocus: false,
+                    readOnly: true,
+                    expands: false,
+                    controller: controller,
+                    showCursor: false,
                   ),
                   if (diary.images != null)
                     Hero(

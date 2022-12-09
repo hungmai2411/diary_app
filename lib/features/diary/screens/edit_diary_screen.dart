@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:diary_app/constants/app_assets.dart';
 import 'package:diary_app/constants/app_colors.dart';
@@ -5,11 +6,8 @@ import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/constants/utils.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/models/mood.dart';
-import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
-import 'package:diary_app/features/diary/screens/diary_screen.dart';
 import 'package:diary_app/features/diary/widgets/item_mood.dart';
 import 'package:diary_app/features/diary/widgets/item_upload_group.dart';
-import 'package:diary_app/features/diary/widgets/success_dialog.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/my_app.dart';
 import 'package:diary_app/providers/diary_provider.dart';
@@ -19,6 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditDiaryScreen extends StatefulWidget {
   final Diary diary;
@@ -34,7 +34,9 @@ class EditDiaryScreen extends StatefulWidget {
 
 class _EditDiaryScreenState extends State<EditDiaryScreen> {
   Mood moodPicked = Mood(name: '', image: '');
-  final TextEditingController noteController = TextEditingController();
+  quill.QuillController noteController = quill.QuillController.basic();
+  final FocusNode editorFocusNode = FocusNode();
+
   // lưu trữ hình ảnh
   List<Uint8List> images = [];
 
@@ -51,7 +53,7 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
       diaryProvider.editDiary(
         widget.diary,
         moodPicked,
-        noteController.text,
+        jsonEncode(noteController.document.toDelta().toJson()),
         images,
       );
 
@@ -68,8 +70,14 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
   @override
   void initState() {
     super.initState();
+    getMoods();
+
     if (widget.diary.content != null) {
-      noteController.text = widget.diary.content!;
+      var json = jsonDecode(widget.diary.content!);
+      noteController = quill.QuillController(
+        document: quill.Document.fromJson(json),
+        selection: const TextSelection.collapsed(offset: 0),
+      );
     }
     moodPicked = widget.diary.mood;
     if (widget.diary.images != null) {
@@ -77,13 +85,46 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
     }
   }
 
-  final List moods = [
-    Mood(name: 'Mood1', image: AppAssets.iconBasicBean1),
-    Mood(name: 'Mood2', image: AppAssets.iconBasicBean2),
-    Mood(name: 'Mood3', image: AppAssets.iconBasicBean3),
-    Mood(name: 'Mood4', image: AppAssets.iconBasicBean4),
-    Mood(name: 'Mood5', image: AppAssets.iconBasicBean5),
-  ];
+  late final List moods;
+  getMoods() {
+    final SettingProvider settingProvider = context.read<SettingProvider>();
+    Setting setting = settingProvider.setting;
+    String nameBean = setting.bean.nameBean;
+
+    if (nameBean == 'Basic Bean') {
+      moods = [
+        Mood(name: 'Mood1', image: basicBean[0]),
+        Mood(name: 'Mood2', image: basicBean[1]),
+        Mood(name: 'Mood3', image: basicBean[2]),
+        Mood(name: 'Mood4', image: basicBean[3]),
+        Mood(name: 'Mood5', image: basicBean[4]),
+      ];
+    } else if (nameBean == 'Blushing Bean') {
+      moods = [
+        Mood(name: 'Mood1', image: blushingBean[0]),
+        Mood(name: 'Mood2', image: blushingBean[1]),
+        Mood(name: 'Mood3', image: blushingBean[2]),
+        Mood(name: 'Mood4', image: blushingBean[3]),
+        Mood(name: 'Mood5', image: blushingBean[4]),
+      ];
+    } else if (nameBean == 'Kitty Bean') {
+      moods = [
+        Mood(name: 'Mood1', image: kittyBean[0]),
+        Mood(name: 'Mood2', image: kittyBean[1]),
+        Mood(name: 'Mood3', image: kittyBean[2]),
+        Mood(name: 'Mood4', image: kittyBean[3]),
+        Mood(name: 'Mood5', image: kittyBean[4]),
+      ];
+    } else {
+      moods = [
+        Mood(name: 'Mood1', image: sproutBean[0]),
+        Mood(name: 'Mood2', image: sproutBean[1]),
+        Mood(name: 'Mood3', image: sproutBean[2]),
+        Mood(name: 'Mood4', image: sproutBean[3]),
+        Mood(name: 'Mood5', image: sproutBean[4]),
+      ];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -179,21 +220,32 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
                   ),
                   SizedBox(
                     height: 150,
-                    child: TextField(
-                      maxLines: null,
-                      keyboardType: TextInputType.multiline,
-                      autocorrect: false,
-                      scrollPadding: EdgeInsets.zero,
+                    // child: TextField(
+                    //   maxLines: null,
+                    //   keyboardType: TextInputType.multiline,
+                    //   autocorrect: false,
+                    //   scrollPadding: EdgeInsets.zero,
+                    //   controller: noteController,
+                    //   decoration: InputDecoration(
+                    //     border: InputBorder.none,
+                    //     contentPadding: EdgeInsets.zero,
+                    //     hintText: 'Write something...',
+                    //     hintStyle: AppStyles.regular.copyWith(
+                    //       fontSize: 17,
+                    //       color: AppColors.textSecondColor,
+                    //     ),
+                    //   ),
+                    // ),
+                    child: quill.QuillEditor(
+                      scrollable: true,
+                      scrollController: ScrollController(),
+                      focusNode: editorFocusNode,
+                      padding: const EdgeInsets.all(0),
+                      autoFocus: true,
+                      readOnly: false,
+                      expands: false,
                       controller: noteController,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.zero,
-                        hintText: 'Write something...',
-                        hintStyle: AppStyles.regular.copyWith(
-                          fontSize: 17,
-                          color: AppColors.textSecondColor,
-                        ),
-                      ),
+                      placeholder: AppLocalizations.of(context)!.writeSomething,
                     ),
                   ),
                 ],

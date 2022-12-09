@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
 
   List screens = [
     const DiaryScreen(),
-    const TimeLineScreen(),
+    Container(),
     const BoardScreen(),
     const SettingScreen(),
   ];

@@ -1,8 +1,8 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:diary_app/constants/app_assets.dart';
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
-import 'package:diary_app/constants/bean.dart';
 import 'package:diary_app/constants/utils.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/models/mood.dart';
@@ -15,6 +15,7 @@ import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/widgets/box.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -34,12 +35,21 @@ class AddDiaryScreen extends StatefulWidget {
 
 class _AddDiaryScreenState extends State<AddDiaryScreen> {
   Mood moodPicked = Mood(name: '', image: '');
-  final TextEditingController noteController = TextEditingController();
+  //final TextEditingController noteController = TextEditingController();
   // lưu trữ hình ảnh
   List<Uint8List> images = [];
+  final FocusNode editorFocusNode = FocusNode();
+
+  quill.QuillController noteController = quill.QuillController.basic();
 
   popScreen() {
     Navigator.pop(context);
+  }
+
+  @override
+  void dispose() {
+    noteController.dispose();
+    super.dispose();
   }
 
   addNote(BuildContext context) async {
@@ -54,10 +64,12 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
       setting = setting.copyWith(point: setting.point + 100);
       settingProvider.setSetting(setting);
       final diaryProvider = context.read<DiaryProvider>();
+      var json = jsonEncode(noteController.document.toDelta().toJson());
+
       Diary newDiary = Diary(
         mood: moodPicked,
         createdAt: widget.dateTime,
-        content: noteController.text.isEmpty ? null : noteController.text,
+        content: json.isEmpty ? null : json,
         images: images,
       );
       diaryProvider.addDiary(newDiary);
@@ -69,12 +81,6 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
       );
       popScreen();
     }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    noteController.dispose();
   }
 
   late final List moods;
@@ -184,24 +190,28 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                     ),
                   ),
                   const SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: moods
-                        .map(
-                          (e) => ItemMood(
-                            mood: e,
-                            isPicked: moodPicked.name == (e as Mood).name
-                                ? true
-                                : false,
-                            callback: (mood) {
-                              setState(() {
-                                moodPicked = mood;
-                              });
-                            },
-                          ),
-                        )
-                        .toList(),
-                  )
+                  SizedBox(
+                    height: 80,
+                    child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 5,
+                      ),
+                      itemCount: moods.length,
+                      itemBuilder: (context, index) {
+                        Mood mood = moods[index];
+                        return ItemMood(
+                          mood: mood,
+                          isPicked: moodPicked.name == mood.name ? true : false,
+                          callback: (mood) {
+                            setState(() {
+                              moodPicked = mood;
+                            });
+                          },
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -227,9 +237,14 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                               await Navigator.of(context).pushNamed<String>(
                             DocumentScreen.routeName,
                           );
+                          var json = jsonDecode(result!);
 
                           setState(() {
-                            noteController.text = result!;
+                            noteController = quill.QuillController(
+                              document: quill.Document.fromJson(json),
+                              selection:
+                                  const TextSelection.collapsed(offset: 0),
+                            );
                           });
                         },
                         child: const FaIcon(
@@ -246,21 +261,32 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                   ),
                   SizedBox(
                     height: 150,
-                    child: TextField(
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      autocorrect: false,
-                      scrollPadding: EdgeInsets.zero,
+                    // child: TextField(
+                    //   keyboardType: TextInputType.multiline,
+                    //   maxLines: null,
+                    //   autocorrect: false,
+                    //   scrollPadding: EdgeInsets.zero,
+                    //   controller: noteController,
+                    //   decoration: InputDecoration(
+                    //     border: InputBorder.none,
+                    //     contentPadding: EdgeInsets.zero,
+                    //     hintText: AppLocalizations.of(context)!.writeSomething,
+                    //     hintStyle: AppStyles.regular.copyWith(
+                    //       fontSize: 17,
+                    //       color: AppColors.textSecondColor,
+                    //     ),
+                    //   ),
+                    // ),
+                    child: quill.QuillEditor(
+                      scrollable: true,
+                      scrollController: ScrollController(),
+                      focusNode: editorFocusNode,
+                      padding: const EdgeInsets.all(0),
+                      autoFocus: true,
+                      readOnly: false,
+                      expands: false,
                       controller: noteController,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.zero,
-                        hintText: AppLocalizations.of(context)!.writeSomething,
-                        hintStyle: AppStyles.regular.copyWith(
-                          fontSize: 17,
-                          color: AppColors.textSecondColor,
-                        ),
-                      ),
+                      placeholder: AppLocalizations.of(context)!.writeSomething,
                     ),
                   ),
                 ],
