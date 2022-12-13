@@ -42,7 +42,7 @@ class ItemImage extends StatelessWidget {
                 color: Colors.white,
                 shape: BoxShape.circle,
               ),
-              child: const Center(
+              child: Center(
                 child: Icon(
                   Icons.close,
                   color: AppColors.primaryColor,

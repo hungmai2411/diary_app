@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/constants/bean.dart';
+import 'package:diary_app/constants/utils.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/edit_diary_screen.dart';
 import 'package:diary_app/features/diary/widgets/delete_dialog.dart';
@@ -15,6 +16,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DetailDiaryScreen extends StatelessWidget {
   final Diary diary;
@@ -57,18 +59,29 @@ class DetailDiaryScreen extends StatelessWidget {
     List<String> moodImages = bean.beans;
     int indexMood = 5 - diary.mood.getIndex().round();
     final FocusNode editorFocusNode = FocusNode();
-    var json = jsonDecode(diary.content!);
-    quill.QuillController noteController = quill.QuillController(
-      document: quill.Document.fromJson(json),
-      selection: const TextSelection.collapsed(offset: 0),
-    );
+    quill.QuillController noteController;
+
+    if (diary.content == null) {
+      noteController = quill.QuillController(
+        document: quill.Document()
+          ..insert(0, AppLocalizations.of(context)!.nothing),
+        selection: const TextSelection.collapsed(offset: 0),
+      );
+    } else {
+      var json = jsonDecode(diary.content!);
+      noteController = quill.QuillController(
+        document: quill.Document.fromJson(json),
+        selection: const TextSelection.collapsed(offset: 0),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
           onPressed: () => popScreen(context),
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back_ios_rounded,
             color: AppColors.textPrimaryColor,
           ),
@@ -80,8 +93,8 @@ class DetailDiaryScreen extends StatelessWidget {
         actions: [
           GestureDetector(
             onTap: () => navigateToEditScreen(context),
-            child: const Padding(
-              padding: EdgeInsets.only(right: 8.0),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 8.0),
               child: Icon(
                 FontAwesomeIcons.penToSquare,
                 size: 20,
@@ -91,8 +104,8 @@ class DetailDiaryScreen extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () => deleteDiary(context),
-            child: const Padding(
-              padding: EdgeInsets.only(right: 20.0),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20.0),
               child: Icon(
                 FontAwesomeIcons.trashCan,
                 size: 20,
@@ -158,7 +171,7 @@ class DetailDiaryScreen extends StatelessWidget {
                     style: AppStyles.medium.copyWith(fontSize: 18),
                   ),
                   const SizedBox(height: 5),
-                  const Divider(
+                  Divider(
                     color: AppColors.textSecondaryColor,
                   ),
                   quill.QuillEditor(
@@ -171,6 +184,7 @@ class DetailDiaryScreen extends StatelessWidget {
                     expands: false,
                     showCursor: false,
                     controller: noteController,
+                    customStyles: defaultStyles,
                   ),
                 ],
               ),

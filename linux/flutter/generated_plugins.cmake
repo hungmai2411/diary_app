@@ -4,6 +4,7 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   flutter_localization
+  flutter_secure_storage_linux
   pasteboard
   record_linux
   url_launcher_linux

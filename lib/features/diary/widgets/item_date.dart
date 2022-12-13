@@ -4,8 +4,6 @@ import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/features/board/widgets/mood_flow.dart';
 import 'package:diary_app/features/diary/widgets/smile_painter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 
 class ItemDate extends StatelessWidget {
   final String date;

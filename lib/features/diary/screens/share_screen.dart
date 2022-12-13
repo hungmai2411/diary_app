@@ -64,9 +64,9 @@ class ShareScreenState extends State<ShareScreen> {
       backgroundColor: AppColors.backgroundShareScreen,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        leading: GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
-          child: const Icon(
+        leading: IconButton(
+          onPressed: () => Navigator.of(context).pop(),
+          icon: const Icon(
             Icons.arrow_back_ios_rounded,
             color: Colors.white,
             size: 20,
@@ -76,15 +76,15 @@ class ShareScreenState extends State<ShareScreen> {
         elevation: 0,
         title: Text(
           'Share',
-          style: AppStyles.semibold.copyWith(
+          style: AppStyles.medium.copyWith(
             color: Colors.white,
-            fontSize: 18,
+            fontSize: 16,
           ),
         ),
         actions: [
-          GestureDetector(
-            onTap: shareImage,
-            child: const Icon(
+          IconButton(
+            onPressed: shareImage,
+            icon: const Icon(
               Icons.arrow_forward_rounded,
               color: Colors.white,
               size: 20,
@@ -97,7 +97,7 @@ class ShareScreenState extends State<ShareScreen> {
       body: Screenshot(
         controller: screenshotController,
         child: Container(
-          color: Colors.white,
+          color: AppColors.boxColor,
           margin: const EdgeInsets.symmetric(
             horizontal: 30,
             vertical: 50,

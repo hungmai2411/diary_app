@@ -1,3 +1,7 @@
+import 'package:diary_app/features/category/models/category.dart';
+import 'package:diary_app/features/category/screens/category_screen.dart';
+import 'package:diary_app/features/category/screens/create_category_screen.dart';
+import 'package:diary_app/features/category/screens/detail_category_screen.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/detail_diary_screen.dart';
@@ -11,7 +15,8 @@ import 'package:diary_app/features/setting/screens/passcode_screen.dart';
 import 'package:diary_app/features/setting/screens/select_theme_screen.dart';
 import 'package:diary_app/features/setting/screens/setting_screen.dart';
 import 'package:diary_app/features/setting/screens/start_of_the_week_screen.dart';
-import 'package:diary_app/features/time_line/screens/time_line_screen.dart';
+import 'package:diary_app/features/board/screens/time_line_screen.dart';
+import 'package:diary_app/features/setting/screens/theme_store_screen.dart';
 import 'package:diary_app/my_app.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +28,9 @@ final Map<String, WidgetBuilder> routes = {
   PasscodeScreen.routeName: (context) => const PasscodeScreen(),
   SettingScreen.routeName: (context) => const SettingScreen(),
   SelectThemeScreen.routeName: (context) => const SelectThemeScreen(),
+  CategoryScreen.routeName: (context) => const CategoryScreen(),
+  CreateCategoryScreen.routeName: (context) => const CreateCategoryScreen(),
+  ThemeStoreScreen.routeName: (context) => const ThemeStoreScreen(),
 };
 
 MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
@@ -61,6 +69,12 @@ MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
       return MaterialPageRoute<dynamic>(
         settings: settings,
         builder: (context) => PasscodeConfirmScreen(passcode: passcode),
+      );
+    case DetailCategoryScreen.routeName:
+      final Category category = settings.arguments as Category;
+      return MaterialPageRoute<dynamic>(
+        settings: settings,
+        builder: (context) => DetailCategoryScreen(category: category),
       );
     case ShareScreen.routeName:
       final List images = settings.arguments as List;

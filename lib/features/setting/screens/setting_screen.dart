@@ -8,6 +8,7 @@ import 'package:diary_app/features/setting/screens/select_theme_screen.dart';
 import 'package:diary_app/features/setting/screens/start_of_the_week_screen.dart';
 import 'package:diary_app/features/setting/widgets/custom_app_bar.dart';
 import 'package:diary_app/providers/setting_provider.dart';
+import 'package:diary_app/services/google_drive.dart';
 import 'package:diary_app/services/notification_services.dart';
 import 'package:diary_app/widgets/box.dart';
 import 'package:flutter/cupertino.dart';
@@ -106,6 +107,11 @@ class _SettingScreenState extends State<SettingScreen> {
     );
   }
 
+  backup() async {
+    GoogleDrive googleDrive = GoogleDrive();
+    //await googleDrive.uploadFileToGoogleDrive(file);
+  }
+
   @override
   Widget build(BuildContext context) {
     final settingProvider = Provider.of<SettingProvider>(context);
@@ -114,18 +120,31 @@ class _SettingScreenState extends State<SettingScreen> {
     print(setting.bean);
     hasPasscode = setting.hasPasscode;
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(56),
-        child: CustomAppBar(scrollController: settingController),
+      appBar: AppBar(
+        backgroundColor: AppColors.appbarColor,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        title: Text(
+          AppLocalizations.of(context)!.settingTab,
+          style: AppStyles.medium.copyWith(
+            fontSize: 18,
+            color: AppColors.textPrimaryColor,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: ListView(
           controller: settingController,
           children: [
+            const SizedBox(height: 10),
             // general text
-            Text(AppLocalizations.of(context)!.general,
-                style: AppStyles.medium),
+            Text(
+              AppLocalizations.of(context)!.general,
+              style: AppStyles.medium.copyWith(
+                color: AppColors.textPrimaryColor,
+              ),
+            ),
             const SizedBox(height: 10),
             // passcode
             GestureDetector(
@@ -143,8 +162,12 @@ class _SettingScreenState extends State<SettingScreen> {
                       color: AppColors.textSecondColor,
                     ),
                     const SizedBox(width: 8),
-                    Text(AppLocalizations.of(context)!.passcode,
-                        style: AppStyles.medium),
+                    Text(
+                      AppLocalizations.of(context)!.passcode,
+                      style: AppStyles.medium.copyWith(
+                        color: AppColors.textPrimaryColor,
+                      ),
+                    ),
                     const Spacer(),
                     CupertinoSwitch(
                       // This bool value toggles the switch.
@@ -167,22 +190,29 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
             const SizedBox(height: 15),
             // backup
-            Box(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15,
-                vertical: 20,
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.backup_outlined,
-                    color: AppColors.textSecondColor,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(AppLocalizations.of(context)!.backUp,
-                      style: AppStyles.medium),
-                ],
+            GestureDetector(
+              onTap: backup,
+              child: Box(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15,
+                  vertical: 20,
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.backup_outlined,
+                      color: AppColors.textSecondColor,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      AppLocalizations.of(context)!.backUp,
+                      style: AppStyles.medium.copyWith(
+                        color: AppColors.textPrimaryColor,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
             const SizedBox(height: 15),
@@ -205,8 +235,12 @@ class _SettingScreenState extends State<SettingScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(AppLocalizations.of(context)!.reminderTime,
-                            style: AppStyles.medium),
+                        Text(
+                          AppLocalizations.of(context)!.reminderTime,
+                          style: AppStyles.medium.copyWith(
+                            color: AppColors.textPrimaryColor,
+                          ),
+                        ),
                         Text(
                           '${setting.reminderHour}:${setting.reminderMinute}',
                           style: AppStyles.regular.copyWith(
@@ -252,7 +286,9 @@ class _SettingScreenState extends State<SettingScreen> {
                     const SizedBox(width: 8),
                     Text(
                       AppLocalizations.of(context)!.startOfTheWeek,
-                      style: AppStyles.medium,
+                      style: AppStyles.medium.copyWith(
+                        color: AppColors.textPrimaryColor,
+                      ),
                     ),
                     const Spacer(),
                     Text(
@@ -290,7 +326,9 @@ class _SettingScreenState extends State<SettingScreen> {
                     const SizedBox(width: 8),
                     Text(
                       AppLocalizations.of(context)!.language,
-                      style: AppStyles.medium,
+                      style: AppStyles.medium.copyWith(
+                        color: AppColors.textPrimaryColor,
+                      ),
                     ),
                     const Spacer(),
                     Text(
@@ -323,7 +361,9 @@ class _SettingScreenState extends State<SettingScreen> {
                     const SizedBox(width: 8),
                     Text(
                       AppLocalizations.of(context)!.changeTheme,
-                      style: AppStyles.medium,
+                      style: AppStyles.medium.copyWith(
+                        color: AppColors.textPrimaryColor,
+                      ),
                     ),
                     const Spacer(),
                     Text(
@@ -339,7 +379,12 @@ class _SettingScreenState extends State<SettingScreen> {
             ),
             const SizedBox(height: 15),
             // general text
-            Text(AppLocalizations.of(context)!.other, style: AppStyles.medium),
+            Text(
+              AppLocalizations.of(context)!.other,
+              style: AppStyles.medium.copyWith(
+                color: AppColors.textPrimaryColor,
+              ),
+            ),
             const SizedBox(height: 10),
             // privacy policy
             Box(
@@ -355,8 +400,12 @@ class _SettingScreenState extends State<SettingScreen> {
                     color: AppColors.textSecondColor,
                   ),
                   const SizedBox(width: 8),
-                  Text(AppLocalizations.of(context)!.privacyPolicy,
-                      style: AppStyles.medium),
+                  Text(
+                    AppLocalizations.of(context)!.privacyPolicy,
+                    style: AppStyles.medium.copyWith(
+                      color: AppColors.textPrimaryColor,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -375,8 +424,12 @@ class _SettingScreenState extends State<SettingScreen> {
                     color: AppColors.textSecondColor,
                   ),
                   const SizedBox(width: 8),
-                  Text(AppLocalizations.of(context)!.termsOfConditions,
-                      style: AppStyles.medium),
+                  Text(
+                    AppLocalizations.of(context)!.termsOfConditions,
+                    style: AppStyles.medium.copyWith(
+                      color: AppColors.textPrimaryColor,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -397,7 +450,9 @@ class _SettingScreenState extends State<SettingScreen> {
                   const SizedBox(width: 8),
                   Text(
                     AppLocalizations.of(context)!.feedback,
-                    style: AppStyles.medium,
+                    style: AppStyles.medium.copyWith(
+                      color: AppColors.textPrimaryColor,
+                    ),
                   ),
                 ],
               ),
@@ -417,8 +472,12 @@ class _SettingScreenState extends State<SettingScreen> {
                     color: AppColors.textSecondColor,
                   ),
                   const SizedBox(width: 8),
-                  Text(AppLocalizations.of(context)!.aboutUs,
-                      style: AppStyles.medium),
+                  Text(
+                    AppLocalizations.of(context)!.aboutUs,
+                    style: AppStyles.medium.copyWith(
+                      color: AppColors.textPrimaryColor,
+                    ),
+                  ),
                 ],
               ),
             ),

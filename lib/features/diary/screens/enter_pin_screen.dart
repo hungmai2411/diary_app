@@ -55,7 +55,9 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
               SizedBox(height: size.height * .1),
               Text(
                 AppLocalizations.of(context)!.enterPin,
-                style: AppStyles.semibold,
+                style: AppStyles.semibold.copyWith(
+                  color: AppColors.textPrimaryColor,
+                ),
               ),
               const SizedBox(height: 20),
               Row(
@@ -123,9 +125,9 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
 
   Container _buildInput(String s, Color? color) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.white,
+        color: AppColors.boxColor,
       ),
       child: Center(
         child: Text(

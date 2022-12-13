@@ -165,7 +165,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
                 // coin
                 Text(
                   setting.point.toString(),
-                  style: AppStyles.semibold.copyWith(fontSize: 16),
+                  style: AppStyles.semibold.copyWith(
+                    fontSize: 16,
+                    color: AppColors.textPrimaryColor,
+                  ),
                 ),
                 const Spacer(),
                 // datetime
@@ -178,12 +181,15 @@ class _DiaryScreenState extends State<DiaryScreen> {
                         return Text(
                           DateFormat('MMM dd, yyyy', locale)
                               .format(dateProvider.selectedDay),
-                          style: AppStyles.medium.copyWith(fontSize: 18),
+                          style: AppStyles.medium.copyWith(
+                            fontSize: 18,
+                            color: AppColors.textPrimaryColor,
+                          ),
                         );
                       }),
                       const SizedBox(width: 6),
                       // choose time
-                      const Icon(
+                      Icon(
                         FontAwesomeIcons.angleDown,
                         size: 18,
                         color: AppColors.textPrimaryColor,
@@ -192,9 +198,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
                   ),
                 ),
                 const Spacer(),
-                GestureDetector(
-                  onTap: captureImage,
-                  child: const Icon(
+                IconButton(
+                  onPressed: captureImage,
+                  icon: Icon(
                     Icons.ios_share,
                     color: AppColors.textPrimaryColor,
                   ),
@@ -213,6 +219,18 @@ class _DiaryScreenState extends State<DiaryScreen> {
                         setting.startingDayOfWeek!.getStartingDayOfWeek,
                     shouldFillViewport: true,
                     calendarBuilders: CalendarBuilders(
+                      dowBuilder: ((context, day) {
+                        final text = DateFormat.E().format(day);
+
+                        return Center(
+                          child: Text(
+                            text,
+                            style: AppStyles.regular.copyWith(
+                              color: AppColors.textSecondColor,
+                            ),
+                          ),
+                        );
+                      }),
                       defaultBuilder: (context1, datetime, events) {
                         return GestureDetector(
                           onTap: () {
@@ -231,6 +249,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                           child: ItemDate(
                             date: datetime.day.toString(),
                             img: getIconOfDay(datetime, diaries),
+                            color: AppColors.textPrimaryColor,
                           ),
                         );
                       },

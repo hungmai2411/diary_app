@@ -36,7 +36,7 @@ class ItemAddImage extends StatelessWidget {
           borderType: BorderType.RRect,
           radius: const Radius.circular(12),
           padding: const EdgeInsets.all(0),
-          child: const Center(
+          child: Center(
             child: Icon(
               Icons.camera_alt,
               color: AppColors.primaryColor,

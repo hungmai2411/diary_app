@@ -13,6 +13,8 @@ import 'package:diary_app/features/diary/widgets/success_dialog.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/providers/setting_provider.dart';
+import 'package:diary_app/widgets/app_button.dart';
+import 'package:diary_app/widgets/app_dialog.dart';
 import 'package:diary_app/widgets/box.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
@@ -20,6 +22,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:tuple/tuple.dart';
 
 class AddDiaryScreen extends StatefulWidget {
   final DateTime dateTime;
@@ -65,18 +68,19 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
       settingProvider.setSetting(setting);
       final diaryProvider = context.read<DiaryProvider>();
       var json = jsonEncode(noteController.document.toDelta().toJson());
-
+      var note = noteController.document.toPlainText();
+      print(note.length);
       Diary newDiary = Diary(
         mood: moodPicked,
         createdAt: widget.dateTime,
-        content: json.isEmpty ? null : json,
+        content: note.length == 1 ? null : json,
         images: images,
       );
       diaryProvider.addDiary(newDiary);
       await showDialog(
         context: context,
         builder: (_) {
-          return const SuccessDialog();
+          return const AppDialog(child: SuccessDialog());
         },
       );
       popScreen();
@@ -144,7 +148,7 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
         elevation: 0,
         leading: GestureDetector(
           onTap: popScreen,
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_ios_rounded,
             color: AppColors.textPrimaryColor,
           ),
@@ -158,7 +162,7 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
             padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
               onTap: () => addNote(context),
-              child: const Icon(
+              child: Icon(
                 FontAwesomeIcons.check,
                 color: AppColors.primaryColor,
               ),
@@ -247,7 +251,7 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                             );
                           });
                         },
-                        child: const FaIcon(
+                        child: FaIcon(
                           FontAwesomeIcons.upRightAndDownLeftFromCenter,
                           color: AppColors.textPrimaryColor,
                           size: 17,
@@ -256,7 +260,7 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                     ],
                   ),
                   const SizedBox(height: 5),
-                  const Divider(
+                  Divider(
                     color: AppColors.textSecondaryColor,
                   ),
                   SizedBox(
@@ -282,11 +286,12 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                       scrollController: ScrollController(),
                       focusNode: editorFocusNode,
                       padding: const EdgeInsets.all(0),
-                      autoFocus: true,
+                      autoFocus: false,
                       readOnly: false,
                       expands: false,
                       controller: noteController,
                       placeholder: AppLocalizations.of(context)!.writeSomething,
+                      customStyles: defaultStyles,
                     ),
                   ),
                 ],

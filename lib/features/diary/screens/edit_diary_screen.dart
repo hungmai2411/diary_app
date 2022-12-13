@@ -134,7 +134,7 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
         elevation: 0,
         leading: GestureDetector(
           onTap: popScreen,
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_ios_rounded,
             color: AppColors.textPrimaryColor,
           ),
@@ -148,7 +148,7 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
             padding: const EdgeInsets.only(right: 20.0),
             child: GestureDetector(
               onTap: () => addNote(context),
-              child: const Icon(
+              child: Icon(
                 FontAwesomeIcons.check,
                 color: AppColors.primaryColor,
               ),
@@ -215,7 +215,7 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
                     style: AppStyles.medium.copyWith(fontSize: 18),
                   ),
                   const SizedBox(height: 5),
-                  const Divider(
+                  Divider(
                     color: AppColors.textSecondaryColor,
                   ),
                   SizedBox(
@@ -246,6 +246,7 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
                       expands: false,
                       controller: noteController,
                       placeholder: AppLocalizations.of(context)!.writeSomething,
+                      customStyles: defaultStyles,
                     ),
                   ),
                 ],

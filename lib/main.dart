@@ -1,5 +1,6 @@
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/bean.dart';
+import 'package:diary_app/features/category/models/category.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/models/mood.dart';
 import 'package:diary_app/features/diary/screens/enter_pin_screen.dart';
@@ -7,6 +8,7 @@ import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/l10n/l10n.dart';
 import 'package:diary_app/my_app.dart';
 import 'package:diary_app/providers/bottom_navigation_provider.dart';
+import 'package:diary_app/providers/category_provider.dart';
 import 'package:diary_app/providers/date_provider.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/providers/setting_provider.dart';
@@ -27,6 +29,7 @@ void main() async {
   Hive.registerAdapter(MoodAdapter());
   Hive.registerAdapter(SettingAdapter());
   Hive.registerAdapter(BeanAdapter());
+  Hive.registerAdapter(CategoryAdapter());
 
   SettingProvider settingProvider = SettingProvider();
   await getSetting(settingProvider);
@@ -45,6 +48,9 @@ void main() async {
         ),
         ChangeNotifierProvider<DateProvider>(
           create: (_) => DateProvider(),
+        ),
+        ChangeNotifierProvider<CategoryProvider>(
+          create: (_) => CategoryProvider(),
         ),
       ],
       child: Consumer<SettingProvider>(builder: (
@@ -91,7 +97,7 @@ getSetting(SettingProvider settingProvider) async {
   final DbHelper dbHelper = DbHelper();
   final box = await dbHelper.openBox("settings");
   Setting setting = dbHelper.getSetting(box);
-
+  AppColors.changeTheme(setting.background);
   if (setting.language == null) {
     setting = setting.copyWith(
       language: 'English',

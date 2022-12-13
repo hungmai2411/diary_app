@@ -26,13 +26,15 @@ class SettingAdapter extends TypeAdapter<Setting> {
       hasReminderTime: fields[5] as bool,
       point: fields[8] as int,
       bean: fields[2] as Bean,
+      myBeans: (fields[9] as List).cast<Bean>(),
+      background: fields[10] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Setting obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.reminderHour)
       ..writeByte(1)
@@ -50,7 +52,11 @@ class SettingAdapter extends TypeAdapter<Setting> {
       ..writeByte(7)
       ..write(obj.reminderMinute)
       ..writeByte(8)
-      ..write(obj.point);
+      ..write(obj.point)
+      ..writeByte(9)
+      ..write(obj.myBeans)
+      ..writeByte(10)
+      ..write(obj.background);
   }
 
   @override

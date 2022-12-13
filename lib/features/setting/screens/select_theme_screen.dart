@@ -4,8 +4,11 @@ import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/constants/bean.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
-import 'package:diary_app/features/setting/widgets/item_carousel.dart';
+import 'package:diary_app/features/setting/screens/theme_store_screen.dart';
+import 'package:diary_app/features/setting/widgets/item_background.dart';
+import 'package:diary_app/features/setting/widgets/item_bean.dart';
 import 'package:diary_app/providers/setting_provider.dart';
+import 'package:diary_app/widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -21,12 +24,16 @@ class _SelectThemeScreenState extends State<SelectThemeScreen> {
   late SettingProvider settingProvider;
   late Setting setting;
   final CarouselController controller = CarouselController();
+  late String background;
+  late Bean beanSelected;
 
   @override
   void initState() {
     super.initState();
     settingProvider = context.read<SettingProvider>();
     setting = settingProvider.setting;
+    beanSelected = setting.bean;
+    background = setting.background;
   }
 
   @override
@@ -50,88 +57,137 @@ class _SelectThemeScreenState extends State<SelectThemeScreen> {
     }
   }
 
-  setTheme(String img) {
-    if (img == AppAssets.imgBasicBean) {
-      setting = setting.copyWith(
-        bean: const Bean(
-          nameBean: 'Basic Bean',
-          beans: basicBean,
-        ),
-      );
-    } else if (img == AppAssets.imgBlushBean) {
-      setting = setting.copyWith(
-        bean: const Bean(
-          nameBean: 'Blush Bean',
-          beans: blushingBean,
-        ),
-      );
-    } else if (img == AppAssets.imgKittyBean) {
-      setting = setting.copyWith(
-        bean: const Bean(
-          nameBean: 'Kitty Bean',
-          beans: kittyBean,
-        ),
-      );
-    } else {
-      setting = setting.copyWith(
-        bean: const Bean(
-          nameBean: 'Sprout Bean',
-          beans: sproutBean,
-        ),
-      );
-    }
-
+  setTheme() {
+    setting = setting.copyWith(
+      bean: beanSelected,
+      background: background,
+    );
+    AppColors.changeTheme(background);
     settingProvider.setSetting(setting);
     Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    List<String> images = [
-      AppAssets.imgBasicBean,
-      AppAssets.imgBlushBean,
-      AppAssets.imgKittyBean,
-      AppAssets.imgSproutBean,
-    ];
+    final settingProvider = context.watch<SettingProvider>();
+    Setting setting = settingProvider.setting;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        backgroundColor: AppColors.appbarColor,
+        elevation: 0.3,
         automaticallyImplyLeading: false,
         title: Text(
           AppLocalizations.of(context)!.changeTheme,
-          style: AppStyles.semibold.copyWith(fontSize: 18),
+          style: AppStyles.medium.copyWith(fontSize: 18),
         ),
-        leading: GestureDetector(
-          onTap: () {
+        leading: IconButton(
+          onPressed: () {
             Navigator.pop(context);
           },
-          child: const Icon(
+          icon: Icon(
             Icons.arrow_back_ios_rounded,
             color: AppColors.textPrimaryColor,
+            size: 21,
           ),
         ),
-      ),
-      body: SizedBox(
-        height: 600,
-        width: double.infinity,
-        child: CarouselSlider(
-          carouselController: controller,
-          options: CarouselOptions(
-            initialPage: getInitialPage(),
-            autoPlay: false,
-            viewportFraction: 0.623,
-            aspectRatio: 0.6,
-            enlargeCenterPage: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, ThemeStoreScreen.routeName);
+            },
+            icon: Icon(
+              Icons.add_shopping_cart_outlined,
+              color: AppColors.textPrimaryColor,
+              size: 21,
+            ),
           ),
-          items: images
-              .map(
-                (e) => GestureDetector(
-                  onTap: () => setTheme(e),
-                  child: ItemCarousel(image: e),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15.0),
+        child: ListView(
+          children: [
+            const SizedBox(height: 10),
+            Text('Background', style: AppStyles.medium),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      background = 'System mode';
+                    });
+                  },
+                  child: ItemBackground(
+                    backgroundSelected: background,
+                    color: AppColors.textPrimaryColor,
+                    background: 'System mode',
+                  ),
                 ),
-              )
-              .toList(),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      background = 'Dark mode';
+                    });
+                  },
+                  child: ItemBackground(
+                    backgroundSelected: background,
+                    color: Colors.black,
+                    background: 'Dark mode',
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      background = 'Light mode';
+                    });
+                  },
+                  child: ItemBackground(
+                    backgroundSelected: background,
+                    color: Colors.white,
+                    background: 'Light mode',
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 15),
+            Text('Beans', style: AppStyles.medium),
+            const SizedBox(height: 10),
+            Column(
+              children: setting.myBeans
+                  .map(
+                    (e) => GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          beanSelected = e;
+                        });
+                      },
+                      child: ItemBean(
+                        bean: e,
+                        beanSelected: beanSelected,
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+            const SizedBox(height: 15),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: AppColors.appbarColor,
+        child: Container(
+          height: 80,
+          padding: const EdgeInsets.all(10),
+          child: SafeArea(
+            child: AppButton(
+              textButton: 'Apply',
+              style: AppStyles.semibold.copyWith(color: Colors.white),
+              onTap: setTheme,
+            ),
+          ),
         ),
       ),
     );

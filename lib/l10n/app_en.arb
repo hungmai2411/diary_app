@@ -41,7 +41,6 @@
     "yourPhotos":"Your photos",
     "writeSomething":"Write something...",
     "theDiaryHasBeenRecorded":"The diary has been recorded",
-    "coin":"100 coin",
     "claim":"Claim",
     "enterNewPin":"Enter your new PIN",
     "exit":"Exit",
@@ -52,5 +51,24 @@
     "ok":"OK",
     "enterPin":"Enter PIN",
     "share":"Share",
-    "cancel":"Cancel"
+    "cancel":"Cancel",
+    "category":"Category",
+    "createCategory":"Create Category",
+    "title":"Title",
+    "addTitle":"Add a title to this category",
+    "write":"Write",
+    "content":"Content",
+    "themeStore":"Theme Store",
+    "coin":"coin",
+    "nothing":"Nothing is written for this day 🙁",
+    "owned":"Owned",
+    "buySuccess":"Buy successfully",
+    "buyFailed":"You need {numCoin} more coin to purchase this theme.",
+    "@buyFailed": {
+        "placeholders":{
+            "numCoin":{
+                "type":"String"
+            }
+        }        
+    }
 }

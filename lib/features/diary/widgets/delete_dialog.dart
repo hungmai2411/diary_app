@@ -27,11 +27,9 @@ class DeleteDialog extends StatelessWidget {
           Radius.circular(10.0),
         ),
       ),
+      backgroundColor: AppColors.boxColor,
       title: Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

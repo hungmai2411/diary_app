@@ -6,7 +6,7 @@ import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/widgets/item_diary.dart';
 import 'package:diary_app/features/diary/widgets/item_no_diary.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
-import 'package:diary_app/features/time_line/screens/time_line_screen.dart';
+import 'package:diary_app/features/board/screens/time_line_screen.dart';
 import 'package:diary_app/providers/date_provider.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/providers/setting_provider.dart';
@@ -50,7 +50,7 @@ class _BoardScreenState extends State<BoardScreen> {
       headerColor: AppColors.selectedColor,
       cancelText: Text(
         AppLocalizations.of(context)!.cancel,
-        style: const TextStyle(
+        style: TextStyle(
           color: AppColors.textSecondaryColor,
         ),
       ),
@@ -74,13 +74,11 @@ class _BoardScreenState extends State<BoardScreen> {
     final SettingProvider settingProvider = context.read<SettingProvider>();
     Setting setting = settingProvider.setting;
     String locale = setting.language == 'English' ? 'en' : 'vi';
-    final size = MediaQuery.of(context).size;
-    final DiaryProvider diaryProvider = context.watch<DiaryProvider>();
+    final DiaryProvider diaryProvider = context.read<DiaryProvider>();
     List<Diary> diaries = diaryProvider.diaries;
     List<Diary> diariesMonth = [];
-    List<Diary> diariesYear = [];
 
-    diaries.sort((a, b) => a.createdAt.compareTo(b.createdAt));
+    diaries.sort((b, a) => a.createdAt.compareTo(b.createdAt));
 
     for (Diary diary in diaries) {
       DateTime createdAt = diary.createdAt;
@@ -89,44 +87,41 @@ class _BoardScreenState extends State<BoardScreen> {
           createdAt.year == selectedDay.year) {
         diariesMonth.add(diary);
       }
-
-      if (createdAt.year == selectedDay.year) {
-        diariesYear.add(diary);
-      }
     }
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: GestureDetector(
-          onTap: () => chooseMonth(locale),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                DateFormat('MMM, yyyy', locale).format(selectedDay),
-                style: AppStyles.medium.copyWith(fontSize: 18),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            title: GestureDetector(
+              onTap: () => chooseMonth(locale),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    DateFormat('MMM, yyyy', locale).format(selectedDay),
+                    style: AppStyles.medium.copyWith(
+                      fontSize: 18,
+                      color: AppColors.textPrimaryColor,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  // choose time
+                  Icon(
+                    FontAwesomeIcons.angleDown,
+                    size: 18,
+                    color: AppColors.textPrimaryColor,
+                  ),
+                ],
               ),
-              const SizedBox(width: 6),
-              // choose time
-              const Icon(
-                FontAwesomeIcons.angleDown,
-                size: 18,
-                color: AppColors.textPrimaryColor,
-              ),
-            ],
+            ),
+            backgroundColor: Colors.transparent,
           ),
-        ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: size.height,
-          width: size.width,
-          child: Column(
-            children: [
-              MoodFlow(
+          SliverPadding(
+            padding: const EdgeInsets.only(top: 10),
+            sliver: SliverToBoxAdapter(
+              child: MoodFlow(
                 month: selectedDay.month,
                 year: selectedDay.year,
                 numOfDays: daysInMonth(
@@ -135,55 +130,67 @@ class _BoardScreenState extends State<BoardScreen> {
                 ),
                 diaries: diariesMonth,
               ),
-              const SizedBox(height: 20),
-              MoodBar(
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            sliver: SliverToBoxAdapter(
+              child: MoodBar(
                 diariesMonth: diariesMonth,
               ),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.timeLineTab,
-                      style: AppStyles.medium,
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            sliver: SliverToBoxAdapter(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.timeLineTab,
+                    style: AppStyles.medium.copyWith(
+                      color: AppColors.textPrimaryColor,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pushNamed(
-                          TimeLineScreen.routeName,
-                          arguments: diariesMonth,
-                        );
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.seeAll,
-                        style: AppStyles.medium.copyWith(
-                          color: AppColors.todayColor,
-                        ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        TimeLineScreen.routeName,
+                        arguments: diariesMonth,
+                      );
+                    },
+                    child: Text(
+                      AppLocalizations.of(context)!.seeAll,
+                      style: AppStyles.medium.copyWith(
+                        color: AppColors.todayColor,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 10),
-              diariesMonth.isEmpty
-                  ? const SizedBox(
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.only(top: 15),
+            sliver: diariesMonth.isEmpty
+                ? const SliverToBoxAdapter(
+                    child: SizedBox(
                       width: double.infinity,
                       child: ItemNoDiary(),
-                    )
-                  : Expanded(
-                      child: ListView.builder(
-                        itemBuilder: (context, index) {
-                          Diary diary = diariesMonth[index];
-                          return ItemDiary(diary: diary);
-                        },
-                        itemCount: diariesMonth.length,
-                      ),
-                    )
-            ],
+                    ),
+                  )
+                : SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                        Diary diary = diariesMonth[index];
+
+                        return ItemDiary(diary: diary);
+                      },
+                      childCount: diariesMonth.length,
+                    ),
+                  ),
           ),
-        ),
+        ],
       ),
     );
   }

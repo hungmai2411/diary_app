@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/constants/utils.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/providers/setting_provider.dart';
@@ -10,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:tuple/tuple.dart';
 
 class ItemDiary extends StatelessWidget {
   final Diary diary;
@@ -25,18 +28,26 @@ class ItemDiary extends StatelessWidget {
     final FocusNode editorFocusNode = FocusNode();
     Setting setting = settingProvider.setting;
     String locale = setting.language == 'English' ? 'en' : 'vi';
-
-    var json = jsonDecode(diary.content!);
-    quill.QuillController controller = quill.QuillController(
-      document: quill.Document.fromJson(json),
-      selection: const TextSelection.collapsed(offset: 0),
-    );
+    quill.QuillController controller;
+    if (diary.content == null) {
+      controller = quill.QuillController(
+        document: quill.Document()
+          ..insert(0, AppLocalizations.of(context)!.nothing),
+        selection: const TextSelection.collapsed(offset: 0),
+      );
+    } else {
+      var json = jsonDecode(diary.content!);
+      controller = quill.QuillController(
+        document: quill.Document.fromJson(json),
+        selection: const TextSelection.collapsed(offset: 0),
+      );
+    }
 
     return Box(
       margin: const EdgeInsets.only(
         left: 15.0,
         right: 15.0,
-        bottom: 10,
+        top: 10,
       ),
       child: IntrinsicHeight(
         child: Row(
@@ -48,12 +59,14 @@ class ItemDiary extends StatelessWidget {
                   diary.createdAt.day.toString(),
                   style: AppStyles.regular.copyWith(
                     fontSize: 25,
+                    color: AppColors.textPrimaryColor,
                   ),
                 ),
                 Text(
                   DateFormat("MMM", locale).format(diary.createdAt),
                   style: AppStyles.regular.copyWith(
                     fontSize: 14,
+                    color: AppColors.textPrimaryColor,
                   ),
                 ),
                 Image.asset(
@@ -65,7 +78,7 @@ class ItemDiary extends StatelessWidget {
               ],
             ),
             const SizedBox(width: 10),
-            const VerticalDivider(
+            VerticalDivider(
               color: AppColors.textSecondaryColor,
             ),
             const SizedBox(width: 10),
@@ -75,13 +88,6 @@ class ItemDiary extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  //Html(data: "<p>Hello <b>Flutter</b><p>"),
-                  // Text(
-                  //   diary.content ?? 'Nothing is written for this day 🙁',
-                  //   style: AppStyles.regular.copyWith(
-                  //     fontSize: 14,
-                  //   ),
-                  // ),
                   quill.QuillEditor(
                     scrollable: true,
                     scrollController: ScrollController(),
@@ -92,6 +98,7 @@ class ItemDiary extends StatelessWidget {
                     expands: false,
                     controller: controller,
                     showCursor: false,
+                    customStyles: defaultStyles,
                   ),
                   if (diary.images != null)
                     Hero(

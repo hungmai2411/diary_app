@@ -30,7 +30,7 @@ class MoodFlow extends StatelessWidget {
       height: 300,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.appbarColor,
         borderRadius: BorderRadius.circular(10),
       ),
       child: diaries.isEmpty
@@ -45,7 +45,9 @@ class MoodFlow extends StatelessWidget {
                 children: [
                   Text(
                     AppLocalizations.of(context)!.moodFlow,
-                    style: AppStyles.medium,
+                    style: AppStyles.medium.copyWith(
+                      color: AppColors.textPrimaryColor,
+                    ),
                   ),
                   const SizedBox(height: 5),
                   Expanded(
@@ -177,7 +179,10 @@ class MoodFlow extends StatelessWidget {
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
-    TextStyle style = AppStyles.regular.copyWith(fontSize: 12);
+    TextStyle style = AppStyles.regular.copyWith(
+      fontSize: 12,
+      color: AppColors.textPrimaryColor,
+    );
     late Widget text;
 
     if (isMonthly!) {

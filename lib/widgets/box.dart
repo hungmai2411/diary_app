@@ -1,3 +1,4 @@
+import 'package:diary_app/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -7,16 +8,20 @@ class Box extends StatelessWidget {
   double? height;
   EdgeInsets? margin;
   EdgeInsets? padding;
+  Border? border;
+  Color? color;
 
   Box({
     super.key,
     required this.child,
     this.height,
     this.margin,
+    this.border,
     this.padding = const EdgeInsets.symmetric(
       horizontal: 15,
       vertical: 10,
     ),
+    this.color,
   });
 
   @override
@@ -26,8 +31,9 @@ class Box extends StatelessWidget {
       margin: margin,
       padding: padding,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: color ?? AppColors.boxColor,
         borderRadius: BorderRadius.circular(10),
+        border: border,
       ),
       child: child,
     );

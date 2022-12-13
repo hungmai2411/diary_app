@@ -41,29 +41,34 @@
     "yourPhotos":"Ảnh của bạn",
     "writeSomething":"Viết gì đó...",
     "theDiaryHasBeenRecorded":"Nhật kí đã được lưu",
-    "coin":"100 xu",
     "claim":"Nhận",
     "enterNewPin":"Nhập mã pin mới của bạn",
     "exit":"Thoát",
     "delete":"Xoá",
     "confirmYourPasscode":"Xác nhận mã PIN của bạn",
     "pinNotMatch":"Không khớp, Vui lòng thử lại",
-    "pinSet":"PIN has đã được thiết lập",
+    "pinSet":"PIN đã được thiết lập",
     "ok":"Xác nhận",
     "enterPin":"Nhập mã PIN",
     "share":"Chia sẻ",
-    "cancel":"Huỷ"
-
-
-
-
-
-
-
-
-
-
-
-
-
+    "cancel":"Huỷ",
+    "category":"Chủ đề",
+    "createCategory":"Tạo chủ đề",
+    "title":"Tiêu đề",
+    "addTitle":"Thêm tiêu đề cho chủ đề này",
+    "write":"Viết",
+    "content":"Nội dung",
+    "themeStore":"Cửa hàng giao diện",
+    "coin":"xu",
+    "nothing":"Ngày này chưa viết gì hết 🙁",
+    "buySuccess":"Mua thành công",
+    "owned":"Đã sở hữu",
+    "buyFailed":"Bạn cần thêm {numCoin} xu để mua giao diện",
+    "@buyFailed": {
+        "placeholders":{
+            "numCoin":{
+                "type":"String"
+            }
+        }        
+    }
 }

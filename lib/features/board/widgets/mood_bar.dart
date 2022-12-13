@@ -1,11 +1,14 @@
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/constants/bean.dart';
 import 'package:diary_app/features/board/widgets/empty_mood_bar.dart';
 import 'package:diary_app/features/board/widgets/item_mood_percent.dart';
 import 'package:diary_app/features/board/widgets/item_mood_percent_detail.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
+import 'package:diary_app/providers/setting_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class MoodBar extends StatelessWidget {
   final List<Diary> diariesMonth;
@@ -17,6 +20,10 @@ class MoodBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SettingProvider settingProvider = context.read<SettingProvider>();
+    Bean bean = settingProvider.setting.bean;
+    List<String> images = bean.beans;
+
     if (diariesMonth.isEmpty) {
       return const EmptyMoodBar();
     }
@@ -26,7 +33,7 @@ class MoodBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.appbarColor,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
@@ -74,23 +81,23 @@ class MoodBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ItemMoodPercentDetail(
-                color: AppColors.mood5,
+                imgMood: images[4],
                 percent: percents[4],
               ),
               ItemMoodPercentDetail(
-                color: AppColors.mood4,
+                imgMood: images[3],
                 percent: percents[3],
               ),
               ItemMoodPercentDetail(
-                color: AppColors.mood3,
+                imgMood: images[2],
                 percent: percents[2],
               ),
               ItemMoodPercentDetail(
-                color: AppColors.mood2,
+                imgMood: images[1],
                 percent: percents[1],
               ),
               ItemMoodPercentDetail(
-                color: AppColors.mood1,
+                imgMood: images[0],
                 percent: percents[0],
               ),
             ],

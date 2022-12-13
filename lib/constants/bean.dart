@@ -11,6 +11,7 @@ class Bean {
 
   @HiveField(1)
   final List<String> beans;
+
   const Bean({
     required this.nameBean,
     this.beans = basicBean,

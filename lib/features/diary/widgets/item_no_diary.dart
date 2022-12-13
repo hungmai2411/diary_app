@@ -16,7 +16,7 @@ class ItemNoDiary extends StatelessWidget {
       margin: const EdgeInsets.only(
         left: 20.0,
         right: 20,
-        bottom: 10,
+        top: 10,
       ),
       child: IntrinsicHeight(
         child: Row(
@@ -44,7 +44,7 @@ class ItemNoDiary extends StatelessWidget {
               ],
             ),
             const SizedBox(width: 10),
-            const VerticalDivider(
+            VerticalDivider(
               color: AppColors.textSecondaryColor,
             ),
             const SizedBox(width: 10),
@@ -73,6 +73,7 @@ class ItemNoDiary extends StatelessWidget {
                     AppLocalizations.of(context)!.noRecord,
                     style: AppStyles.regular.copyWith(
                       fontSize: 14,
+                      color: AppColors.textPrimaryColor,
                     ),
                   ),
                 ],

@@ -6,26 +6,26 @@ class FontFamily {
 }
 
 class AppStyles {
-  static TextStyle medium = const TextStyle(
+  static TextStyle medium = TextStyle(
     fontFamily: FontFamily.monsterat,
     fontSize: 16,
     fontWeight: FontWeight.w500,
     color: AppColors.textPrimaryColor,
   );
-  static TextStyle regular = const TextStyle(
+  static TextStyle regular = TextStyle(
     fontFamily: FontFamily.monsterat,
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimaryColor,
   );
-  static TextStyle bold = const TextStyle(
+  static TextStyle bold = TextStyle(
     fontFamily: FontFamily.monsterat,
     fontSize: 16,
     fontWeight: FontWeight.w700,
     color: AppColors.textPrimaryColor,
   );
 
-  static TextStyle semibold = const TextStyle(
+  static TextStyle semibold = TextStyle(
     fontFamily: FontFamily.monsterat,
     fontSize: 18,
     fontWeight: FontWeight.w600,

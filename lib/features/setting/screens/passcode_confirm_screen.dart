@@ -6,6 +6,7 @@ import 'package:diary_app/features/diary/widgets/success_dialog.dart';
 import 'package:diary_app/features/setting/screens/setting_screen.dart';
 import 'package:diary_app/my_app.dart';
 import 'package:diary_app/providers/setting_provider.dart';
+import 'package:diary_app/widgets/app_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -129,7 +130,9 @@ class _PasscodeConfirmScreenState extends State<PasscodeConfirmScreen> {
                             await showDialog(
                               context: context,
                               builder: (_) {
-                                return const PinSuccessDialog();
+                                return const AppDialog(
+                                  child: PinSuccessDialog(),
+                                );
                               },
                             );
                             SettingProvider settingProvider =
@@ -169,9 +172,9 @@ class _PasscodeConfirmScreenState extends State<PasscodeConfirmScreen> {
 
   Container _buildInput(String s, Color? color) {
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: Colors.white,
+        color: AppColors.boxColor,
       ),
       child: Center(
         child: Text(

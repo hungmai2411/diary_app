@@ -64,16 +64,16 @@ class _StartOfTheWeekScreenState extends State<StartOfTheWeekScreen> {
           onTap: () {
             Navigator.pop(context);
           },
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_ios_rounded,
             color: AppColors.textPrimaryColor,
           ),
         ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        backgroundColor: AppColors.appbarColor,
+        elevation: 0.3,
         title: Text(
           AppLocalizations.of(context)!.startOfTheWeek,
-          style: AppStyles.regular.copyWith(fontSize: 16),
+          style: AppStyles.regular.copyWith(fontSize: 18),
         ),
       ),
       body: ListView.builder(
@@ -84,7 +84,7 @@ class _StartOfTheWeekScreenState extends State<StartOfTheWeekScreen> {
             onTap: () => chooseStartDayOfTheWeek(day),
             child: Box(
               margin: const EdgeInsets.only(
-                bottom: 10.0,
+                top: 10.0,
                 left: 20,
                 right: 20,
               ),

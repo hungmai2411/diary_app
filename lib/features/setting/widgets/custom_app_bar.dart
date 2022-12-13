@@ -51,13 +51,12 @@ class _CustomAppBarState extends State<CustomAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor:
-          !isAppbarCollapsing ? Colors.transparent : AppColors.appbarColor,
+      backgroundColor: AppColors.appbarColor,
       elevation: 0,
       automaticallyImplyLeading: false,
       title: Text(
         AppLocalizations.of(context)!.settingTab,
-        style: AppStyles.semibold.copyWith(fontSize: 18),
+        style: AppStyles.medium.copyWith(fontSize: 18),
       ),
     );
   }

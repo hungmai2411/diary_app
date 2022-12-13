@@ -36,6 +36,12 @@ class Setting {
   @HiveField(8)
   final int point;
 
+  @HiveField(9)
+  final List<Bean> myBeans;
+
+  @HiveField(10)
+  final String background;
+
   Setting({
     this.reminderHour = 20,
     this.reminderMinute = 0,
@@ -46,6 +52,10 @@ class Setting {
     this.hasReminderTime = false,
     this.point = 0,
     this.bean = const Bean(nameBean: 'Basic Bean'),
+    this.myBeans = const [
+      Bean(nameBean: 'Basic Bean'),
+    ],
+    this.background = 'Light mode',
   });
 
   Setting copyWith({
@@ -59,6 +69,8 @@ class Setting {
     bool? hasReminderTime,
     int? point,
     Bean? bean,
+    List<Bean>? myBeans,
+    String? background,
   }) {
     return Setting(
       reminderHour: reminderHour ?? this.reminderHour,
@@ -70,6 +82,8 @@ class Setting {
       hasReminderTime: hasReminderTime ?? this.hasReminderTime,
       point: point ?? this.point,
       bean: bean ?? this.bean,
+      myBeans: myBeans ?? this.myBeans,
+      background: background ?? this.background,
     );
   }
 }

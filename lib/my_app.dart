@@ -1,10 +1,12 @@
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/features/board/screens/board_screen.dart';
+import 'package:diary_app/features/category/models/category.dart';
+import 'package:diary_app/features/category/screens/category_screen.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/diary_screen.dart';
 import 'package:diary_app/features/setting/screens/setting_screen.dart';
-import 'package:diary_app/features/time_line/screens/time_line_screen.dart';
+import 'package:diary_app/providers/category_provider.dart';
 import 'package:diary_app/providers/date_provider.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/services/db_helpers.dart';
@@ -30,7 +32,7 @@ class _MyAppState extends State<MyApp> {
 
   List screens = [
     const DiaryScreen(),
-    Container(),
+    const CategoryScreen(),
     const BoardScreen(),
     const SettingScreen(),
   ];
@@ -47,6 +49,7 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     getDiaries();
+    getCategories();
   }
 
   getDiaries() async {
@@ -54,6 +57,14 @@ class _MyAppState extends State<MyApp> {
     final box = await dbHelper.openBox("diaries");
     List<Diary> diaries = dbHelper.getDiaries(box);
     diaryProvider.setDiaries(diaries);
+  }
+
+  getCategories() async {
+    var categoryProvider =
+        Provider.of<CategoryProvider>(context, listen: false);
+    final box = await dbHelper.openBox("categories");
+    List<Category> categories = dbHelper.getCategories(box);
+    categoryProvider.setCategories(categories);
   }
 
   @override
@@ -67,6 +78,7 @@ class _MyAppState extends State<MyApp> {
       backgroundColor: AppColors.backgroundColor,
       body: screens[bottomProvider.currentIndex],
       bottomNavigationBar: BottomAppBar(
+        color: AppColors.bottomBarColor,
         shape: const CircularNotchedRectangle(),
         notchMargin: 10,
         child: SizedBox(
@@ -93,7 +105,7 @@ class _MyAppState extends State<MyApp> {
                       bottomProvider.currentIndex = 1;
                     },
                     iconData: FontAwesomeIcons.list,
-                    name: AppLocalizations.of(context)!.timeLineTab,
+                    name: AppLocalizations.of(context)!.category,
                     color: bottomProvider.currentIndex == 1
                         ? AppColors.primaryColor
                         : AppColors.textSecondColor,

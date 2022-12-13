@@ -36,20 +36,21 @@ class _LanguageScreenState extends State<LanguageScreen> {
     final settingProvider = context.read<SettingProvider>();
     return Scaffold(
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
+        leading: IconButton(
+          onPressed: () {
             Navigator.pop(context);
           },
-          child: const Icon(
+          icon: Icon(
             Icons.arrow_back_ios_rounded,
             color: AppColors.textPrimaryColor,
+            size: 21,
           ),
         ),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        backgroundColor: AppColors.appbarColor,
+        elevation: 0.3,
         title: Text(
           AppLocalizations.of(context)!.language,
-          style: AppStyles.regular.copyWith(fontSize: 16),
+          style: AppStyles.regular.copyWith(fontSize: 18),
         ),
       ),
       body: ListView.builder(
@@ -60,7 +61,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
             onTap: () => chooseLanguage(language),
             child: Box(
               margin: const EdgeInsets.only(
-                bottom: 10.0,
+                top: 10.0,
                 left: 20,
                 right: 20,
               ),
