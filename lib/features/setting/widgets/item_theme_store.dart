@@ -84,7 +84,10 @@ class ItemThemeStore extends StatelessWidget {
             children: [
               Text(
                 bean.nameBean,
-                style: AppStyles.semibold,
+                style: AppStyles.semibold.copyWith(
+                  color: AppColors.textPrimaryColor,
+                  fontSize: 16,
+                ),
               ),
               !checkBean(context, bean)
                   ? GestureDetector(
@@ -110,6 +113,7 @@ class ItemThemeStore extends StatelessWidget {
                               '$coin ${AppLocalizations.of(context)!.coin}',
                               style: AppStyles.medium.copyWith(
                                 fontSize: 15,
+                                color: AppColors.textPrimaryColor,
                               ),
                             ),
                           ],

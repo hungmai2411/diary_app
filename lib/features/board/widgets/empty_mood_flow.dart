@@ -29,7 +29,9 @@ class EmptyMoodFlow extends StatelessWidget {
             children: [
               Text(
                 AppLocalizations.of(context)!.moodFlow,
-                style: AppStyles.medium,
+                style: AppStyles.medium.copyWith(
+                  color: AppColors.textPrimaryColor,
+                ),
               ),
               const SizedBox(height: 5),
               Expanded(

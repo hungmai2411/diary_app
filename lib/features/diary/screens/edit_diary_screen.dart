@@ -141,7 +141,10 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
         ),
         title: Text(
           DateFormat('MMM d, yyyy').format(widget.diary.createdAt),
-          style: AppStyles.medium.copyWith(fontSize: 18),
+          style: AppStyles.medium.copyWith(
+            fontSize: 18,
+            color: AppColors.textPrimaryColor,
+          ),
         ),
         actions: [
           Padding(
@@ -176,7 +179,10 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
                         const EdgeInsets.only(left: 15.0, right: 15, top: 10),
                     child: Text(
                       'How was your day?',
-                      style: AppStyles.medium.copyWith(fontSize: 18),
+                      style: AppStyles.medium.copyWith(
+                        fontSize: 18,
+                        color: AppColors.textPrimaryColor,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 5),
@@ -212,7 +218,10 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
                 children: [
                   Text(
                     'Write about today',
-                    style: AppStyles.medium.copyWith(fontSize: 18),
+                    style: AppStyles.medium.copyWith(
+                      fontSize: 18,
+                      color: AppColors.textPrimaryColor,
+                    ),
                   ),
                   const SizedBox(height: 5),
                   Divider(
@@ -220,22 +229,6 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
                   ),
                   SizedBox(
                     height: 150,
-                    // child: TextField(
-                    //   maxLines: null,
-                    //   keyboardType: TextInputType.multiline,
-                    //   autocorrect: false,
-                    //   scrollPadding: EdgeInsets.zero,
-                    //   controller: noteController,
-                    //   decoration: InputDecoration(
-                    //     border: InputBorder.none,
-                    //     contentPadding: EdgeInsets.zero,
-                    //     hintText: 'Write something...',
-                    //     hintStyle: AppStyles.regular.copyWith(
-                    //       fontSize: 17,
-                    //       color: AppColors.textSecondColor,
-                    //     ),
-                    //   ),
-                    // ),
                     child: quill.QuillEditor(
                       scrollable: true,
                       scrollController: ScrollController(),
@@ -246,7 +239,7 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
                       expands: false,
                       controller: noteController,
                       placeholder: AppLocalizations.of(context)!.writeSomething,
-                      customStyles: defaultStyles,
+                      customStyles: getDefaultStyles(context),
                     ),
                   ),
                 ],
@@ -263,7 +256,10 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
                 children: [
                   Text(
                     'Your photos',
-                    style: AppStyles.medium.copyWith(fontSize: 18),
+                    style: AppStyles.medium.copyWith(
+                      fontSize: 18,
+                      color: AppColors.textPrimaryColor,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   ItemUploadGroup(

@@ -117,7 +117,7 @@ class _SettingScreenState extends State<SettingScreen> {
     final settingProvider = Provider.of<SettingProvider>(context);
     Setting setting = settingProvider.setting;
     String locale = setting.language == 'English' ? 'en' : 'vi';
-    print(setting.bean);
+    print(setting.background);
     hasPasscode = setting.hasPasscode;
     return Scaffold(
       appBar: AppBar(

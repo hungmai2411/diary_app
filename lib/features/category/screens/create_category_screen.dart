@@ -105,9 +105,8 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
         appBar: AppBar(
           title: Text(
             AppLocalizations.of(context)!.write,
-            style: AppStyles.medium.copyWith(
-              fontSize: 16,
-            ),
+            style: AppStyles.medium
+                .copyWith(fontSize: 16, color: AppColors.textPrimaryColor),
           ),
           centerTitle: true,
           elevation: 0.3,
@@ -148,14 +147,19 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
                 AppLocalizations.of(context)!.title,
                 style: AppStyles.bold.copyWith(
                   fontSize: 18,
+                  color: AppColors.textPrimaryColor,
                 ),
               ),
               TextField(
-                style: AppStyles.regular,
+                style: AppStyles.regular.copyWith(
+                  color: AppColors.textPrimaryColor,
+                ),
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintText: AppLocalizations.of(context)!.addTitle,
-                  hintStyle: AppStyles.regular,
+                  hintStyle: AppStyles.regular.copyWith(
+                    color: AppColors.textPrimaryColor,
+                  ),
                 ),
                 controller: titleController,
               ),
@@ -163,6 +167,7 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
                 AppLocalizations.of(context)!.content,
                 style: AppStyles.bold.copyWith(
                   fontSize: 18,
+                  color: AppColors.textPrimaryColor,
                 ),
               ),
               quill.QuillEditor(
@@ -176,7 +181,7 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
                 embedBuilders: FlutterQuillEmbeds.builders(),
                 controller: contentController,
                 placeholder: AppLocalizations.of(context)!.writeSomething,
-                customStyles: defaultStyles,
+                customStyles: getDefaultStyles(context),
               ),
             ],
           ),

@@ -63,10 +63,6 @@ void main() async {
         return MaterialApp(
           theme: ThemeData(
             scaffoldBackgroundColor: AppColors.backgroundColor,
-            appBarTheme: const AppBarTheme(
-              systemOverlayStyle:
-                  SystemUiOverlayStyle.dark, // set dark of light
-            ),
           ),
           locale: model.setting.language == 'English'
               ? const Locale('en')
@@ -97,6 +93,7 @@ getSetting(SettingProvider settingProvider) async {
   final DbHelper dbHelper = DbHelper();
   final box = await dbHelper.openBox("settings");
   Setting setting = dbHelper.getSetting(box);
+  print('main: ${setting.background}');
   AppColors.changeTheme(setting.background);
   if (setting.language == null) {
     setting = setting.copyWith(

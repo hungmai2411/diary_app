@@ -9,6 +9,7 @@ import 'package:diary_app/features/setting/screens/setting_screen.dart';
 import 'package:diary_app/providers/category_provider.dart';
 import 'package:diary_app/providers/date_provider.dart';
 import 'package:diary_app/providers/diary_provider.dart';
+import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/services/db_helpers.dart';
 import 'package:diary_app/widgets/tab_widget.dart';
 import 'package:flutter/material.dart';
@@ -71,8 +72,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     var bottomProvider = Provider.of<BottomNavigationProvider>(context);
     var dateProvider = Provider.of<DateProvider>(context);
-
-    print(dateProvider.selectedDay);
+    var settingProvider = context.watch<SettingProvider>();
+    print('rebuild my app');
     return Scaffold(
       extendBody: true,
       backgroundColor: AppColors.backgroundColor,

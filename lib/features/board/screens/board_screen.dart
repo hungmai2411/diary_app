@@ -3,6 +3,7 @@ import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/features/board/widgets/mood_bar.dart';
 import 'package:diary_app/features/board/widgets/mood_flow.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
+import 'package:diary_app/features/diary/screens/detail_diary_screen.dart';
 import 'package:diary_app/features/diary/widgets/item_diary.dart';
 import 'package:diary_app/features/diary/widgets/item_no_diary.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
@@ -11,7 +12,6 @@ import 'package:diary_app/providers/date_provider.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/providers/setting_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cupertino_datetime_picker/flutter_cupertino_datetime_picker.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -40,14 +40,23 @@ class _BoardScreenState extends State<BoardScreen> {
     super.dispose();
   }
 
+  navigateToDetailDiaryScreen(Diary diary) {
+    Navigator.pushNamed(
+      context,
+      DetailDiaryScreen.routeName,
+      arguments: diary,
+    );
+  }
+
   chooseMonth(String locale) async {
     showMonthPicker(
+      dismissible: true,
       context: context,
       initialDate: selectedDay,
       locale: locale != 'en' ? const Locale('vi') : null,
       roundedCornersRadius: 8,
       unselectedMonthTextColor: AppColors.textSecondaryColor,
-      headerColor: AppColors.selectedColor,
+      headerColor: AppColors.calendarHeaderColor,
       cancelText: Text(
         AppLocalizations.of(context)!.cancel,
         style: TextStyle(
@@ -116,7 +125,7 @@ class _BoardScreenState extends State<BoardScreen> {
                 ],
               ),
             ),
-            backgroundColor: Colors.transparent,
+            backgroundColor: AppColors.backgroundColor,
           ),
           SliverPadding(
             padding: const EdgeInsets.only(top: 10),
@@ -171,7 +180,7 @@ class _BoardScreenState extends State<BoardScreen> {
             ),
           ),
           SliverPadding(
-            padding: const EdgeInsets.only(top: 15),
+            padding: const EdgeInsets.only(top: 0),
             sliver: diariesMonth.isEmpty
                 ? const SliverToBoxAdapter(
                     child: SizedBox(
@@ -184,7 +193,10 @@ class _BoardScreenState extends State<BoardScreen> {
                       (BuildContext context, int index) {
                         Diary diary = diariesMonth[index];
 
-                        return ItemDiary(diary: diary);
+                        return GestureDetector(
+                          onTap: () => navigateToDetailDiaryScreen(diary),
+                          child: ItemDiary(diary: diary),
+                        );
                       },
                       childCount: diariesMonth.length,
                     ),

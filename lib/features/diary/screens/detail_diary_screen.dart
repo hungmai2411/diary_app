@@ -88,7 +88,10 @@ class DetailDiaryScreen extends StatelessWidget {
         ),
         title: Text(
           DateFormat('MMM d, yyyy').format(diary.createdAt),
-          style: AppStyles.medium.copyWith(fontSize: 18),
+          style: AppStyles.medium.copyWith(
+            fontSize: 18,
+            color: AppColors.textPrimaryColor,
+          ),
         ),
         actions: [
           GestureDetector(
@@ -133,7 +136,10 @@ class DetailDiaryScreen extends StatelessWidget {
                       const EdgeInsets.only(left: 15.0, right: 15, top: 10),
                   child: Text(
                     'How was your day?',
-                    style: AppStyles.medium.copyWith(fontSize: 18),
+                    style: AppStyles.medium.copyWith(
+                      fontSize: 18,
+                      color: AppColors.textPrimaryColor,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 5),
@@ -168,7 +174,10 @@ class DetailDiaryScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Write about today',
-                    style: AppStyles.medium.copyWith(fontSize: 18),
+                    style: AppStyles.medium.copyWith(
+                      fontSize: 18,
+                      color: AppColors.textPrimaryColor,
+                    ),
                   ),
                   const SizedBox(height: 5),
                   Divider(
@@ -184,7 +193,7 @@ class DetailDiaryScreen extends StatelessWidget {
                     expands: false,
                     showCursor: false,
                     controller: noteController,
-                    customStyles: defaultStyles,
+                    customStyles: getDefaultStyles(context),
                   ),
                 ],
               ),
@@ -201,7 +210,10 @@ class DetailDiaryScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Your photos',
-                    style: AppStyles.medium.copyWith(fontSize: 18),
+                    style: AppStyles.medium.copyWith(
+                      fontSize: 18,
+                      color: AppColors.textPrimaryColor,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   Hero(

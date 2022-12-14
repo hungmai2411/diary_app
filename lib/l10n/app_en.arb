@@ -60,8 +60,13 @@
     "content":"Content",
     "themeStore":"Theme Store",
     "coin":"coin",
+    "apply":"Apply",
+    "darkMode":"Dark mode",
+    "lightMode":"Light mode",
+    "systemMode":"System mode",
     "nothing":"Nothing is written for this day 🙁",
     "owned":"Owned",
+    "background":"Background",
     "buySuccess":"Buy successfully",
     "buyFailed":"You need {numCoin} more coin to purchase this theme.",
     "@buyFailed": {

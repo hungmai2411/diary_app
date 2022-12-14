@@ -45,7 +45,8 @@ class _DetailCategoryScreenState extends State<DetailCategoryScreen> {
         automaticallyImplyLeading: false,
         title: Text(
           widget.category.title,
-          style: AppStyles.medium.copyWith(fontSize: 18),
+          style: AppStyles.medium
+              .copyWith(fontSize: 18, color: AppColors.textPrimaryColor),
         ),
       ),
       body: Padding(
@@ -65,7 +66,7 @@ class _DetailCategoryScreenState extends State<DetailCategoryScreen> {
           showCursor: false,
           controller: noteController,
           embedBuilders: FlutterQuillEmbeds.builders(),
-          customStyles: defaultStyles,
+          customStyles: getDefaultStyles(context),
         ),
       ),
     );

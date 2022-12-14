@@ -50,7 +50,10 @@ class _LanguageScreenState extends State<LanguageScreen> {
         elevation: 0.3,
         title: Text(
           AppLocalizations.of(context)!.language,
-          style: AppStyles.regular.copyWith(fontSize: 18),
+          style: AppStyles.regular.copyWith(
+            fontSize: 18,
+            color: AppColors.textPrimaryColor,
+          ),
         ),
       ),
       body: ListView.builder(
@@ -81,6 +84,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                     language.language,
                     style: AppStyles.medium.copyWith(
                       fontSize: 15,
+                      color: AppColors.textPrimaryColor,
                     ),
                   ),
                   const Spacer(),

@@ -1,6 +1,9 @@
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/features/setting/models/setting.dart';
+import 'package:diary_app/providers/setting_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ItemBackground extends StatelessWidget {
   final Color color;
@@ -16,17 +19,33 @@ class ItemBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settingProvider =
+        Provider.of<SettingProvider>(context, listen: false);
+    Setting setting = settingProvider.setting;
+    String locale = setting.language == 'English' ? 'en' : 'vi';
+
+    String backgroundTmp = background;
+    if (locale == 'vi') {
+      if (backgroundTmp == 'Tối') {
+        backgroundTmp = 'Dark mode';
+      } else if (backgroundTmp == 'Sáng') {
+        backgroundTmp = 'Light mode';
+      } else {
+        backgroundTmp = 'System mode';
+      }
+    }
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        background == 'System mode'
+        backgroundTmp == 'System mode'
             ? Container(
                 width: 100,
                 height: 100,
                 decoration: BoxDecoration(
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(10),
-                  border: backgroundSelected == background
+                  border: backgroundSelected == backgroundTmp
                       ? Border.all(
                           color: AppColors.selectedColor,
                           width: 3,
@@ -43,7 +62,7 @@ class ItemBackground extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: color,
                   borderRadius: BorderRadius.circular(10),
-                  border: backgroundSelected == background
+                  border: backgroundSelected == backgroundTmp
                       ? Border.all(
                           color: AppColors.selectedColor,
                           width: 3,
@@ -52,7 +71,12 @@ class ItemBackground extends StatelessWidget {
                 ),
               ),
         const SizedBox(height: 5),
-        Text(background, style: AppStyles.regular),
+        Text(
+          background,
+          style: AppStyles.regular.copyWith(
+            color: AppColors.textPrimaryColor,
+          ),
+        ),
       ],
     );
   }

@@ -155,7 +155,10 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
         ),
         title: Text(
           DateFormat('MMM d, yyyy', locale).format(widget.dateTime),
-          style: AppStyles.medium.copyWith(fontSize: 18),
+          style: AppStyles.medium.copyWith(
+            fontSize: 18,
+            color: AppColors.textPrimaryColor,
+          ),
         ),
         actions: [
           Padding(
@@ -190,7 +193,10 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                         const EdgeInsets.only(left: 15.0, right: 15, top: 10),
                     child: Text(
                       AppLocalizations.of(context)!.howWasYourDay,
-                      style: AppStyles.medium.copyWith(fontSize: 18),
+                      style: AppStyles.medium.copyWith(
+                        fontSize: 18,
+                        color: AppColors.textPrimaryColor,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 5),
@@ -232,31 +238,34 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                     children: [
                       Text(
                         AppLocalizations.of(context)!.writeAboutToday,
-                        style: AppStyles.medium.copyWith(fontSize: 18),
+                        style: AppStyles.medium.copyWith(
+                          fontSize: 18,
+                          color: AppColors.textPrimaryColor,
+                        ),
                       ),
                       const Spacer(),
-                      GestureDetector(
-                        onTap: () async {
-                          final result =
-                              await Navigator.of(context).pushNamed<String>(
-                            DocumentScreen.routeName,
-                          );
-                          var json = jsonDecode(result!);
+                      // GestureDetector(
+                      //   onTap: () async {
+                      //     final result =
+                      //         await Navigator.of(context).pushNamed<String>(
+                      //       DocumentScreen.routeName,
+                      //     );
+                      //     var json = jsonDecode(result!);
 
-                          setState(() {
-                            noteController = quill.QuillController(
-                              document: quill.Document.fromJson(json),
-                              selection:
-                                  const TextSelection.collapsed(offset: 0),
-                            );
-                          });
-                        },
-                        child: FaIcon(
-                          FontAwesomeIcons.upRightAndDownLeftFromCenter,
-                          color: AppColors.textPrimaryColor,
-                          size: 17,
-                        ),
-                      )
+                      //     setState(() {
+                      //       noteController = quill.QuillController(
+                      //         document: quill.Document.fromJson(json),
+                      //         selection:
+                      //             const TextSelection.collapsed(offset: 0),
+                      //       );
+                      //     });
+                      //   },
+                      //   child: FaIcon(
+                      //     FontAwesomeIcons.upRightAndDownLeftFromCenter,
+                      //     color: AppColors.textPrimaryColor,
+                      //     size: 17,
+                      //   ),
+                      // )
                     ],
                   ),
                   const SizedBox(height: 5),
@@ -265,22 +274,6 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                   ),
                   SizedBox(
                     height: 150,
-                    // child: TextField(
-                    //   keyboardType: TextInputType.multiline,
-                    //   maxLines: null,
-                    //   autocorrect: false,
-                    //   scrollPadding: EdgeInsets.zero,
-                    //   controller: noteController,
-                    //   decoration: InputDecoration(
-                    //     border: InputBorder.none,
-                    //     contentPadding: EdgeInsets.zero,
-                    //     hintText: AppLocalizations.of(context)!.writeSomething,
-                    //     hintStyle: AppStyles.regular.copyWith(
-                    //       fontSize: 17,
-                    //       color: AppColors.textSecondColor,
-                    //     ),
-                    //   ),
-                    // ),
                     child: quill.QuillEditor(
                       scrollable: true,
                       scrollController: ScrollController(),
@@ -291,7 +284,7 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                       expands: false,
                       controller: noteController,
                       placeholder: AppLocalizations.of(context)!.writeSomething,
-                      customStyles: defaultStyles,
+                      customStyles: getDefaultStyles(context),
                     ),
                   ),
                 ],
@@ -308,7 +301,10 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                 children: [
                   Text(
                     AppLocalizations.of(context)!.yourPhotos,
-                    style: AppStyles.medium.copyWith(fontSize: 18),
+                    style: AppStyles.medium.copyWith(
+                      fontSize: 18,
+                      color: AppColors.textPrimaryColor,
+                    ),
                   ),
                   const SizedBox(height: 10),
                   ItemUploadGroup(

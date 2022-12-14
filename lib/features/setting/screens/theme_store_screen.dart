@@ -33,7 +33,10 @@ class ThemeStoreScreen extends StatelessWidget {
         automaticallyImplyLeading: false,
         title: Text(
           AppLocalizations.of(context)!.themeStore,
-          style: AppStyles.medium.copyWith(fontSize: 18),
+          style: AppStyles.medium.copyWith(
+            fontSize: 18,
+            color: AppColors.textPrimaryColor,
+          ),
         ),
         leading: IconButton(
           onPressed: () {

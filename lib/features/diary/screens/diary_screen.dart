@@ -101,14 +101,35 @@ class _DiaryScreenState extends State<DiaryScreen> {
     return diariesTmp;
   }
 
-  void chooseDate() async {
+  void chooseDate(String locale) async {
     final dateProvider = context.read<DateProvider>();
+    SettingProvider settingProvider = context.read<SettingProvider>();
+    String background = settingProvider.setting.background;
 
     final result = await showDatePicker(
       context: context,
       initialDate: dateProvider.selectedDay,
       firstDate: DateTime(2000),
       lastDate: DateTime.now(),
+      locale: Locale(locale),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            dialogBackgroundColor: AppColors.calendarColor,
+            colorScheme: ColorScheme.light(
+              primary: AppColors.calendarHeaderColor, // header background color
+              onPrimary: AppColors.textPrimaryColor, // header text color
+              onSurface: AppColors.textPrimaryColor, // body text color
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: AppColors.selectedColor, // button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (result != null) {
       dateProvider.setDay(result);
@@ -152,7 +173,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
           SliverAppBar(
             elevation: 0,
             automaticallyImplyLeading: false,
-            backgroundColor: Colors.transparent,
+            backgroundColor: AppColors.backgroundColor,
             title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -173,7 +194,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                 const Spacer(),
                 // datetime
                 GestureDetector(
-                  onTap: chooseDate,
+                  onTap: () => chooseDate(locale),
                   child: Row(
                     children: [
                       WidgetToImage(builder: (key) {
@@ -226,7 +247,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                           child: Text(
                             text,
                             style: AppStyles.regular.copyWith(
-                              color: AppColors.textSecondColor,
+                              color: AppColors.textPrimaryColor,
                             ),
                           ),
                         );
@@ -310,12 +331,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
                   }
                   Diary diary = diariesOfDay[index];
 
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 15.0),
-                    child: GestureDetector(
-                      onTap: () => navigateToDetailDiaryScreen(diary),
-                      child: ItemDiary(diary: diary),
-                    ),
+                  return GestureDetector(
+                    onTap: () => navigateToDetailDiaryScreen(diary),
+                    child: ItemDiary(diary: diary),
                   );
                 },
                 childCount: diariesOfDay.length + 1,

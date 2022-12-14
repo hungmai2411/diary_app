@@ -98,7 +98,7 @@ class ItemDiary extends StatelessWidget {
                     expands: false,
                     controller: controller,
                     showCursor: false,
-                    customStyles: defaultStyles,
+                    customStyles: getDefaultStyles(context),
                   ),
                   if (diary.images != null)
                     Hero(

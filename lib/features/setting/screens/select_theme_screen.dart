@@ -1,5 +1,4 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:diary_app/constants/app_assets.dart';
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/constants/bean.dart';
@@ -58,11 +57,23 @@ class _SelectThemeScreenState extends State<SelectThemeScreen> {
   }
 
   setTheme() {
+    if (background == 'System mode') {
+      var brightness = MediaQuery.of(context).platformBrightness;
+      bool isDarkMode = brightness == Brightness.dark;
+      if (isDarkMode) {
+        background = 'Dark mode';
+      } else {
+        background = 'Light mode';
+      }
+    }
     setting = setting.copyWith(
       bean: beanSelected,
       background: background,
     );
-    AppColors.changeTheme(background);
+    if (setting.background.compareTo(background) == 0) {
+      AppColors.changeTheme(background);
+    }
+
     settingProvider.setSetting(setting);
     Navigator.of(context).pop();
   }
@@ -79,7 +90,10 @@ class _SelectThemeScreenState extends State<SelectThemeScreen> {
         automaticallyImplyLeading: false,
         title: Text(
           AppLocalizations.of(context)!.changeTheme,
-          style: AppStyles.medium.copyWith(fontSize: 18),
+          style: AppStyles.medium.copyWith(
+            fontSize: 18,
+            color: AppColors.textPrimaryColor,
+          ),
         ),
         leading: IconButton(
           onPressed: () {
@@ -109,7 +123,12 @@ class _SelectThemeScreenState extends State<SelectThemeScreen> {
         child: ListView(
           children: [
             const SizedBox(height: 10),
-            Text('Background', style: AppStyles.medium),
+            Text(
+              AppLocalizations.of(context)!.background,
+              style: AppStyles.medium.copyWith(
+                color: AppColors.textPrimaryColor,
+              ),
+            ),
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -123,7 +142,7 @@ class _SelectThemeScreenState extends State<SelectThemeScreen> {
                   child: ItemBackground(
                     backgroundSelected: background,
                     color: AppColors.textPrimaryColor,
-                    background: 'System mode',
+                    background: AppLocalizations.of(context)!.systemMode,
                   ),
                 ),
                 GestureDetector(
@@ -135,7 +154,7 @@ class _SelectThemeScreenState extends State<SelectThemeScreen> {
                   child: ItemBackground(
                     backgroundSelected: background,
                     color: Colors.black,
-                    background: 'Dark mode',
+                    background: AppLocalizations.of(context)!.darkMode,
                   ),
                 ),
                 GestureDetector(
@@ -147,13 +166,18 @@ class _SelectThemeScreenState extends State<SelectThemeScreen> {
                   child: ItemBackground(
                     backgroundSelected: background,
                     color: Colors.white,
-                    background: 'Light mode',
+                    background: AppLocalizations.of(context)!.lightMode,
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 15),
-            Text('Beans', style: AppStyles.medium),
+            Text(
+              'Beans',
+              style: AppStyles.medium.copyWith(
+                color: AppColors.textPrimaryColor,
+              ),
+            ),
             const SizedBox(height: 10),
             Column(
               children: setting.myBeans
@@ -183,7 +207,7 @@ class _SelectThemeScreenState extends State<SelectThemeScreen> {
           padding: const EdgeInsets.all(10),
           child: SafeArea(
             child: AppButton(
-              textButton: 'Apply',
+              textButton: AppLocalizations.of(context)!.apply,
               style: AppStyles.semibold.copyWith(color: Colors.white),
               onTap: setTheme,
             ),

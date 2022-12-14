@@ -29,6 +29,8 @@ class AppColors {
   static Color boxColor = Colors.white;
   static Color bottomBarColor = Colors.white;
   static Color chartColor = Colors.white;
+  static Color calendarColor = Colors.white;
+  static Color calendarHeaderColor = const Color(0xFF2699E2);
 
   static void changeTheme(String background) {
     switch (background) {
@@ -40,6 +42,8 @@ class AppColors {
         bottomBarColor = const Color(0xFF2B2F3A);
         chartColor = const Color(0xFF2E2E2E);
         appbarColor = const Color(0xFF2B2F3A);
+        calendarColor = const Color(0xFF414141);
+        calendarHeaderColor = const Color(0xFF2B2F3A);
         break;
 
       // White Theme.
@@ -50,7 +54,8 @@ class AppColors {
         bottomBarColor = Colors.white;
         chartColor = Colors.white;
         appbarColor = const Color(0xFFDBEDF9);
-
+        calendarHeaderColor = const Color(0xFF2699E2);
+        calendarColor = Colors.white;
         break;
     }
   }

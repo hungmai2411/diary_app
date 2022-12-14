@@ -1,5 +1,6 @@
 import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
+import 'package:diary_app/features/diary/screens/detail_diary_screen.dart';
 import 'package:diary_app/features/diary/widgets/item_diary.dart';
 import 'package:diary_app/features/diary/widgets/item_no_diary.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,14 @@ class _TimeLineScreenState extends State<TimeLineScreen> {
   void initState() {
     super.initState();
     diaries = widget.diariesMonth;
+  }
+
+  navigateToDetailDiaryScreen(Diary diary) {
+    Navigator.pushNamed(
+      context,
+      DetailDiaryScreen.routeName,
+      arguments: diary,
+    );
   }
 
   @override
@@ -78,7 +87,10 @@ class _TimeLineScreenState extends State<TimeLineScreen> {
           : ListView.builder(
               itemBuilder: (context, index) {
                 Diary diary = diaries[index];
-                return ItemDiary(diary: diary);
+                return GestureDetector(
+                  onTap: () => navigateToDetailDiaryScreen(diary),
+                  child: ItemDiary(diary: diary),
+                );
               },
               itemCount: diaries.length,
             ),
