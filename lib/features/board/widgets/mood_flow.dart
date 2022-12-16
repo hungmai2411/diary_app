@@ -30,7 +30,7 @@ class MoodFlow extends StatelessWidget {
       height: 300,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.appbarColor,
+        color: AppColors.boxColor,
         borderRadius: BorderRadius.circular(10),
       ),
       child: diaries.isEmpty

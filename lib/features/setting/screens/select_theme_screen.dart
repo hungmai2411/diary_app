@@ -57,23 +57,17 @@ class _SelectThemeScreenState extends State<SelectThemeScreen> {
   }
 
   setTheme() {
-    if (background == 'System mode') {
-      var brightness = MediaQuery.of(context).platformBrightness;
-      bool isDarkMode = brightness == Brightness.dark;
-      if (isDarkMode) {
-        background = 'Dark mode';
-      } else {
-        background = 'Light mode';
-      }
-    }
     setting = setting.copyWith(
       bean: beanSelected,
       background: background,
     );
-    if (setting.background.compareTo(background) == 0) {
-      AppColors.changeTheme(background);
-    }
 
+    if (background == 'System mode') {
+      var brightness = MediaQuery.of(context).platformBrightness;
+      bool isDarkMode = brightness == Brightness.dark;
+      background = isDarkMode ? 'Dark mode' : 'Light mode';
+    }
+    AppColors.changeTheme(background);
     settingProvider.setSetting(setting);
     Navigator.of(context).pop();
   }

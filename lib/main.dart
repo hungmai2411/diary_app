@@ -15,6 +15,7 @@ import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/route.dart';
 import 'package:diary_app/services/db_helpers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:month_year_picker/month_year_picker.dart';
@@ -93,8 +94,17 @@ getSetting(SettingProvider settingProvider) async {
   final DbHelper dbHelper = DbHelper();
   final box = await dbHelper.openBox("settings");
   Setting setting = dbHelper.getSetting(box);
-  print('main: ${setting.background}');
-  AppColors.changeTheme(setting.background);
+  String background = setting.background;
+
+  if (background == 'System mode') {
+    var brightness = SchedulerBinding.instance.window.platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
+
+    background = isDarkMode ? 'Dark mode' : 'Light mode';
+  }
+
+  AppColors.changeTheme(background);
+
   if (setting.language == null) {
     setting = setting.copyWith(
       language: 'English',

@@ -16,42 +16,45 @@ class CategoryProvider extends ChangeNotifier {
   void addCategory(Category category) async {
     final box = await dbHelper.openBox("categories");
 
-    Category categoryNew = await dbHelper.addCategory(box, category);
-    _categories.add(categoryNew);
+    Category newCategory = await dbHelper.addCategory(box, category);
+    _categories.add(newCategory);
     notifyListeners();
   }
 
-  // void deleteDiary(Diary diary) async {
-  //   final box = await dbHelper.openBox("diaries");
-  //   await dbHelper.deleteDiary(box, diary.key!);
+  void deleteCategory(Category category) async {
+    final box = await dbHelper.openBox("categories");
+    await dbHelper.delete(box, category.key!);
 
-  //   _diaries.remove(diary);
-  //   notifyListeners();
-  // }
+    for (var c in _categories) {
+      if (c.key == category.key) {
+        _categories.remove(c);
+        break;
+      }
+    }
+    notifyListeners();
+  }
 
-  // void editDiary(
-  //   Diary diary,
-  //   Mood mood,
-  //   String? content,
-  //   List<Uint8List>? images,
-  // ) async {
-  //   for (var d in _diaries) {
-  //     if (diary.key == d.key) {
-  //       _diaries.remove(d);
-  //       break;
-  //     }
-  //   }
+  void editCategory(
+    Category category,
+    String title,
+    String content,
+  ) async {
+    for (var c in _categories) {
+      if (category.key == c.key) {
+        _categories.remove(category);
+        break;
+      }
+    }
 
-  //   final box = await dbHelper.openBox("diaries");
+    final box = await dbHelper.openBox("categories");
 
-  //   diary = diary.copyWith(
-  //     mood: mood,
-  //     content: content,
-  //     images: images,
-  //   );
-  //   _diaries.add(diary);
-  //   await dbHelper.editDiary(box, diary.key!, diary);
+    category = category.copyWith(
+      title: title,
+      content: content,
+    );
+    _categories.add(category);
+    await dbHelper.editCategory(box, category.key!, category);
 
-  //   notifyListeners();
-  // }
+    notifyListeners();
+  }
 }

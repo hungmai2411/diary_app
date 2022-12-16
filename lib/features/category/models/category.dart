@@ -18,6 +18,7 @@ class Category {
     required this.content,
     this.key,
   });
+
   Category copyWith({
     String? content,
     String? title,

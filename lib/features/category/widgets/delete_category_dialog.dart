@@ -1,21 +1,21 @@
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
-import 'package:diary_app/features/diary/models/diary.dart';
-import 'package:diary_app/providers/diary_provider.dart';
+import 'package:diary_app/features/category/models/category.dart';
+import 'package:diary_app/providers/category_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class DeleteDialog extends StatelessWidget {
-  final Diary diary;
+class DeleteCategoryDialog extends StatelessWidget {
+  final Category category;
 
-  const DeleteDialog({
+  const DeleteCategoryDialog({
     super.key,
-    required this.diary,
+    required this.category,
   });
 
   void deleteDiary(BuildContext context) {
-    context.read<DiaryProvider>().deleteDiary(diary);
+    context.read<CategoryProvider>().deleteCategory(category);
     Navigator.pop(context, [true]);
   }
 
@@ -35,10 +35,9 @@ class DeleteDialog extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              AppLocalizations.of(context)!.deleteDiary,
-              style: AppStyles.medium.copyWith(
-                color: AppColors.textPrimaryColor,
-              ),
+              AppLocalizations.of(context)!.deleteCategory,
+              style:
+                  AppStyles.medium.copyWith(color: AppColors.textPrimaryColor),
             ),
             const SizedBox(height: 20),
             Text(

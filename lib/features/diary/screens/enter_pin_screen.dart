@@ -18,6 +18,7 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
   late List<String> input;
   int indexTmp = 0;
   List<String> passcode = ['', '', '', ''];
+  bool isWrong = false;
 
   @override
   void didChangeDependencies() {
@@ -69,6 +70,15 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
                   return _buildActiveBox();
                 }).toList(),
               ),
+              if (isWrong) ...[
+                const SizedBox(height: 10),
+                Text(
+                  AppLocalizations.of(context)!.pinNotMatch,
+                  style: AppStyles.medium.copyWith(
+                    color: AppColors.orange,
+                  ),
+                )
+              ],
               SizedBox(height: size.height * .1),
               Expanded(
                 child: GridView.builder(
@@ -106,6 +116,12 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
                                 context,
                                 MyApp.routeName,
                               );
+                            });
+                          } else {
+                            setState(() {
+                              isWrong = true;
+                              passcode = ['', '', '', ''];
+                              indexTmp = 0;
                             });
                           }
                         }

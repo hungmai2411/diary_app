@@ -14,7 +14,7 @@ class EmptyMoodBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.appbarColor,
+        color: AppColors.boxColor,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Column(

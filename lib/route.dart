@@ -2,6 +2,7 @@ import 'package:diary_app/features/category/models/category.dart';
 import 'package:diary_app/features/category/screens/category_screen.dart';
 import 'package:diary_app/features/category/screens/create_category_screen.dart';
 import 'package:diary_app/features/category/screens/detail_category_screen.dart';
+import 'package:diary_app/features/category/screens/edit_category_screen.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/detail_diary_screen.dart';
@@ -49,6 +50,14 @@ MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
         settings: settings,
         builder: (context) => EditDiaryScreen(
           diary: diary,
+        ),
+      );
+    case EditCategoryScreen.routeName:
+      final Category category = settings.arguments as Category;
+      return MaterialPageRoute<dynamic>(
+        settings: settings,
+        builder: (context) => EditCategoryScreen(
+          category: category,
         ),
       );
     case DetailDiaryScreen.routeName:

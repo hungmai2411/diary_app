@@ -14,7 +14,7 @@ class PinSuccessDialog extends StatelessWidget {
       children: [
         Text(
           AppLocalizations.of(context)!.pinSet,
-          style: AppStyles.medium.copyWith(),
+          style: AppStyles.medium.copyWith(color: AppColors.textPrimaryColor),
         ),
         const SizedBox(height: 15),
         AppButton(

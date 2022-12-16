@@ -40,7 +40,7 @@ class DetailDiaryScreen extends StatelessWidget {
   }
 
   deleteDiary(BuildContext context) async {
-    await showDialog(
+    final bool? result = await showDialog(
       context: context,
       builder: (_) {
         return DeleteDialog(
@@ -48,7 +48,9 @@ class DetailDiaryScreen extends StatelessWidget {
         );
       },
     );
-    Navigator.pop(context);
+    if (result != null) {
+      Navigator.pop(context);
+    }
   }
 
   @override

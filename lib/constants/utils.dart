@@ -62,6 +62,11 @@ const baseSpacing = Tuple2<double, double>(6, 0);
 DefaultStyles getDefaultStyles(BuildContext context) {
   SettingProvider settingProvider = context.read<SettingProvider>();
   String background = settingProvider.setting.background;
+  if (background == 'System mode') {
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
+    background = isDarkMode ? 'Dark mode' : 'Light mode';
+  }
 
   return DefaultStyles(
     h1: DefaultTextBlockStyle(

@@ -60,11 +60,11 @@ class _StartOfTheWeekScreenState extends State<StartOfTheWeekScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: GestureDetector(
-          onTap: () {
+        leading: IconButton(
+          onPressed: () {
             Navigator.pop(context);
           },
-          child: Icon(
+          icon: Icon(
             Icons.arrow_back_ios_rounded,
             color: AppColors.textPrimaryColor,
           ),

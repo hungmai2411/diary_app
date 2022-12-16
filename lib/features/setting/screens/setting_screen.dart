@@ -32,24 +32,40 @@ class _SettingScreenState extends State<SettingScreen> {
     minute: 00,
   );
 
+  Theme _buildThemeReminderTime(Widget child) {
+    return Theme(
+      data: ThemeData.dark().copyWith(
+        colorScheme: ColorScheme.dark(
+          surface: AppColors.boxColor,
+          // change the border color
+          primary: AppColors.selectedColor,
+          // change the text color
+          onSurface: AppColors.textPrimaryColor,
+        ),
+        // button colors
+        buttonTheme: ButtonThemeData(
+          colorScheme: ColorScheme.light(
+            primary: Colors.green,
+          ),
+        ),
+      ),
+      child: child,
+    );
+  }
+
   chooseReminderTime(BuildContext context, String locale) async {
     final settingProvider = context.read<SettingProvider>();
-
     final TimeOfDay? value = await showTimePicker(
       context: context,
       initialTime: reminderTime,
       builder: (BuildContext context, Widget? child) {
-        // return MediaQuery(
-        //   data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-        //   child: child!,
-        // );
         if (MediaQuery.of(context).alwaysUse24HourFormat) {
-          return child!;
+          return _buildThemeReminderTime(child!);
         } else {
           return Localizations.override(
             context: context,
             locale: Locale(locale),
-            child: child,
+            child: _buildThemeReminderTime(child!),
           );
         }
       },

@@ -56,6 +56,37 @@ class _PasscodeConfirmScreenState extends State<PasscodeConfirmScreen> {
     ];
   }
 
+  void checkPasscode() async {
+    if (passcodeConfirm.toString() == widget.passcode) {
+      await showDialog(
+        context: context,
+        builder: (_) {
+          return const AppDialog(
+            child: PinSuccessDialog(),
+          );
+        },
+      );
+      SettingProvider settingProvider = context.read<SettingProvider>();
+      Setting setting = settingProvider.setting;
+      setting = setting.copyWith(
+        hasPasscode: true,
+        passcode: passcodeConfirm.toString(),
+      );
+      settingProvider.setSetting(setting);
+      // ignore: use_build_context_synchronously
+      Navigator.pushNamed(
+        context,
+        MyApp.routeName,
+      );
+    } else {
+      setState(() {
+        isWrong = true;
+        passcodeConfirm = ['', '', '', ''];
+        indexTmp = 0;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -126,35 +157,7 @@ class _PasscodeConfirmScreenState extends State<PasscodeConfirmScreen> {
                         });
 
                         if (indexTmp == 4) {
-                          if (passcodeConfirm.toString() == widget.passcode) {
-                            await showDialog(
-                              context: context,
-                              builder: (_) {
-                                return const AppDialog(
-                                  child: PinSuccessDialog(),
-                                );
-                              },
-                            );
-                            SettingProvider settingProvider =
-                                context.read<SettingProvider>();
-                            Setting setting = settingProvider.setting;
-                            setting = setting.copyWith(
-                              hasPasscode: true,
-                              passcode: passcodeConfirm.toString(),
-                            );
-                            settingProvider.setSetting(setting);
-                            // ignore: use_build_context_synchronously
-                            Navigator.pushNamed(
-                              context,
-                              MyApp.routeName,
-                            );
-                          } else {
-                            setState(() {
-                              isWrong = true;
-                              passcodeConfirm = ['', '', '', ''];
-                              indexTmp = 0;
-                            });
-                          }
+                          checkPasscode();
                         }
                       },
                       child: _buildInput(s, null),

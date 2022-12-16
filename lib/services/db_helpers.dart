@@ -31,9 +31,13 @@ class DbHelper {
     return category;
   }
 
-  Future<void> deleteDiary(Box box, int key) async => await box.delete(key);
+  Future<void> delete(Box box, int key) async => await box.delete(key);
+
   Future<void> editDiary(Box box, int key, Diary diary) async =>
       await box.put(key, diary);
+
+  Future<void> editCategory(Box box, int key, Category category) async =>
+      await box.put(key, category);
 
   Future<void> addSetting(Box box, Setting setting) async =>
       await box.put('setting', setting);

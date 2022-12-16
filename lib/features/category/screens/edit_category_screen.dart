@@ -1,44 +1,77 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/constants/utils.dart';
 import 'package:diary_app/features/category/models/category.dart';
+import 'package:diary_app/my_app.dart';
+
 import 'package:diary_app/providers/category_provider.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_quill/flutter_quill.dart' as quill;
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
+import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart';
 import 'package:provider/provider.dart';
-import 'package:tuple/tuple.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class CreateCategoryScreen extends StatefulWidget {
-  const CreateCategoryScreen({super.key});
+class EditCategoryScreen extends StatefulWidget {
+  final Category category;
 
-  static const String routeName = '/create_category_screen';
+  const EditCategoryScreen({
+    super.key,
+    required this.category,
+  });
+  static const String routeName = '/edit_category_screen';
   @override
-  State<CreateCategoryScreen> createState() => _CreateCategoryScreenState();
+  State<EditCategoryScreen> createState() => _EditCategoryScreenState();
 }
 
-class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
-  final TextEditingController titleController = TextEditingController();
-  final FocusNode editorFocusNode = FocusNode();
+class _EditCategoryScreenState extends State<EditCategoryScreen> {
   quill.QuillController contentController = quill.QuillController.basic();
+  final FocusNode editorFocusNode = FocusNode();
+  final TextEditingController titleController = TextEditingController();
+
+  popScreen() {
+    Navigator.pop(context);
+  }
+
+  void editCategory() {
+    var json = jsonEncode(contentController.document.toDelta().toJson());
+
+    if (titleController.text.isNotEmpty) {
+      context
+          .read<CategoryProvider>()
+          .editCategory(widget.category, titleController.text, json);
+    }
+    Navigator.pushNamed(context, MyApp.routeName);
+  }
 
   @override
   void dispose() {
     super.dispose();
+    contentController.dispose();
     titleController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    var json = jsonDecode(widget.category.content);
+    contentController = quill.QuillController(
+      document: quill.Document.fromJson(json),
+      selection: const TextSelection.collapsed(offset: 0),
+    );
+    titleController.text = widget.category.title;
   }
 
   Future<String> _onImagePickCallback(File file) async {
     // // Copies the picked file from temporary cache to applications directory
     Directory appDocDir = await getApplicationDocumentsDirectory();
     final copiedFile =
-        await file.copy('${appDocDir.path}/${basename(file.path)}');
+        await file.copy('${appDocDir.path}/${path.basename(file.path)}');
     return copiedFile.path.toString();
   }
 
@@ -92,7 +125,7 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
     // Copies the picked file from temporary cache to applications directory
     final appDocDir = await getApplicationDocumentsDirectory();
     final copiedFile =
-        await file.copy('${appDocDir.path}/${basename(file.path)}');
+        await file.copy('${appDocDir.path}/${path.basename(file.path)}');
     return copiedFile.path.toString();
   }
 
@@ -114,7 +147,7 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
           backgroundColor: AppColors.appbarColor,
           actions: [
             IconButton(
-              onPressed: () => addCategory(context),
+              onPressed: editCategory,
               icon: Icon(
                 Icons.close_rounded,
                 color: AppColors.textPrimaryColor,
@@ -191,15 +224,5 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
         ),
       ),
     );
-  }
-
-  void addCategory(BuildContext context) {
-    var json = jsonEncode(contentController.document.toDelta().toJson());
-
-    if (titleController.text.isNotEmpty) {
-      Category category = Category(title: titleController.text, content: json);
-      context.read<CategoryProvider>().addCategory(category);
-    }
-    Navigator.of(context).pop();
   }
 }

@@ -26,7 +26,7 @@ class DiaryProvider extends ChangeNotifier {
 
   void deleteDiary(Diary diary) async {
     final box = await dbHelper.openBox("diaries");
-    await dbHelper.deleteDiary(box, diary.key!);
+    await dbHelper.delete(box, diary.key!);
 
     for (var d in _diaries) {
       if (diary.key == d.key) {
