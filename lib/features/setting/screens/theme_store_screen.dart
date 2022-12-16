@@ -38,6 +38,7 @@ class ThemeStoreScreen extends StatelessWidget {
             color: AppColors.textPrimaryColor,
           ),
         ),
+        centerTitle: true,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);

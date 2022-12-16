@@ -326,7 +326,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                 ) {
                   if (index == diariesOfDay.length) {
                     return Container(
-                      height: 50,
+                      height: 100,
                     );
                   }
                   Diary diary = diariesOfDay[index];

@@ -78,6 +78,7 @@ class _StartOfTheWeekScreenState extends State<StartOfTheWeekScreen> {
             color: AppColors.textPrimaryColor,
           ),
         ),
+        centerTitle: true,
       ),
       body: ListView.builder(
         itemBuilder: (context, index) {

@@ -147,10 +147,14 @@ class _SettingScreenState extends State<SettingScreen> {
             color: AppColors.textPrimaryColor,
           ),
         ),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: ListView(
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
           controller: settingController,
           children: [
             const SizedBox(height: 10),

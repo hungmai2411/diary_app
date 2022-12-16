@@ -18,6 +18,7 @@ class ItemCategory extends StatelessWidget {
         color: AppColors.boxColor,
         borderRadius: BorderRadius.circular(12),
       ),
+      padding: const EdgeInsets.symmetric(horizontal: 5),
       child: Center(
         child: Text(
           category.title,

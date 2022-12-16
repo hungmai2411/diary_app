@@ -89,6 +89,7 @@ class _SelectThemeScreenState extends State<SelectThemeScreen> {
             color: AppColors.textPrimaryColor,
           ),
         ),
+        centerTitle: true,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -196,14 +197,19 @@ class _SelectThemeScreenState extends State<SelectThemeScreen> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.appbarColor,
-        child: Container(
-          height: 80,
-          padding: const EdgeInsets.all(10),
-          child: SafeArea(
-            child: AppButton(
-              textButton: AppLocalizations.of(context)!.apply,
+        child: GestureDetector(
+          onTap: setTheme,
+          child: Container(
+            height: 68,
+            margin: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: AppColors.selectedColor,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              AppLocalizations.of(context)!.apply,
               style: AppStyles.semibold.copyWith(color: Colors.white),
-              onTap: setTheme,
             ),
           ),
         ),

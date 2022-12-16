@@ -146,9 +146,9 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: GestureDetector(
-          onTap: popScreen,
-          child: Icon(
+        leading: IconButton(
+          onPressed: popScreen,
+          icon: Icon(
             Icons.arrow_back_ios_rounded,
             color: AppColors.textPrimaryColor,
           ),
@@ -162,10 +162,10 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 20.0),
-            child: GestureDetector(
-              onTap: () => addNote(context),
-              child: Icon(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: IconButton(
+              onPressed: () => addNote(context),
+              icon: Icon(
                 FontAwesomeIcons.check,
                 color: AppColors.primaryColor,
               ),

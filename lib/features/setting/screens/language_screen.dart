@@ -46,6 +46,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
             size: 21,
           ),
         ),
+        centerTitle: true,
         backgroundColor: AppColors.appbarColor,
         elevation: 0.3,
         title: Text(

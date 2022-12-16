@@ -58,6 +58,7 @@ class _TimeLineScreenState extends State<TimeLineScreen> {
             color: AppColors.textPrimaryColor,
           ),
         ),
+        centerTitle: true,
         backgroundColor: AppColors.appbarColor,
         elevation: 0,
         actions: [
@@ -86,13 +87,17 @@ class _TimeLineScreenState extends State<TimeLineScreen> {
             )
           : ListView.builder(
               itemBuilder: (context, index) {
+                if (index == diaries.length) {
+                  return Container(height: 100);
+                }
+
                 Diary diary = diaries[index];
                 return GestureDetector(
                   onTap: () => navigateToDetailDiaryScreen(diary),
                   child: ItemDiary(diary: diary),
                 );
               },
-              itemCount: diaries.length,
+              itemCount: diaries.length + 1,
             ),
     );
   }

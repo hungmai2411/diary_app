@@ -34,6 +34,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
             color: AppColors.textPrimaryColor,
           ),
         ),
+        centerTitle: true,
       ),
       body: CategoryUploadGroup(categories: categories),
     );

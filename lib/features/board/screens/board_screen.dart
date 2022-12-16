@@ -191,6 +191,9 @@ class _BoardScreenState extends State<BoardScreen> {
                 : SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
+                        if (index == diaries.length) {
+                          return Container(height: 100);
+                        }
                         Diary diary = diariesMonth[index];
 
                         return GestureDetector(
@@ -198,7 +201,7 @@ class _BoardScreenState extends State<BoardScreen> {
                           child: ItemDiary(diary: diary),
                         );
                       },
-                      childCount: diariesMonth.length,
+                      childCount: diariesMonth.length + 1,
                     ),
                   ),
           ),
