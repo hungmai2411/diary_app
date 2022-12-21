@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:diary_app/features/diary/screens/detail_image_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -25,11 +26,18 @@ class ImageGroup extends StatelessWidget {
       physics: const NeverScrollableScrollPhysics(),
       itemCount: images.length,
       itemBuilder: (context, index) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: Image.memory(
-            images[index],
-            fit: BoxFit.cover,
+        return GestureDetector(
+          onTap: () => Navigator.pushNamed(
+            context,
+            DetailImageScreen.routeName,
+            arguments: images[index],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.memory(
+              images[index],
+              fit: BoxFit.cover,
+            ),
           ),
         );
       },

@@ -6,6 +6,7 @@ import 'package:diary_app/features/category/screens/edit_category_screen.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/detail_diary_screen.dart';
+import 'package:diary_app/features/diary/screens/detail_image_screen.dart';
 import 'package:diary_app/features/diary/screens/diary_screen.dart';
 import 'package:diary_app/features/diary/screens/document_screen.dart';
 import 'package:diary_app/features/diary/screens/edit_diary_screen.dart';
@@ -20,6 +21,7 @@ import 'package:diary_app/features/board/screens/time_line_screen.dart';
 import 'package:diary_app/features/setting/screens/theme_store_screen.dart';
 import 'package:diary_app/my_app.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 final Map<String, WidgetBuilder> routes = {
   MyApp.routeName: (context) => const MyApp(),
@@ -84,6 +86,12 @@ MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
       return MaterialPageRoute<dynamic>(
         settings: settings,
         builder: (context) => DetailCategoryScreen(category: category),
+      );
+    case DetailImageScreen.routeName:
+      final Uint8List image = settings.arguments as Uint8List;
+      return MaterialPageRoute<dynamic>(
+        settings: settings,
+        builder: (context) => DetailImageScreen(image: image),
       );
     case ShareScreen.routeName:
       final List images = settings.arguments as List;

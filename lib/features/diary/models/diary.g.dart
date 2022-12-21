@@ -17,7 +17,7 @@ class DiaryAdapter extends TypeAdapter<Diary> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Diary(
-      mood: fields[0] as Mood,
+      mood: fields[0] as String,
       createdAt: fields[3] as DateTime,
       content: fields[1] as String?,
       images: (fields[2] as List?)?.cast<Uint8List>(),

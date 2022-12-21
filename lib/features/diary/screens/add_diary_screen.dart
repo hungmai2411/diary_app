@@ -5,15 +5,12 @@ import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/constants/utils.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
-import 'package:diary_app/features/diary/models/mood.dart';
-import 'package:diary_app/features/diary/screens/document_screen.dart';
 import 'package:diary_app/features/diary/widgets/item_mood.dart';
 import 'package:diary_app/features/diary/widgets/item_upload_group.dart';
 import 'package:diary_app/features/diary/widgets/success_dialog.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/providers/diary_provider.dart';
 import 'package:diary_app/providers/setting_provider.dart';
-import 'package:diary_app/widgets/app_button.dart';
 import 'package:diary_app/widgets/app_dialog.dart';
 import 'package:diary_app/widgets/box.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +19,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:tuple/tuple.dart';
+
+import '../../../constants/global_variables.dart';
 
 class AddDiaryScreen extends StatefulWidget {
   final DateTime dateTime;
@@ -37,7 +35,7 @@ class AddDiaryScreen extends StatefulWidget {
 }
 
 class _AddDiaryScreenState extends State<AddDiaryScreen> {
-  Mood moodPicked = Mood(name: '', image: '');
+  String moodPicked = '';
   //final TextEditingController noteController = TextEditingController();
   // lưu trữ hình ảnh
   List<Uint8List> images = [];
@@ -56,7 +54,7 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
   }
 
   addNote(BuildContext context) async {
-    if (moodPicked.name.isEmpty) {
+    if (moodPicked.isEmpty) {
       showSnackBar(
         context,
         AppLocalizations.of(context)!.pleaseRecordYourMood,
@@ -72,7 +70,11 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
       print(note.length);
       Diary newDiary = Diary(
         mood: moodPicked,
-        createdAt: widget.dateTime,
+        createdAt: DateTime.utc(
+          widget.dateTime.year,
+          widget.dateTime.month,
+          widget.dateTime.day,
+        ),
         content: note.length == 1 ? null : json,
         images: images,
       );
@@ -101,37 +103,13 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
     String nameBean = setting.bean.nameBean;
 
     if (nameBean == 'Basic Bean') {
-      moods = [
-        Mood(name: 'Mood1', image: basicBean[0]),
-        Mood(name: 'Mood2', image: basicBean[1]),
-        Mood(name: 'Mood3', image: basicBean[2]),
-        Mood(name: 'Mood4', image: basicBean[3]),
-        Mood(name: 'Mood5', image: basicBean[4]),
-      ];
+      moods = basicBean;
     } else if (nameBean == 'Blushing Bean') {
-      moods = [
-        Mood(name: 'Mood1', image: blushingBean[0]),
-        Mood(name: 'Mood2', image: blushingBean[1]),
-        Mood(name: 'Mood3', image: blushingBean[2]),
-        Mood(name: 'Mood4', image: blushingBean[3]),
-        Mood(name: 'Mood5', image: blushingBean[4]),
-      ];
+      moods = blushingBean;
     } else if (nameBean == 'Kitty Bean') {
-      moods = [
-        Mood(name: 'Mood1', image: kittyBean[0]),
-        Mood(name: 'Mood2', image: kittyBean[1]),
-        Mood(name: 'Mood3', image: kittyBean[2]),
-        Mood(name: 'Mood4', image: kittyBean[3]),
-        Mood(name: 'Mood5', image: kittyBean[4]),
-      ];
+      moods = kittyBean;
     } else {
-      moods = [
-        Mood(name: 'Mood1', image: sproutBean[0]),
-        Mood(name: 'Mood2', image: sproutBean[1]),
-        Mood(name: 'Mood3', image: sproutBean[2]),
-        Mood(name: 'Mood4', image: sproutBean[3]),
-        Mood(name: 'Mood5', image: sproutBean[4]),
-      ];
+      moods = sproutBean;
     }
   }
 
@@ -209,13 +187,16 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                       ),
                       itemCount: moods.length,
                       itemBuilder: (context, index) {
-                        Mood mood = moods[index];
+                        String mood = moods[index];
+                        String moodName = nameBeans[index];
+                        print('moodName: $moodName');
                         return ItemMood(
                           mood: mood,
-                          isPicked: moodPicked.name == mood.name ? true : false,
+                          moodName: moodName,
+                          isPicked: moodPicked == moodName ? true : false,
                           callback: (mood) {
                             setState(() {
-                              moodPicked = mood;
+                              moodPicked = moodName;
                             });
                           },
                         );
@@ -244,28 +225,6 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                         ),
                       ),
                       const Spacer(),
-                      // GestureDetector(
-                      //   onTap: () async {
-                      //     final result =
-                      //         await Navigator.of(context).pushNamed<String>(
-                      //       DocumentScreen.routeName,
-                      //     );
-                      //     var json = jsonDecode(result!);
-
-                      //     setState(() {
-                      //       noteController = quill.QuillController(
-                      //         document: quill.Document.fromJson(json),
-                      //         selection:
-                      //             const TextSelection.collapsed(offset: 0),
-                      //       );
-                      //     });
-                      //   },
-                      //   child: FaIcon(
-                      //     FontAwesomeIcons.upRightAndDownLeftFromCenter,
-                      //     color: AppColors.textPrimaryColor,
-                      //     size: 17,
-                      //   ),
-                      // )
                     ],
                   ),
                   const SizedBox(height: 5),
@@ -313,14 +272,6 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
                 ],
               ),
             ),
-            // your voices
-            // Box(
-            //   margin: const EdgeInsets.symmetric(
-            //     horizontal: 20,
-            //     vertical: 10,
-            //   ),
-            //   child: ItemUploadVoice(),
-            // ),
           ],
         ),
       ),

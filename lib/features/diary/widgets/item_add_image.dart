@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 class ItemAddImage extends StatelessWidget {
   final int index;
-  final Function(Uint8List) callback;
+  final Function(List<Uint8List>) callback;
 
   const ItemAddImage({
     super.key,
@@ -15,12 +15,14 @@ class ItemAddImage extends StatelessWidget {
   });
 
   void pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    XFile? file = await _picker.pickImage(
-      source: ImageSource.gallery,
-    );
-    Uint8List image = await file!.readAsBytes();
-    callback(image);
+    final ImagePicker picker = ImagePicker();
+    List<XFile>? files = await picker.pickMultiImage();
+    List<Uint8List> images = [];
+    for (var file in files) {
+      Uint8List image = await file.readAsBytes();
+      images.add(image);
+    }
+    callback(images);
   }
 
   @override

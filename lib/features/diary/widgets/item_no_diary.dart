@@ -14,8 +14,8 @@ class ItemNoDiary extends StatelessWidget {
   Widget build(BuildContext context) {
     return Box(
       margin: const EdgeInsets.only(
-        left: 20.0,
-        right: 20,
+        left: 15.0,
+        right: 15.0,
         top: 10,
       ),
       child: IntrinsicHeight(

@@ -3,9 +3,9 @@ import 'dart:typed_data';
 import 'package:diary_app/constants/app_assets.dart';
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/constants/global_variables.dart';
 import 'package:diary_app/constants/utils.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
-import 'package:diary_app/features/diary/models/mood.dart';
 import 'package:diary_app/features/diary/widgets/item_mood.dart';
 import 'package:diary_app/features/diary/widgets/item_upload_group.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
@@ -33,7 +33,7 @@ class EditDiaryScreen extends StatefulWidget {
 }
 
 class _EditDiaryScreenState extends State<EditDiaryScreen> {
-  Mood moodPicked = Mood(name: '', image: '');
+  String moodPicked = '';
   quill.QuillController noteController = quill.QuillController.basic();
   final FocusNode editorFocusNode = FocusNode();
 
@@ -45,7 +45,7 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
   }
 
   addNote(BuildContext context) async {
-    if (moodPicked.name.isEmpty) {
+    if (moodPicked.isEmpty) {
       showSnackBar(context, 'Please record your mood');
     } else {
       final diaryProvider = context.read<DiaryProvider>();
@@ -92,37 +92,13 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
     String nameBean = setting.bean.nameBean;
 
     if (nameBean == 'Basic Bean') {
-      moods = [
-        Mood(name: 'Mood1', image: basicBean[0]),
-        Mood(name: 'Mood2', image: basicBean[1]),
-        Mood(name: 'Mood3', image: basicBean[2]),
-        Mood(name: 'Mood4', image: basicBean[3]),
-        Mood(name: 'Mood5', image: basicBean[4]),
-      ];
+      moods = basicBean;
     } else if (nameBean == 'Blushing Bean') {
-      moods = [
-        Mood(name: 'Mood1', image: blushingBean[0]),
-        Mood(name: 'Mood2', image: blushingBean[1]),
-        Mood(name: 'Mood3', image: blushingBean[2]),
-        Mood(name: 'Mood4', image: blushingBean[3]),
-        Mood(name: 'Mood5', image: blushingBean[4]),
-      ];
+      moods = blushingBean;
     } else if (nameBean == 'Kitty Bean') {
-      moods = [
-        Mood(name: 'Mood1', image: kittyBean[0]),
-        Mood(name: 'Mood2', image: kittyBean[1]),
-        Mood(name: 'Mood3', image: kittyBean[2]),
-        Mood(name: 'Mood4', image: kittyBean[3]),
-        Mood(name: 'Mood5', image: kittyBean[4]),
-      ];
+      moods = kittyBean;
     } else {
-      moods = [
-        Mood(name: 'Mood1', image: sproutBean[0]),
-        Mood(name: 'Mood2', image: sproutBean[1]),
-        Mood(name: 'Mood3', image: sproutBean[2]),
-        Mood(name: 'Mood4', image: sproutBean[3]),
-        Mood(name: 'Mood5', image: sproutBean[4]),
-      ];
+      moods = sproutBean;
     }
   }
 
@@ -186,24 +162,31 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
                     ),
                   ),
                   const SizedBox(height: 5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: moods
-                        .map(
-                          (e) => ItemMood(
-                            mood: e,
-                            isPicked: moodPicked.name == (e as Mood).name
-                                ? true
-                                : false,
-                            callback: (mood) {
-                              setState(() {
-                                moodPicked = mood;
-                              });
-                            },
-                          ),
-                        )
-                        .toList(),
-                  )
+                  SizedBox(
+                    height: 80,
+                    child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 5,
+                      ),
+                      itemCount: moods.length,
+                      itemBuilder: (context, index) {
+                        String mood = moods[index];
+                        String moodName = nameBeans[index];
+
+                        return ItemMood(
+                          mood: mood,
+                          moodName: moodName,
+                          isPicked: moodPicked == moodName ? true : false,
+                          callback: (mood) {
+                            setState(() {
+                              moodPicked = moodName;
+                            });
+                          },
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),

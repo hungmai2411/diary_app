@@ -20,8 +20,6 @@ class SelectThemeScreen extends StatefulWidget {
 }
 
 class _SelectThemeScreenState extends State<SelectThemeScreen> {
-  late SettingProvider settingProvider;
-  late Setting setting;
   final CarouselController controller = CarouselController();
   late String background;
   late Bean beanSelected;
@@ -29,10 +27,7 @@ class _SelectThemeScreenState extends State<SelectThemeScreen> {
   @override
   void initState() {
     super.initState();
-    settingProvider = context.read<SettingProvider>();
-    setting = settingProvider.setting;
-    beanSelected = setting.bean;
-    background = setting.background;
+    getBackground();
   }
 
   @override
@@ -40,23 +35,16 @@ class _SelectThemeScreenState extends State<SelectThemeScreen> {
     super.dispose();
   }
 
-  int getInitialPage() {
-    Bean bean = setting.bean;
-
-    switch (bean.nameBean) {
-      case 'Basic Bean':
-        return 0;
-      case 'Blushing Bean':
-        return 1;
-      case 'Kitty Bean':
-        return 2;
-
-      default:
-        return 3;
-    }
+  void getBackground() {
+    final settingProvider = context.read<SettingProvider>();
+    Setting setting = settingProvider.setting;
+    background = setting.background;
+    beanSelected = setting.bean;
   }
 
   setTheme() {
+    final settingProvider = context.read<SettingProvider>();
+    Setting setting = settingProvider.setting;
     setting = setting.copyWith(
       bean: beanSelected,
       background: background,

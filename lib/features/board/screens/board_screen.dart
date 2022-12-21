@@ -1,5 +1,6 @@
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/constants/bean.dart';
 import 'package:diary_app/features/board/widgets/mood_bar.dart';
 import 'package:diary_app/features/board/widgets/mood_flow.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
@@ -82,6 +83,7 @@ class _BoardScreenState extends State<BoardScreen> {
   Widget build(BuildContext context) {
     final SettingProvider settingProvider = context.read<SettingProvider>();
     Setting setting = settingProvider.setting;
+    Bean bean = setting.bean;
     String locale = setting.language == 'English' ? 'en' : 'vi';
     final DiaryProvider diaryProvider = context.read<DiaryProvider>();
     List<Diary> diaries = diaryProvider.diaries;

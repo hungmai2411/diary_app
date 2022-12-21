@@ -1,3 +1,4 @@
+import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/widgets/app_button.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,9 @@ class BuySuccessDialog extends StatelessWidget {
       children: [
         Text(
           AppLocalizations.of(context)!.buySuccess,
-          style: AppStyles.medium.copyWith(),
+          style: AppStyles.medium.copyWith(
+            color: AppColors.textPrimaryColor,
+          ),
         ),
         const SizedBox(height: 15),
         AppButton(

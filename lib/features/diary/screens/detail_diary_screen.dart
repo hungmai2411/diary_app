@@ -59,7 +59,7 @@ class DetailDiaryScreen extends StatelessWidget {
     Setting setting = settingProvider.setting;
     Bean bean = setting.bean;
     List<String> moodImages = bean.beans;
-    int indexMood = 5 - diary.mood.getIndex().round();
+    int indexMood = 5 - diary.getIndex().round();
     final FocusNode editorFocusNode = FocusNode();
     quill.QuillController noteController;
 
@@ -218,10 +218,7 @@ class DetailDiaryScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Hero(
-                    tag: diary.key!,
-                    child: ImageGroup(images: diary.images!),
-                  ),
+                  ImageGroup(images: diary.images!),
                 ],
               ),
             ),

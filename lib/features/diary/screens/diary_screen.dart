@@ -5,12 +5,12 @@ import 'package:diary_app/constants/bean.dart';
 import 'package:diary_app/constants/utils.dart';
 import 'package:diary_app/extensions/string_ext.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
-import 'package:diary_app/features/diary/models/mood.dart';
 import 'package:diary_app/features/diary/screens/add_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/detail_diary_screen.dart';
 import 'package:diary_app/features/diary/screens/share_screen.dart';
 import 'package:diary_app/features/diary/widgets/item_date.dart';
 import 'package:diary_app/features/diary/widgets/item_diary.dart';
+import 'package:diary_app/features/diary/widgets/item_no_diary.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/providers/date_provider.dart';
 import 'package:diary_app/providers/diary_provider.dart';
@@ -41,6 +41,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
   late SettingProvider settingProvider;
   late Setting setting;
   late Bean bean;
+  Map<DateTime, List<Diary>> eventsMood = {};
 
   @override
   void initState() {
@@ -48,6 +49,20 @@ class _DiaryScreenState extends State<DiaryScreen> {
     settingProvider = context.read<SettingProvider>();
     setting = settingProvider.setting;
     bean = setting.bean;
+  }
+
+  createEvents(List<Diary> diaries) {
+    eventsMood = {};
+    for (var diary in diaries) {
+      DateTime createdAt = diary.createdAt;
+      List<Diary>? diariesTmp = eventsMood[createdAt];
+      print('createdTime: $createdAt diaries: $diariesTmp');
+      if (diariesTmp != null) {
+        eventsMood[createdAt] = [...diariesTmp, diary];
+      } else {
+        eventsMood[createdAt] = [diary];
+      }
+    }
   }
 
   navigateToAddDiaryScreen(DateTime dateTime) {
@@ -66,45 +81,8 @@ class _DiaryScreenState extends State<DiaryScreen> {
     );
   }
 
-  String? getIconOfDay(DateTime dateTime, List<Diary> diaries) {
-    print('run func get icon of  per day');
-
-    for (var diary in diaries) {
-      if (dateTime.day == diary.createdAt.day &&
-          dateTime.month == diary.createdAt.month &&
-          dateTime.year == diary.createdAt.year) {
-        int indexOfMood = 5 - diary.mood.getIndex().round();
-        String imageMood = bean.beans[indexOfMood];
-        return imageMood;
-      }
-    }
-
-    return null;
-  }
-
-  List<Diary> getDiaryOfDay(DateTime dateTime, List<Diary> diaries) {
-    List<Diary> diariesTmp = [];
-
-    print('run func get icon of  per day');
-    for (var diary in diaries) {
-      if (dateTime.day == diary.createdAt.day &&
-          dateTime.month == diary.createdAt.month &&
-          dateTime.year == diary.createdAt.year) {
-        int indexOfMood = 5 - diary.mood.getIndex().round();
-        String imageMood = bean.beans[indexOfMood];
-        String moodName = diary.mood.name;
-        diary = diary.copyWith(mood: Mood(name: moodName, image: imageMood));
-        diariesTmp.add(diary);
-      }
-    }
-
-    return diariesTmp;
-  }
-
   void chooseDate(String locale) async {
     final dateProvider = context.read<DateProvider>();
-    SettingProvider settingProvider = context.read<SettingProvider>();
-    String background = settingProvider.setting.background;
 
     final result = await showDatePicker(
       context: context,
@@ -157,15 +135,14 @@ class _DiaryScreenState extends State<DiaryScreen> {
     final DateProvider dateProvider = context.watch<DateProvider>();
     final DiaryProvider diaryProvider = context.watch<DiaryProvider>();
     List<Diary> diaries = diaryProvider.diaries;
-    List<Diary> diariesOfDay = getDiaryOfDay(dateProvider.selectedDay, diaries);
+    createEvents(diaries);
     Setting setting = settingProvider.setting;
     String locale = setting.language == 'English' ? 'en' : 'vi';
 
     final kToday = DateTime.now();
     final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
     final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
-    print(setting.point);
-
+    print('point of diary screen: ${setting.point}');
     return Scaffold(
       key: _scaffoldKey,
       body: CustomScrollView(
@@ -197,17 +174,19 @@ class _DiaryScreenState extends State<DiaryScreen> {
                   onTap: () => chooseDate(locale),
                   child: Row(
                     children: [
-                      WidgetToImage(builder: (key) {
-                        key1 = key;
-                        return Text(
-                          DateFormat('MMM dd, yyyy', locale)
-                              .format(dateProvider.selectedDay),
-                          style: AppStyles.medium.copyWith(
-                            fontSize: 18,
-                            color: AppColors.textPrimaryColor,
-                          ),
-                        );
-                      }),
+                      WidgetToImage(
+                        builder: (key) {
+                          key1 = key;
+                          return Text(
+                            DateFormat('MMM dd, yyyy', locale)
+                                .format(dateProvider.selectedDay),
+                            style: AppStyles.medium.copyWith(
+                              fontSize: 18,
+                              color: AppColors.textPrimaryColor,
+                            ),
+                          );
+                        },
+                      ),
                       const SizedBox(width: 6),
                       // choose time
                       Icon(
@@ -239,9 +218,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     startingDayOfWeek:
                         setting.startingDayOfWeek!.getStartingDayOfWeek,
                     shouldFillViewport: true,
+                    //eventLoader: getEventsForDays,
                     calendarBuilders: CalendarBuilders(
                       dowBuilder: ((context, day) {
-                        final text = DateFormat.E().format(day);
+                        final text = DateFormat.E(locale).format(day);
 
                         return Center(
                           child: Text(
@@ -269,7 +249,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
                           },
                           child: ItemDate(
                             date: datetime.day.toString(),
-                            img: getIconOfDay(datetime, diaries),
+                            img: eventsMood[datetime] != null
+                                ? bean.beans[5 -
+                                    eventsMood[datetime]![0].getIndex().round()]
+                                : null,
                             color: AppColors.textPrimaryColor,
                           ),
                         );
@@ -282,7 +265,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
                           child: ItemDate(
                             date: datetime.day.toString(),
                             color: AppColors.todayColor,
-                            img: getIconOfDay(datetime, diaries),
+                            img: eventsMood[datetime] != null
+                                ? bean.beans[5 -
+                                    eventsMood[datetime]![0].getIndex().round()]
+                                : null,
                           ),
                         );
                       },
@@ -290,7 +276,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
                         return ItemDate(
                           date: datetime.day.toString(),
                           color: AppColors.primaryColor,
-                          img: getIconOfDay(datetime, diaries),
+                          img: eventsMood[datetime] != null
+                              ? bean.beans[5 -
+                                  eventsMood[datetime]![0].getIndex().round()]
+                              : null,
                           isSelected: true,
                         );
                       },
@@ -318,27 +307,34 @@ class _DiaryScreenState extends State<DiaryScreen> {
             padding: const EdgeInsets.symmetric(
               vertical: 10,
             ),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (
-                  BuildContext context,
-                  int index,
-                ) {
-                  if (index == diariesOfDay.length) {
-                    return Container(
-                      height: 100,
-                    );
-                  }
-                  Diary diary = diariesOfDay[index];
+            sliver: eventsMood[dateProvider.selectedDay] == null
+                ? const SliverToBoxAdapter(
+                    child: ItemNoDiary(),
+                  )
+                : SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (
+                        BuildContext context,
+                        int index,
+                      ) {
+                        if (index ==
+                            eventsMood[dateProvider.selectedDay]!.length) {
+                          return Container(
+                            height: 100,
+                          );
+                        }
+                        Diary diary =
+                            eventsMood[dateProvider.selectedDay]![index];
 
-                  return GestureDetector(
-                    onTap: () => navigateToDetailDiaryScreen(diary),
-                    child: ItemDiary(diary: diary),
-                  );
-                },
-                childCount: diariesOfDay.length + 1,
-              ),
-            ),
+                        return GestureDetector(
+                          onTap: () => navigateToDetailDiaryScreen(diary),
+                          child: ItemDiary(diary: diary),
+                        );
+                      },
+                      childCount:
+                          eventsMood[dateProvider.selectedDay]!.length + 1,
+                    ),
+                  ),
           ),
         ],
       ),

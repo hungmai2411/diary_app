@@ -127,66 +127,71 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
             left: 10.0,
             top: 10,
           ),
-          child: ListView(
-            children: [
-              quill.QuillToolbar.basic(
-                controller: contentController,
-                showFontFamily: false,
-                showFontSize: false,
-                embedButtons: FlutterQuillEmbeds.buttons(
-                  showCameraButton: true,
-                  onImagePickCallback: _onImagePickCallback,
-                  onVideoPickCallback: _onVideoPickCallback,
-                  mediaPickSettingSelector: _selectMediaPickSetting,
-                  cameraPickSettingSelector: _selectCameraPickSetting,
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: ListView(
+              children: [
+                quill.QuillToolbar.basic(
+                  controller: contentController,
+                  showFontFamily: false,
+                  showFontSize: false,
+                  embedButtons: FlutterQuillEmbeds.buttons(
+                    showCameraButton: true,
+                    onImagePickCallback: _onImagePickCallback,
+                    onVideoPickCallback: _onVideoPickCallback,
+                    mediaPickSettingSelector: _selectMediaPickSetting,
+                    cameraPickSettingSelector: _selectCameraPickSetting,
+                  ),
+                  locale: const Locale('vi'),
+                  afterButtonPressed: editorFocusNode.requestFocus,
+                  showAlignmentButtons: true,
                 ),
-                locale: const Locale('vi'),
-                afterButtonPressed: editorFocusNode.requestFocus,
-                showAlignmentButtons: true,
-              ),
-              const SizedBox(height: 20),
-              Text(
-                AppLocalizations.of(context)!.title,
-                style: AppStyles.bold.copyWith(
-                  fontSize: 18,
-                  color: AppColors.textPrimaryColor,
-                ),
-              ),
-              TextField(
-                style: AppStyles.regular.copyWith(
-                  color: AppColors.textPrimaryColor,
-                ),
-                decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: AppLocalizations.of(context)!.addTitle,
-                  hintStyle: AppStyles.regular.copyWith(
+                const SizedBox(height: 20),
+                Text(
+                  AppLocalizations.of(context)!.title,
+                  style: AppStyles.bold.copyWith(
+                    fontSize: 18,
                     color: AppColors.textPrimaryColor,
                   ),
                 ),
-                controller: titleController,
-              ),
-              Text(
-                AppLocalizations.of(context)!.content,
-                style: AppStyles.bold.copyWith(
-                  fontSize: 18,
-                  color: AppColors.textPrimaryColor,
+                TextField(
+                  style: AppStyles.regular.copyWith(
+                    color: AppColors.textPrimaryColor,
+                  ),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: AppLocalizations.of(context)!.addTitle,
+                    hintStyle: AppStyles.regular.copyWith(
+                      color: AppColors.textPrimaryColor,
+                    ),
+                  ),
+                  controller: titleController,
                 ),
-              ),
-              quill.QuillEditor(
-                scrollable: true,
-                scrollController: ScrollController(),
-                focusNode: editorFocusNode,
-                padding: const EdgeInsets.all(0),
-                autoFocus: false,
-                readOnly: false,
-                expands: false,
-                embedBuilders: FlutterQuillEmbeds.builders(),
-                controller: contentController,
-                placeholder: AppLocalizations.of(context)!.writeSomething,
-                customStyles: getDefaultStyles(context),
-                enableSelectionToolbar: false,
-              ),
-            ],
+                Text(
+                  AppLocalizations.of(context)!.content,
+                  style: AppStyles.bold.copyWith(
+                    fontSize: 18,
+                    color: AppColors.textPrimaryColor,
+                  ),
+                ),
+                quill.QuillEditor(
+                  scrollable: true,
+                  scrollController: ScrollController(),
+                  focusNode: editorFocusNode,
+                  padding: const EdgeInsets.all(0),
+                  autoFocus: false,
+                  readOnly: false,
+                  expands: false,
+                  embedBuilders: FlutterQuillEmbeds.builders(),
+                  controller: contentController,
+                  placeholder: AppLocalizations.of(context)!.writeSomething,
+                  customStyles: getDefaultStyles(context),
+                  enableSelectionToolbar: false,
+                ),
+              ],
+            ),
           ),
         ),
       ),

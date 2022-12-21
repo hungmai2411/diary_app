@@ -42,7 +42,7 @@ class ItemDate extends StatelessWidget {
               ? Expanded(
                   child: Image.asset(
                     img!,
-                    fit: BoxFit.cover,
+                    fit: BoxFit.contain,
                     width: 50,
                     height: 50,
                   ),

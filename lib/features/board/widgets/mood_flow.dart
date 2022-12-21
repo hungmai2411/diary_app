@@ -115,9 +115,7 @@ class MoodFlow extends StatelessWidget {
                                 );
                               },
                             ),
-                            spots: isMonthly!
-                                ? createSpotsForMonthly(diaries)
-                                : createSpotsForAnnualy(diaries),
+                            spots: createSpotsForMonthly(diaries),
                             color: AppColors.selectedColor,
                             barWidth: 5,
                             isStrokeCapRound: true,
@@ -132,29 +130,6 @@ class MoodFlow extends StatelessWidget {
     );
   }
 
-  List<FlSpot> createSpotsForAnnualy(List<Diary> diariesAnnual) {
-    List<FlSpot> spots = [];
-    int dayTmp = 0;
-    int i = 0;
-
-    for (Diary diary in diariesAnnual) {
-      int dayCreated = diary.createdAt.day;
-      double x = dayCreated / 5 - 0.2;
-      double y = diary.mood.getIndex();
-
-      if (dayTmp == dayCreated) {
-        --i;
-        spots.removeAt(i);
-      }
-
-      spots.insert(i, FlSpot(x, y));
-      dayTmp = dayCreated;
-      i++;
-    }
-
-    return spots;
-  }
-
   List<FlSpot> createSpotsForMonthly(List<Diary> diariesMonth) {
     List<FlSpot> spots = [];
     int dayTmp = 0;
@@ -162,12 +137,13 @@ class MoodFlow extends StatelessWidget {
 
     for (Diary diary in diariesMonth) {
       int dayCreated = diary.createdAt.day;
-      double x = dayCreated / 5 - 0.2;
-      double y = diary.mood.getIndex();
 
+      double x = dayCreated / 5 - 0.2;
+      double y = diary.getIndex();
+
+      print('moodname : ${diary.mood} day created: $dayCreated x: $x y: $y');
       if (dayTmp == dayCreated) {
-        --i;
-        spots.removeAt(i);
+        continue;
       }
 
       spots.insert(i, FlSpot(x, y));

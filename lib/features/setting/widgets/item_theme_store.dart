@@ -29,11 +29,15 @@ class ItemThemeStore extends StatelessWidget {
 
     if (setting.point >= coin) {
       myBeans.add(bean);
+      int newPoint = setting.point - coin;
+      print('new Point: $newPoint');
 
       setting = setting.copyWith(
-        point: setting.point - coin,
+        point: newPoint,
         myBeans: myBeans,
       );
+      print('new Point Setting: ${setting.point}');
+
       settingProvider.setSetting(setting);
       await showDialog(
         context: context,
@@ -123,8 +127,7 @@ class ItemThemeStore extends StatelessWidget {
                   : Text(
                       AppLocalizations.of(context)!.owned,
                       style: AppStyles.medium.copyWith(
-                        fontSize: 15,
-                      ),
+                          fontSize: 15, color: AppColors.textPrimaryColor),
                     ),
             ],
           ),

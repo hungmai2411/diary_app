@@ -94,10 +94,12 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
                       return GestureDetector(
                           onTap: () {
                             if (index == 11) {
-                              setState(() {
-                                passcode.removeAt(--indexTmp);
-                                passcode.add('');
-                              });
+                              if (indexTmp > 0) {
+                                setState(() {
+                                  passcode.removeAt(--indexTmp);
+                                  passcode.add('');
+                                });
+                              }
                             } else if (index == 9) {
                               Navigator.pop(context);
                             }

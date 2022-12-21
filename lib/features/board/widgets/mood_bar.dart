@@ -118,7 +118,7 @@ class MoodBar extends StatelessWidget {
     int totalMood = diariesMonth.length;
 
     for (Diary diary in diariesMonth) {
-      double index = diary.mood.getIndex();
+      double index = diary.getIndex();
 
       if (index == 1) {
         mood5++;

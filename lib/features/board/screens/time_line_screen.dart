@@ -66,7 +66,7 @@ class _TimeLineScreenState extends State<TimeLineScreen> {
             onPressed: () {
               setState(() {
                 if (isSort) {
-                  diaries.sort((b, a) => a.createdAt.compareTo(b.createdAt));
+                  diaries.sort((a, b) => b.createdAt.compareTo(a.createdAt));
                 } else {
                   diaries.sort((a, b) => a.createdAt.compareTo(b.createdAt));
                 }

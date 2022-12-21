@@ -33,9 +33,9 @@ class _ItemUploadGroupState extends State<ItemUploadGroup> {
         if (index == widget.images.length) {
           return ItemAddImage(
             index: index,
-            callback: (image) {
+            callback: (images) {
               setState(() {
-                widget.images.add(image);
+                widget.images.addAll(images);
               });
             },
           );

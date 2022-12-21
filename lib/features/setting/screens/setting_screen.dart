@@ -198,10 +198,8 @@ class _SettingScreenState extends State<SettingScreen> {
                       trackColor: AppColors.trackUnSelectedColor,
                       activeColor: AppColors.trackSelectedColor,
                       onChanged: (bool? value) {
-                        // This is called when the user toggles the switch.
-                        setState(() {
-                          hasPasscode = value!;
-                        });
+                        setting = setting.copyWith(hasPasscode: value);
+                        settingProvider.setSetting(setting);
                       },
                     ),
                   ],

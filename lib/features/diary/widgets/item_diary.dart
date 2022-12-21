@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
+import 'package:diary_app/constants/bean.dart';
 import 'package:diary_app/constants/utils.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
@@ -27,6 +28,8 @@ class ItemDiary extends StatelessWidget {
     final SettingProvider settingProvider = context.read<SettingProvider>();
     final FocusNode editorFocusNode = FocusNode();
     Setting setting = settingProvider.setting;
+    Bean bean = setting.bean;
+
     String locale = setting.language == 'English' ? 'en' : 'vi';
     quill.QuillController controller;
     if (diary.content == null) {
@@ -42,7 +45,6 @@ class ItemDiary extends StatelessWidget {
         selection: const TextSelection.collapsed(offset: 0),
       );
     }
-
     return Box(
       margin: const EdgeInsets.only(
         left: 15.0,
@@ -70,7 +72,7 @@ class ItemDiary extends StatelessWidget {
                   ),
                 ),
                 Image.asset(
-                  diary.mood.image,
+                  bean.beans[5 - diary.getIndex().round()],
                   width: 50,
                   height: 50,
                   fit: BoxFit.cover,
@@ -101,29 +103,26 @@ class ItemDiary extends StatelessWidget {
                     customStyles: getDefaultStyles(context),
                   ),
                   if (diary.images != null)
-                    Hero(
-                      tag: diary.key!,
-                      child: Wrap(
-                        children: diary.images!
-                            .map(
-                              (e) => Padding(
-                                padding: const EdgeInsets.only(
-                                  top: 8.0,
-                                  right: 8.0,
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.memory(
-                                    e,
-                                    fit: BoxFit.cover,
-                                    width: 80,
-                                    height: 80,
-                                  ),
+                    Wrap(
+                      children: diary.images!
+                          .map(
+                            (e) => Padding(
+                              padding: const EdgeInsets.only(
+                                top: 8.0,
+                                right: 8.0,
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.memory(
+                                  e,
+                                  fit: BoxFit.cover,
+                                  width: 80,
+                                  height: 80,
                                 ),
                               ),
-                            )
-                            .toList(),
-                      ),
+                            ),
+                          )
+                          .toList(),
                     )
                 ],
               ),
