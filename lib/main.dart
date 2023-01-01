@@ -79,9 +79,7 @@ void main() async {
             debugShowCheckedModeBanner: false,
             onGenerateRoute: generateRoutes,
             home: setting.hasPasscode
-                ? EnterPinScreen(
-                    passcode: setting.passcode!,
-                  )
+                ? EnterPinScreen(passcode: setting.passcode!)
                 : const MyApp(),
           );
         },

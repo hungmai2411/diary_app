@@ -103,7 +103,9 @@ class _PasscodeConfirmScreenState extends State<PasscodeConfirmScreen> {
               SizedBox(height: size.height * .1),
               Text(
                 AppLocalizations.of(context)!.confirmYourPasscode,
-                style: AppStyles.semibold,
+                style: AppStyles.semibold.copyWith(
+                  color: AppColors.textPrimaryColor,
+                ),
               ),
               const SizedBox(height: 20),
               Row(

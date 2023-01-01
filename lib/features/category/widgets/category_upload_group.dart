@@ -28,7 +28,8 @@ class _CategoryUploadGroupState extends State<CategoryUploadGroup> {
       ),
       shrinkWrap: true,
       padding: const EdgeInsets.all(15),
-      physics: const NeverScrollableScrollPhysics(),
+      // allow scroll in GridView
+      physics: const ScrollPhysics(),
       itemCount: widget.categories.isEmpty ? 1 : widget.categories.length + 1,
       itemBuilder: (context, index) {
         if (index == 0) {
@@ -41,17 +42,8 @@ class _CategoryUploadGroupState extends State<CategoryUploadGroup> {
         }
         Category category = widget.categories[index - 1];
 
-        return GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              DetailCategoryScreen.routeName,
-              arguments: category,
-            );
-          },
-          child: ItemCategory(
-            category: category,
-          ),
+        return ItemCategory(
+          category: category,
         );
       },
     );

@@ -16,7 +16,7 @@ class DeleteCategoryDialog extends StatelessWidget {
 
   void deleteDiary(BuildContext context) {
     context.read<CategoryProvider>().deleteCategory(category);
-    Navigator.pop(context, [true]);
+    Navigator.pop(context, true);
   }
 
   @override
