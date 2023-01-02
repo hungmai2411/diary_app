@@ -205,7 +205,8 @@ class _SettingScreenState extends State<SettingScreen> {
                           );
                           settingProvider.setSetting(setting);
                         } else {
-                          if (setting.passcode == null) {
+                          if (setting.passcode == null ||
+                              setting.passcode!.isEmpty) {
                             navigateToPasscodeScreen();
                           } else {
                             setting = setting.copyWith(hasPasscode: value);
