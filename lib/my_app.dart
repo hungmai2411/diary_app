@@ -22,7 +22,7 @@ import 'providers/bottom_navigation_provider.dart';
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  static const routeName = '/my_app';
+  static const routeName = '/';
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -44,28 +44,6 @@ class _MyAppState extends State<MyApp> {
       AddDiaryScreen.routeName,
       arguments: dateTime,
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getDiaries();
-    getCategories();
-  }
-
-  getDiaries() async {
-    var diaryProvider = Provider.of<DiaryProvider>(context, listen: false);
-    final box = await dbHelper.openBox("diaries");
-    List<Diary> diaries = dbHelper.getDiaries(box);
-    diaryProvider.setDiaries(diaries);
-  }
-
-  getCategories() async {
-    var categoryProvider =
-        Provider.of<CategoryProvider>(context, listen: false);
-    final box = await dbHelper.openBox("categories");
-    List<Category> categories = dbHelper.getCategories(box);
-    categoryProvider.setCategories(categories);
   }
 
   @override

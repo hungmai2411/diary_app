@@ -1,13 +1,14 @@
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
 import 'package:diary_app/my_app.dart';
+import 'package:diary_app/providers/setting_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 class EnterPinScreen extends StatefulWidget {
-  const EnterPinScreen({super.key, required this.passcode});
-  final String passcode;
+  const EnterPinScreen({super.key});
 
   static const String routeName = '/enter_pin_screen';
   @override
@@ -19,6 +20,16 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
   int indexTmp = 0;
   List<String> passcode = ['', '', '', ''];
   bool isWrong = false;
+  late String password;
+  @override
+  void initState() {
+    super.initState();
+    getPassword();
+  }
+
+  void getPassword() {
+    password = context.read<SettingProvider>().setting.passcode!;
+  }
 
   @override
   void didChangeDependencies() {
@@ -112,7 +123,7 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
                           passcode[indexTmp++] = s;
                         });
                         if (indexTmp == 4) {
-                          if (passcode.toString() == widget.passcode) {
+                          if (passcode.toString() == password) {
                             SchedulerBinding.instance.addPostFrameCallback((_) {
                               Navigator.pushNamed(
                                 context,

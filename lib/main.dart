@@ -2,10 +2,8 @@ import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/bean.dart';
 import 'package:diary_app/features/category/models/category.dart';
 import 'package:diary_app/features/diary/models/diary.dart';
-import 'package:diary_app/features/diary/screens/enter_pin_screen.dart';
 import 'package:diary_app/features/setting/models/setting.dart';
 import 'package:diary_app/l10n/l10n.dart';
-import 'package:diary_app/my_app.dart';
 import 'package:diary_app/providers/bottom_navigation_provider.dart';
 import 'package:diary_app/providers/category_provider.dart';
 import 'package:diary_app/providers/date_provider.dart';
@@ -24,13 +22,21 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+
   Hive.registerAdapter(DiaryAdapter());
   Hive.registerAdapter(SettingAdapter());
   Hive.registerAdapter(BeanAdapter());
   Hive.registerAdapter(CategoryAdapter());
 
+  final DbHelper dbHelper = DbHelper();
+
   SettingProvider settingProvider = SettingProvider();
-  await getSetting(settingProvider);
+  DiaryProvider diaryProvider = DiaryProvider();
+  CategoryProvider categoryProvider = CategoryProvider();
+
+  await getSetting(dbHelper, settingProvider);
+  await getDiaries(dbHelper, diaryProvider);
+  await getCategories(dbHelper, categoryProvider);
 
   runApp(
     MultiProvider(
@@ -39,7 +45,7 @@ void main() async {
           create: (_) => BottomNavigationProvider(),
         ),
         ChangeNotifierProvider<DiaryProvider>(
-          create: (_) => DiaryProvider(),
+          create: (_) => diaryProvider,
         ),
         ChangeNotifierProvider<SettingProvider>(
           create: (_) => settingProvider,
@@ -48,7 +54,7 @@ void main() async {
           create: (_) => DateProvider(),
         ),
         ChangeNotifierProvider<CategoryProvider>(
-          create: (_) => CategoryProvider(),
+          create: (_) => categoryProvider,
         ),
       ],
       child: Consumer<SettingProvider>(
@@ -75,12 +81,13 @@ void main() async {
               GlobalWidgetsLocalizations.delegate,
               MonthYearPickerLocalizations.delegate,
             ],
+            // initialRoute: !setting.hasPasscode
+            //     ? MyApp.routeName
+            //     : EnterPinScreen.routeName,
             routes: routes,
             debugShowCheckedModeBanner: false,
             onGenerateRoute: generateRoutes,
-            home: setting.hasPasscode
-                ? EnterPinScreen(passcode: setting.passcode!)
-                : const MyApp(),
+            //home: setting.hasPasscode ? const EnterPinScreen() : const MyApp(),
           );
         },
       ),
@@ -88,10 +95,31 @@ void main() async {
   );
 }
 
-getSetting(SettingProvider settingProvider) async {
-  final DbHelper dbHelper = DbHelper();
-  final box = await dbHelper.openBox("settings");
-  Setting setting = dbHelper.getSetting(box);
+Future<void> getDiaries(
+  DbHelper dbHelper,
+  DiaryProvider diaryProvider,
+) async {
+  final box = await dbHelper.openBox("diaries");
+  List<Diary> diaries = dbHelper.getDiaries(box);
+  diaryProvider.setDiaries(diaries);
+}
+
+Future<void> getCategories(
+  DbHelper dbHelper,
+  CategoryProvider categoryProvider,
+) async {
+  final box = await dbHelper.openBox("categories");
+  List<Category> categories = dbHelper.getCategories(box);
+  categoryProvider.setCategories(categories);
+}
+
+Future<void> getSetting(
+  DbHelper dbHelper,
+  SettingProvider settingProvider,
+) async {
+  final boxSetting = await dbHelper.openBox("settings");
+
+  Setting setting = dbHelper.getSetting(boxSetting);
   String background = setting.background;
 
   if (background == 'System mode') {
@@ -111,5 +139,6 @@ getSetting(SettingProvider settingProvider) async {
   if (setting.startingDayOfWeek == null) {
     setting = setting.copyWith(startingDayOfWeek: 'Sunday');
   }
+
   settingProvider.setSetting(setting);
 }

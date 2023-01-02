@@ -10,6 +10,7 @@ import 'package:diary_app/features/diary/screens/detail_image_screen.dart';
 import 'package:diary_app/features/diary/screens/diary_screen.dart';
 import 'package:diary_app/features/diary/screens/document_screen.dart';
 import 'package:diary_app/features/diary/screens/edit_diary_screen.dart';
+import 'package:diary_app/features/diary/screens/enter_pin_screen.dart';
 import 'package:diary_app/features/diary/screens/share_screen.dart';
 import 'package:diary_app/features/setting/screens/language_screen.dart';
 import 'package:diary_app/features/setting/screens/passcode_confirm_screen.dart';
@@ -34,6 +35,7 @@ final Map<String, WidgetBuilder> routes = {
   CategoryScreen.routeName: (context) => const CategoryScreen(),
   CreateCategoryScreen.routeName: (context) => const CreateCategoryScreen(),
   ThemeStoreScreen.routeName: (context) => const ThemeStoreScreen(),
+  EnterPinScreen.routeName: (context) => const EnterPinScreen(),
 };
 
 MaterialPageRoute<dynamic>? generateRoutes(RouteSettings settings) {
