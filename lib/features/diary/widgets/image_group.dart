@@ -37,6 +37,8 @@ class ImageGroup extends StatelessWidget {
             child: Image.memory(
               images[index],
               fit: BoxFit.cover,
+              cacheWidth: 342,
+              cacheHeight: 342,
             ),
           ),
         );

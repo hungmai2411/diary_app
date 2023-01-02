@@ -15,14 +15,13 @@ class DetailImageScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: MemoryImage(
-                  image,
-                ),
-                fit: BoxFit.cover,
-              ),
+          SizedBox(
+            height: double.infinity,
+            child: Image.memory(
+              image,
+              fit: BoxFit.cover,
+              cacheWidth: 1284,
+              cacheHeight: 2778,
             ),
           ),
           Positioned(

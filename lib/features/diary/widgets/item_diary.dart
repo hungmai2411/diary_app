@@ -117,6 +117,8 @@ class ItemDiary extends StatelessWidget {
                                   e,
                                   fit: BoxFit.cover,
                                   width: 80,
+                                  cacheWidth: 240,
+                                  cacheHeight: 240,
                                   height: 80,
                                 ),
                               ),

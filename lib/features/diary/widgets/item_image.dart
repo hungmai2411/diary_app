@@ -28,6 +28,8 @@ class ItemImage extends StatelessWidget {
           child: Image.memory(
             image,
             fit: BoxFit.cover,
+            cacheWidth: 342,
+            cacheHeight: 342,
           ),
         ),
         Positioned(
