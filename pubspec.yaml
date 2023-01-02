@@ -76,7 +76,14 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   hive_generator: ^2.0.0
+  flutter_launcher_icons: "^0.11.0"
 
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/icon_app.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 # The following section is specific to Flutter packages.
