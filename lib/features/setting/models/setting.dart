@@ -76,7 +76,7 @@ class Setting {
       reminderHour: reminderHour ?? this.reminderHour,
       reminderMinute: reminderMinute ?? this.reminderMinute,
       language: language ?? this.language,
-      passcode: passcode,
+      passcode: passcode ?? this.passcode,
       startingDayOfWeek: startingDayOfWeek ?? this.startingDayOfWeek,
       hasPasscode: hasPasscode ?? this.hasPasscode,
       hasReminderTime: hasReminderTime ?? this.hasReminderTime,

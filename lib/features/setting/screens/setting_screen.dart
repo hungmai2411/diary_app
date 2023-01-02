@@ -201,7 +201,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         if (!value!) {
                           setting = setting.copyWith(
                             hasPasscode: value,
-                            passcode: null,
+                            passcode: '',
                           );
                           settingProvider.setSetting(setting);
                         } else {

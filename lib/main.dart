@@ -83,12 +83,15 @@ void main() async {
               GlobalWidgetsLocalizations.delegate,
               MonthYearPickerLocalizations.delegate,
             ],
-            initialRoute: !setting.hasPasscode
-                ? MyApp.routeName
-                : EnterPinScreen.routeName,
+            // initialRoute: !setting.hasPasscode
+            //     ? MyApp.routeName
+            //     : EnterPinScreen.routeName,
             routes: routes,
             debugShowCheckedModeBanner: false,
             onGenerateRoute: generateRoutes,
+            home: setting.hasPasscode && setting.passcode!.isNotEmpty
+                ? const EnterPinScreen()
+                : const MyApp(),
           );
         },
       ),

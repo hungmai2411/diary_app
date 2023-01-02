@@ -18,7 +18,7 @@ import 'providers/bottom_navigation_provider.dart';
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  static const routeName = '/';
+  static const routeName = '/my_app';
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -46,6 +46,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     var bottomProvider = Provider.of<BottomNavigationProvider>(context);
     var dateProvider = Provider.of<DateProvider>(context);
+
+    // be used to change theme
     var settingProvider = context.watch<SettingProvider>();
     print('rebuild my app');
     return Scaffold(
