@@ -168,7 +168,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     color: AppColors.textPrimaryColor,
                   ),
                 ),
-                const Spacer(),
+                const Spacer(flex: 3),
                 // datetime
                 GestureDetector(
                   onTap: () => chooseDate(locale),
@@ -197,7 +197,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     ],
                   ),
                 ),
-                const Spacer(),
+                const Spacer(flex: 2),
                 IconButton(
                   onPressed: captureImage,
                   icon: Icon(
@@ -218,7 +218,6 @@ class _DiaryScreenState extends State<DiaryScreen> {
                     startingDayOfWeek:
                         setting.startingDayOfWeek!.getStartingDayOfWeek,
                     shouldFillViewport: true,
-                    //eventLoader: getEventsForDays,
                     calendarBuilders: CalendarBuilders(
                       dowBuilder: ((context, day) {
                         final text = DateFormat.E(locale).format(day);

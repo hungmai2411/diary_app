@@ -81,42 +81,42 @@ class _PasscodeConfirmScreenState extends State<PasscodeConfirmScreen> {
     initData();
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: size.width * 0.2,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: size.height * .1),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: size.height * .1),
+            Text(
+              AppLocalizations.of(context)!.confirmYourPasscode,
+              style: AppStyles.semibold.copyWith(
+                color: AppColors.textPrimaryColor,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: passcodeConfirm.map((e) {
+                if (e.isEmpty) {
+                  return _buildUnActiveBox();
+                }
+                return _buildActiveBox();
+              }).toList(),
+            ),
+            if (isWrong) ...[
+              const SizedBox(height: 10),
               Text(
-                AppLocalizations.of(context)!.confirmYourPasscode,
-                style: AppStyles.semibold.copyWith(
-                  color: AppColors.textPrimaryColor,
+                AppLocalizations.of(context)!.pinNotMatch,
+                style: AppStyles.medium.copyWith(
+                  color: AppColors.orange,
                 ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: passcodeConfirm.map((e) {
-                  if (e.isEmpty) {
-                    return _buildUnActiveBox();
-                  }
-                  return _buildActiveBox();
-                }).toList(),
-              ),
-              if (isWrong) ...[
-                const SizedBox(height: 10),
-                Text(
-                  AppLocalizations.of(context)!.pinNotMatch,
-                  style: AppStyles.medium.copyWith(
-                    color: AppColors.orange,
-                  ),
-                )
-              ],
-              SizedBox(height: size.height * .1),
-              Expanded(
+              )
+            ],
+            SizedBox(height: size.height * .1),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.2,
+                ),
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
@@ -157,8 +157,8 @@ class _PasscodeConfirmScreenState extends State<PasscodeConfirmScreen> {
                   itemCount: input.length,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

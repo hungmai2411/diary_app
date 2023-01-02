@@ -41,33 +41,34 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
     initData();
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: size.width * 0.2,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: size.height * .1),
-              Text(
-                AppLocalizations.of(context)!.enterNewPin,
-                style: AppStyles.semibold.copyWith(
-                  color: AppColors.textPrimaryColor,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: size.height * .1),
+            Text(
+              AppLocalizations.of(context)!.enterNewPin,
+              textAlign: TextAlign.center,
+              style: AppStyles.semibold.copyWith(
+                color: AppColors.textPrimaryColor,
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: passcode.map((e) {
+                if (e.isEmpty) {
+                  return _buildUnActiveBox();
+                }
+                return _buildActiveBox();
+              }).toList(),
+            ),
+            SizedBox(height: size.height * .1),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.2,
                 ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: passcode.map((e) {
-                  if (e.isEmpty) {
-                    return _buildUnActiveBox();
-                  }
-                  return _buildActiveBox();
-                }).toList(),
-              ),
-              SizedBox(height: size.height * .1),
-              Expanded(
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
@@ -112,8 +113,8 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                   itemCount: input.length,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -89,7 +89,6 @@ void main() async {
             routes: routes,
             debugShowCheckedModeBanner: false,
             onGenerateRoute: generateRoutes,
-            //home: setting.hasPasscode ? const EnterPinScreen() : const MyApp(),
           );
         },
       ),
