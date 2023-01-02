@@ -18,9 +18,7 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
   int indexTmp = 0;
   List<String> passcode = ['', '', '', ''];
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  initData() {
     input = [
       '1',
       '2',
@@ -40,7 +38,7 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
+    initData();
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -78,7 +76,7 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                   ),
                   itemBuilder: (context, index) {
                     String s = input[index];
-
+                    // s can be 'Delete' || 'Exit'
                     if (index == 9 || index == 11) {
                       return GestureDetector(
                           onTap: () {
@@ -94,20 +92,19 @@ class _PasscodeScreenState extends State<PasscodeScreen> {
                             }
                           },
                           child: _buildInput(s, AppColors.primaryColor));
-                    } else if (indexTmp == 4) {
-                      SchedulerBinding.instance.addPostFrameCallback((_) {
-                        Navigator.pushNamed(
-                          context,
-                          PasscodeConfirmScreen.routeName,
-                          arguments: passcode.toString(),
-                        );
-                      });
                     }
                     return GestureDetector(
                       onTap: () {
                         setState(() {
                           passcode[indexTmp++] = s;
                         });
+                        if (indexTmp == 4) {
+                          Navigator.pushNamed(
+                            context,
+                            PasscodeConfirmScreen.routeName,
+                            arguments: passcode.toString(),
+                          );
+                        }
                       },
                       child: _buildInput(s, null),
                     );

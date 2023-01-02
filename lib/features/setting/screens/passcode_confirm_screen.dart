@@ -1,14 +1,10 @@
 import 'package:diary_app/constants/app_colors.dart';
 import 'package:diary_app/constants/app_styles.dart';
-import 'package:diary_app/constants/utils.dart';
 import 'package:diary_app/features/diary/widgets/pin_success_dialog.dart';
-import 'package:diary_app/features/diary/widgets/success_dialog.dart';
-import 'package:diary_app/features/setting/screens/setting_screen.dart';
 import 'package:diary_app/my_app.dart';
 import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/widgets/app_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
@@ -31,15 +27,7 @@ class _PasscodeConfirmScreenState extends State<PasscodeConfirmScreen> {
   int indexTmp = 0;
   List<String> passcodeConfirm = ['', '', '', ''];
   bool isWrong = false;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  initData() {
     input = [
       '1',
       '2',
@@ -90,6 +78,7 @@ class _PasscodeConfirmScreenState extends State<PasscodeConfirmScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    initData();
     return Scaffold(
       body: SafeArea(
         child: Padding(

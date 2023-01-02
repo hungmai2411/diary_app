@@ -67,6 +67,7 @@ class _StartOfTheWeekScreenState extends State<StartOfTheWeekScreen> {
           icon: Icon(
             Icons.arrow_back_ios_rounded,
             color: AppColors.textPrimaryColor,
+            size: 21,
           ),
         ),
         backgroundColor: AppColors.appbarColor,

@@ -6,7 +6,6 @@ import 'package:diary_app/features/setting/screens/language_screen.dart';
 import 'package:diary_app/features/setting/screens/passcode_screen.dart';
 import 'package:diary_app/features/setting/screens/select_theme_screen.dart';
 import 'package:diary_app/features/setting/screens/start_of_the_week_screen.dart';
-import 'package:diary_app/features/setting/widgets/custom_app_bar.dart';
 import 'package:diary_app/providers/setting_provider.dart';
 import 'package:diary_app/services/google_drive.dart';
 import 'package:diary_app/services/notification_services.dart';
@@ -198,8 +197,21 @@ class _SettingScreenState extends State<SettingScreen> {
                       trackColor: AppColors.trackUnSelectedColor,
                       activeColor: AppColors.trackSelectedColor,
                       onChanged: (bool? value) {
-                        setting = setting.copyWith(hasPasscode: value);
-                        settingProvider.setSetting(setting);
+                        print('value: $value');
+                        if (!value!) {
+                          setting = setting.copyWith(
+                            hasPasscode: value,
+                            passcode: null,
+                          );
+                          settingProvider.setSetting(setting);
+                        } else {
+                          if (setting.passcode == null) {
+                            navigateToPasscodeScreen();
+                          } else {
+                            setting = setting.copyWith(hasPasscode: value);
+                            settingProvider.setSetting(setting);
+                          }
+                        }
                       },
                     ),
                   ],
