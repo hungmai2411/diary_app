@@ -106,7 +106,7 @@ class _EditDiaryScreenState extends State<EditDiaryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.backgroundColor,
         elevation: 0,
         leading: IconButton(
           onPressed: popScreen,
