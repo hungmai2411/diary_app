@@ -158,6 +158,7 @@ class _EditCategoryScreenState extends State<EditCategoryScreen> {
         body: Padding(
           padding: const EdgeInsets.only(
             left: 10.0,
+            right: 10.0,
             top: 10,
           ),
           child: ListView(

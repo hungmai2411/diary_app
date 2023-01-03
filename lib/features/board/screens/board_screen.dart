@@ -193,7 +193,7 @@ class _BoardScreenState extends State<BoardScreen> {
                 : SliverList(
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
-                        if (index == diaries.length) {
+                        if (index == diariesMonth.length) {
                           return Container(height: 100);
                         }
                         Diary diary = diariesMonth[index];

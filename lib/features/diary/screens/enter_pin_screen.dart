@@ -31,9 +31,7 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
     password = context.read<SettingProvider>().setting.passcode!;
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  initInput() {
     input = [
       '1',
       '2',
@@ -53,7 +51,7 @@ class _EnterPinScreenState extends State<EnterPinScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
+    initInput();
     return Scaffold(
       body: SafeArea(
         child: Padding(

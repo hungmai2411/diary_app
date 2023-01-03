@@ -131,6 +131,7 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
         body: Padding(
           padding: const EdgeInsets.only(
             left: 10.0,
+            right: 10.0,
             top: 10,
           ),
           child: ListView(
@@ -149,6 +150,8 @@ class _CreateCategoryScreenState extends State<CreateCategoryScreen> {
                 locale: const Locale('vi'),
                 afterButtonPressed: editorFocusNode.requestFocus,
                 showAlignmentButtons: true,
+                showLink: false,
+                showListCheck: false,
               ),
               const SizedBox(height: 20),
               Text(

@@ -24,12 +24,6 @@ class _StartOfTheWeekScreenState extends State<StartOfTheWeekScreen> {
     super.initState();
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    setDays();
-  }
-
   void setDays() {
     days = [
       AppLocalizations.of(context)!.monday,
@@ -57,6 +51,7 @@ class _StartOfTheWeekScreenState extends State<StartOfTheWeekScreen> {
   Widget build(BuildContext context) {
     final settingProvider = context.read<SettingProvider>();
     Setting setting = settingProvider.setting;
+    setDays();
 
     return Scaffold(
       appBar: AppBar(
