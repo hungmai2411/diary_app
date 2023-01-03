@@ -122,7 +122,7 @@ class _AddDiaryScreenState extends State<AddDiaryScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.backgroundColor,
         elevation: 0,
         leading: IconButton(
           onPressed: popScreen,
