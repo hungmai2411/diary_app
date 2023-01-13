@@ -114,6 +114,8 @@ class ShareScreenState extends State<ShareScreen> {
               Image.memory(
                 reportData2!,
                 fit: BoxFit.cover,
+                cacheHeight: 654,
+                cacheWidth: 590,
               ),
             ],
           ),
